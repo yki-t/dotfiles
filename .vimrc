@@ -19,7 +19,7 @@ set number
 set expandtab
 set tabstop=4
 set ambiwidth=double
-set shiftwidth=4
+set shiftwidth=4 
 set smartindent
 set wrap
 set list
@@ -37,7 +37,7 @@ set ignorecase
 set mouse=a
 
 colorscheme molokai
-
+set t_Co=256
 
 " ###########################################################
 " 補完の設定
@@ -73,42 +73,42 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 " NeoBundle
 " ############################################################
 
-" 起動時にruntimepathにNeoBundleのパスを追加する
-if has('vim_starting')
-  if &compatible
-    set nocompatible
-  endif
-  set runtimepath+=/Users/usr/.vim/bundle/neobundle.vim/
-endif
-" NeoBundle設定の開始
-call neobundle#begin(expand('/Users/usr/.vim/bundle'))
-" NeoBundleのバージョンをNeoBundle自身で管理する
-NeoBundleFetch 'Shougo/neobundle.vim'
-" インストールしたいプラグインを記述
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimshell.vim'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'kana/vim-submode'
-
-NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make',
-\     'linux' : 'make',
-\     'unix' : 'gmake',
-\    },
-\ }
-
-" NeoBundle設定の終了
-call neobundle#end()
-
-filetype plugin indent on
-
-" vim起動時に未インストールのプラグインをインストールする
-NeoBundleCheck
-
+" " 起動時にruntimepathにNeoBundleのパスを追加する
+" if has('vim_starting')
+"   if &compatible
+"     set nocompatible
+"   endif
+"   set runtimepath+=/Users/usr/.vim/bundle/neobundle.vim/
+" endif
+" " NeoBundle設定の開始
+" call neobundle#begin(expand('/Users/usr/.vim/bundle'))
+" " NeoBundleのバージョンをNeoBundle自身で管理する
+" NeoBundleFetch 'Shougo/neobundle.vim'
+" " インストールしたいプラグインを記述
+" NeoBundle 'Shougo/unite.vim'
+" NeoBundle 'Shougo/vimfiler'
+" NeoBundle 'Shougo/vimshell.vim'
+" NeoBundle 'tpope/vim-surround'
+" NeoBundle 'kana/vim-submode'
+" 
+" NeoBundle 'Shougo/vimproc.vim', {
+" \ 'build' : {
+" \     'windows' : 'tools\\update-dll-mingw',
+" \     'cygwin' : 'make -f make_cygwin.mak',
+" \     'mac' : 'make',
+" \     'linux' : 'make',
+" \     'unix' : 'gmake',
+" \    },
+" \ }
+" 
+" " NeoBundle設定の終了
+" call neobundle#end()
+" 
+" filetype plugin indent on
+" 
+" " vim起動時に未インストールのプラグインをインストールする
+" NeoBundleCheck
+" 
 " ###########################################################
 " キーマッピング
 " ###########################################################
@@ -121,8 +121,8 @@ nnoremap g* g*zz
 nnoremap g# g#zz
 
 " 
-nnoremap ; :
-nnoremap : ;
+" nnoremap ; :
+" nnoremap : ;
 nnoremap x "_x
 
 " 行移動を表示行での移動に
@@ -179,13 +179,13 @@ if &term =~ "xterm"
 	cnoremap <special> <Esc>[201~ <nop>
 endif
 
-call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
-call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
-call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
-call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
-call submode#map('bufmove', 'n', '', '>', '<C-w>>')
-call submode#map('bufmove', 'n', '', '<', '<C-w><')
-call submode#map('bufmove', 'n', '', '+', '<C-w>+')
-call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+" call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+" call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+" call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+" call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+" call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+" call submode#map('bufmove', 'n', '', '<', '<C-w><')
+" call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+" call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 
 
