@@ -1,4 +1,52 @@
+" OSの判定
+if has('win32')
+    let ostype = 'Win32'
+    let dsp = '\'
+elseif has('mac')
+    let ostype = 'Mac'
+    let dsp = '/'
+else
+    let ostype = system('uname')
+    let dsp = '/'
+endif
 
+"dein Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
+endif
+
+if ostype == 'Win'
+    set runtimepath+=$HOME\.cache\dein\repos\github.com\Shougo\dein.vim
+else
+    set runtimepath+=$HOME/.cache/dein/repos/github.com/Shougo/dein.vim
+endif
+
+if dein#load_state($HOME.dsp.'.cache'.dsp.'dein')
+  call dein#begin($HOME.dsp.'.cache'.dsp.'dein')
+  call dein#add($HOME.dsp.'.cache'.dsp.'dein'.dsp.'repos'.dsp.'github.com'.dsp.'Shougo'.dsp.'dein.vim')
+
+  " Add or remove your plugins here.
+  call dein#add('Shougo'.dsp.'neosnippet.vim')
+  call dein#add('Shougo'.dsp.'neosnippet-snippets')
+
+  " You can specify revision'.dsp.'branch'.dsp.'tag.
+  call dein#add('Shougo'.dsp.'vimshell', { 'rev': '3787e5' })
+
+  call dein#end()
+  call dein#save_state()
+endif
+
+
+filetype plugin indent on
+syntax enable
+if dein#check_install()
+  call dein#install()
+endif
+"End dein Scripts-------------------------
+
+
+
+"
 set modelines=0        " CVE-2007-2438
 
 " Normally we use vim-extensions. If you want true vi-compatibility
@@ -6,10 +54,17 @@ set modelines=0        " CVE-2007-2438
 set nocompatible    " Use Vim defaults instead of 100% vi compatibility
 set backspace=2        " more powerful backspacing
 
-" Don't write backup file if vim is being called by "crontab -e"
-au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
-" Don't write backup file if vim is being called by "chpass"
-au BufWrite /private/etc/pw.* set nowritebackup nobackup
+if ostype == 'Win'
+    " Don't write backup file if vim is being called by "crontab -e"
+    au BufWrite \private\tmp\crontab.* set nowritebackup nobackup
+    " Don't write backup file if vim is being called by "chpass"
+    au BufWrite \private\etc\pw.* set nowritebackup nobackup
+else
+    " Don't write backup file if vim is being called by "crontab -e"
+    au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
+    " Don't write backup file if vim is being called by "chpass"
+    au BufWrite /private/etc/pw.* set nowritebackup nobackup
+endif
 
 if has("syntax")
     syntax on
@@ -69,84 +124,6 @@ endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
 
-" ############################################################
-" NeoBundle <deprecated>
-" ############################################################
-" {{{
-" " 起動時にruntimepathにNeoBundleのパスを追加する
-" if has('vim_starting')
-"   if &compatible
-"     set nocompatible
-"   endif
-"   set runtimepath+=/Users/usr/.vim/bundle/neobundle.vim/
-" endif
-" " NeoBundle設定の開始
-" call neobundle#begin(expand('/Users/usr/.vim/bundle'))
-" " NeoBundleのバージョンをNeoBundle自身で管理する
-" NeoBundleFetch 'Shougo/neobundle.vim'
-" " インストールしたいプラグインを記述
-" NeoBundle 'Shougo/unite.vim'
-" NeoBundle 'Shougo/vimfiler'
-" NeoBundle 'Shougo/vimshell.vim'
-" NeoBundle 'tpope/vim-surround'
-" NeoBundle 'kana/vim-submode'
-" 
-" NeoBundle 'Shougo/vimproc.vim', {
-" \ 'build' : {
-" \     'windows' : 'tools\\update-dll-mingw',
-" \     'cygwin' : 'make -f make_cygwin.mak',
-" \     'mac' : 'make',
-" \     'linux' : 'make',
-" \     'unix' : 'gmake',
-" \    },
-" \ }
-" 
-" " NeoBundle設定の終了
-" call neobundle#end()
-" 
-" filetype plugin indent on
-" 
-" " vim起動時に未インストールのプラグインをインストールする
-" NeoBundleCheck
-"
-" }}}
-" ############################################################
-" dein
-" ############################################################
-" プラグインが実際にインストールされるディレクトリ
-let s:dein_dir = expand('~/.vim/dein')
-" dein.vim 本体
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-" dein.vim がなければ github から落としてくる
-if &runtimepath !~# '/dein.vim'
-  if !isdirectory(s:dein_repo_dir)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-  endif
-  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
-endif
-" 設定開始
-if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
-  " プラグインリストを収めた TOML ファイル
-  " ~/.vim/rc/dein.toml,deinlazy.tomlを用意する
-  let g:rc_dir    = expand('~/.vim/rc')
-  let s:toml      = g:rc_dir . '/dein.toml'
-  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-  " TOML を読み込み、キャッシュしておく
-  call dein#load_toml(s:toml,      {'lazy': 0})
-  call dein#load_toml(s:lazy_toml, {'lazy': 1})
-  " 設定終了
-  call dein#end()
-  call dein#save_state()
-endif
-" もし、未インストールものものがあったらインストール
-if dein#check_install()
-  call dein#install()
-endif
-
-filetype plugin indent on
-
-
 " ###########################################################
 " キーマッピング
 " ###########################################################
@@ -157,6 +134,12 @@ nnoremap c <Nop>
 nmap cf :VimFiler
 nmap cs :VimShell
 
+inoremap { {}<Left>
+inoremap ( ()<Left>
+inoremap [ []<LEFT>
+inoremap ' ''<LEFT>
+inoremap " ""<LEFT>
+
 " 検索結果を画面の中央に
 nnoremap n nzz
 nnoremap N Nzz
@@ -165,9 +148,9 @@ nnoremap # #zz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
-" 
-" nnoremap ; :
-" nnoremap : ;
+
+nnoremap ; :
+nnoremap : ;
 nnoremap x "_x
 
 " 行移動を表示行での移動に
