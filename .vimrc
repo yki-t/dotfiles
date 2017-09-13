@@ -1,13 +1,10 @@
 " OSの判定
 if has('win32')
     let ostype = 'Win32'
-    let dsp = '\'
 elseif has('mac')
     let ostype = 'Mac'
-    let dsp = '/'
 else
     let ostype = system('uname')
-    let dsp = '/'
 endif
 
 "dein Scripts-----------------------------
@@ -15,22 +12,24 @@ if &compatible
   set nocompatible               " Be iMproved
 endif
 
-if ostype == 'Win'
-    set runtimepath+=$HOME\.cache\dein\repos\github.com\Shougo\dein.vim
-else
-    set runtimepath+=$HOME/.cache/dein/repos/github.com/Shougo/dein.vim
+if ostype == 'Win32'
+    set runtimepath+=$HOME/.vim
 endif
+set runtimepath+=$HOME/.cache/dein/repos/github.com/Shougo/dein.vim
 
-if dein#load_state($HOME.dsp.'.cache'.dsp.'dein')
-  call dein#begin($HOME.dsp.'.cache'.dsp.'dein')
-  call dein#add($HOME.dsp.'.cache'.dsp.'dein'.dsp.'repos'.dsp.'github.com'.dsp.'Shougo'.dsp.'dein.vim')
+let load_dir = $HOME.'/.cache/dein'
+let add_dir = $HOME.'/.cache/dein/repos/github.com/Shougo/dein.vim'
+
+if dein#load_state(load_dir)
+  call dein#begin(load_dir)
+  call dein#add(add_dir)
 
   " Add or remove your plugins here.
-  call dein#add('Shougo'.dsp.'neosnippet.vim')
-  call dein#add('Shougo'.dsp.'neosnippet-snippets')
+  call dein#add('Shougo/neosnippet.vim')
+  call dein#add('Shougo/neosnippet-snippets')
 
-  " You can specify revision'.dsp.'branch'.dsp.'tag.
-  call dein#add('Shougo'.dsp.'vimshell', { 'rev': '3787e5' })
+  " You can specify revision'/'branch'/'tag.
+  call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
 
   call dein#end()
   call dein#save_state()
@@ -45,26 +44,15 @@ endif
 "End dein Scripts-------------------------
 
 
-
-"
 set modelines=0        " CVE-2007-2438
-
 " Normally we use vim-extensions. If you want true vi-compatibility
 " remove change the following statements
 set nocompatible    " Use Vim defaults instead of 100% vi compatibility
 set backspace=2        " more powerful backspacing
 
-if ostype == 'Win'
-    " Don't write backup file if vim is being called by "crontab -e"
-    au BufWrite \private\tmp\crontab.* set nowritebackup nobackup
-    " Don't write backup file if vim is being called by "chpass"
-    au BufWrite \private\etc\pw.* set nowritebackup nobackup
-else
-    " Don't write backup file if vim is being called by "crontab -e"
-    au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
-    " Don't write backup file if vim is being called by "chpass"
-    au BufWrite /private/etc/pw.* set nowritebackup nobackup
-endif
+au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
+" Don't write backup file if vim is being called by "chpass"
+au BufWrite /private/etc/pw.* set nowritebackup nobackup
 
 if has("syntax")
     syntax on
