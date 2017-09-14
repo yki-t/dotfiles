@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: sexe.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 07 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,18 +29,18 @@ let s:command = {
       \ 'kind' : 'special',
       \ 'description' : 'sexe {command}',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   let [args, options] = vimshell#parser#getopt(a:args, 
         \{ 'arg=' : ['--encoding']
         \})
   if !has_key(options, '--encoding')
-    let options['--encoding'] = 'char'
+    let options['--encoding'] = &termencoding
   endif
 
   " Execute shell command.
   let cmdline = ''
   for arg in args
-    if vimshell#util#is_windows()
+    if iswin
       let arg = substitute(arg, '"', '\\"', 'g')
       let arg = substitute(arg, '[<>|^]', '^\0', 'g')
       let cmdline .= '"' . arg . '" '
@@ -48,12 +49,11 @@ function! s:command.execute(args, context) abort "{{{
     endif
   endfor
 
-  if vimshell#util#is_windows()
+  if vimshell#iswin()
     let cmdline = '"' . cmdline . '"'
   endif
 
   " Set redirection.
-  let null = ''
   if a:context.fd.stdin == ''
     let stdin = ''
   elseif a:context.fd.stdin == '/dev/null'
@@ -67,34 +67,22 @@ function! s:command.execute(args, context) abort "{{{
 
   echo 'Running command.'
 
+  if options['--encoding'] != '' && &encoding != options['--encoding']
     " Convert encoding.
-  let cmdline = vimproc#util#iconv(cmdline, &encoding, options['--encoding'])
-  let stdin = vimproc#util#iconv(stdin, &encoding, options['--encoding'])
-
-  " Set environment variables.
-  let environments_save = vimshell#util#set_variables({
-        \ '$TERMCAP' : 'COLUMNS=' . vimshell#helpers#get_winwidth(),
-        \ '$COLUMNS' : vimshell#helpers#get_winwidth(),
-        \ '$LINES' : g:vimshell_scrollback_limit,
-        \ '$EDITOR' : vimshell#helpers#get_editor_name(),
-        \ '$GIT_EDITOR' : vimshell#helpers#get_editor_name(),
-        \ '$PAGER' : g:vimshell_cat_command,
-        \ '$GIT_PAGER' : g:vimshell_cat_command,
-        \})
-
+    let cmdline = iconv(cmdline, &encoding, options['--encoding'])
+    let stdin = iconv(stdin, &encoding, options['--encoding'])
+  endif
   let result = system(printf('%s %s', cmdline, stdin))
-
-  " Restore environment variables.
-  call vimshell#util#restore_variables(environments_save)
-
-  " Convert encoding.
-  let result = vimproc#util#iconv(result, options['--encoding'], &encoding)
+  if options['--encoding'] != '' && &encoding != options['--encoding']
+    " Convert encoding.
+    let result = iconv(result, options['--encoding'], &encoding)
+  endif
 
   call vimshell#print(a:context.fd, result)
   redraw
   echo ''
 
-  if null != ''
+  if a:context.fd.stdin == '/dev/null'
     call delete(null)
   endif
 
@@ -103,6 +91,6 @@ function! s:command.execute(args, context) abort "{{{
   return
 endfunction"}}}
 
-function! vimshell#commands#sexe#define() abort
+function! vimshell#commands#sexe#define()
   return s:command
 endfunction

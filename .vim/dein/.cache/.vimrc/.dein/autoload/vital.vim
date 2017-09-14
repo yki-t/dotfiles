@@ -1,5 +1,5 @@
-function! vital#of(name) abort
-  let files = globpath(&runtimepath, 'autoload/vital/' . a:name . '.vital', 1)
+function! vital#of(name)
+  let files = globpath(&runtimepath, 'autoload/vital/' . a:name . '.vital')
   let file = split(files, "\n")
   if empty(file)
     throw 'vital: version file not found: ' . a:name
@@ -8,5 +8,5 @@ function! vital#of(name) abort
   if empty(ver)
     throw 'vital: invalid version file: ' . a:name
   endif
-  return vital#_{substitute(ver[0], '\W', '', 'g')}#new()
+  return vital#_{ver[0]}#new()
 endfunction

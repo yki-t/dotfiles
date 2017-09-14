@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: open.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 07 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,7 +29,7 @@ let s:command = {
       \ 'kind' : 'internal',
       \ 'description' : 'open {filename}',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   " Open file.
 
   call vimshell#open(join(a:args))
@@ -36,6 +37,6 @@ function! s:command.execute(args, context) abort "{{{
   return
 endfunction"}}}
 
-function! vimshell#commands#open#define() abort
+function! vimshell#commands#open#define()
   return s:command
 endfunction

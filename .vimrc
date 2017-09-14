@@ -7,41 +7,48 @@ else
     let ostype = system('uname')
 endif
 
-"dein Scripts-----------------------------
-if &compatible
-  set nocompatible               " Be iMproved
+
+if ostype == 'Mac'
+    "dein Scripts-----------------------------
+    if &compatible
+      set nocompatible               " Be iMproved
+    endif
+    
+    " Required:
+    set runtimepath+=/Users/usr/.vim/dein/repos/github.com/Shougo/dein.vim
+    
+    " Required:
+    if dein#load_state('/Users/usr/.vim/dein')
+      call dein#begin('/Users/usr/.vim/dein')
+    
+      " Let dein manage dein
+      " Required:
+      call dein#add('/Users/usr/.vim/dein/repos/github.com/Shougo/dein.vim')
+    
+      " Add or remove your plugins here:
+      call dein#add('Shougo/neosnippet.vim')
+      call dein#add('Shougo/neosnippet-snippets')
+    
+      " You can specify revision/branch/tag.
+      call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
+    
+      " Required:
+      call dein#end()
+      call dein#save_state()
+    endif
+    
+    " Required:
+    filetype plugin indent on
+    syntax enable
+    
+    " If you want to install not installed plugins on startup.
+    if dein#check_install()
+      call dein#install()
+    endif
+    
+    "End dein Scripts-------------------------
 endif
 
-if ostype == 'Win32'
-    set runtimepath+=$HOME/.vim
-endif
-set runtimepath+=$HOME/.cache/dein/repos/github.com/Shougo/dein.vim
-
-let load_dir = $HOME.'/.cache/dein'
-let add_dir = $HOME.'/.cache/dein/repos/github.com/Shougo/dein.vim'
-
-if dein#load_state(load_dir)
-  call dein#begin(load_dir)
-  call dein#add(add_dir)
-
-  " Add or remove your plugins here.
-  call dein#add('Shougo/neosnippet.vim')
-  call dein#add('Shougo/neosnippet-snippets')
-
-  " You can specify revision'/'branch'/'tag.
-  call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
-
-  call dein#end()
-  call dein#save_state()
-endif
-
-
-filetype plugin indent on
-syntax enable
-if dein#check_install()
-  call dein#install()
-endif
-"End dein Scripts-------------------------
 
 
 set modelines=0        " CVE-2007-2438

@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: parser.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 04 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -23,16 +24,14 @@
 " }}}
 "=============================================================================
 
-function! vimshell#parser#check_script(script) abort "{{{
+function! vimshell#parser#check_script(script)"{{{
   " Parse check only.
   " Split statements.
   for statement in vimproc#parser#split_statements(a:script)
-    call vimproc#parser#split_args(vimshell#parser#parse_alias(statement))
+    let args = vimproc#parser#split_args(statement)
   endfor
 endfunction"}}}
-function! vimshell#parser#eval_script(script, context) abort "{{{
-  let context = vimshell#init#_context(a:context)
-
+function! vimshell#parser#eval_script(script, context)"{{{
   " Split statements.
   let statements = vimproc#parser#parse_statements(a:script)
   let max = len(statements)
@@ -43,14 +42,13 @@ function! vimshell#parser#eval_script(script, context) abort "{{{
   let i = 0
   while i < max
     try
-      let ret =  s:execute_statement(statements[i].statement, context)
+      let ret =  s:execute_statement(statements[i].statement, a:context)
     catch /^exe: Process started./
       " Change continuation.
       let b:vimshell.continuation = {
-            \ 'statements' : statements[i : ], 'context' : context,
+            \ 'statements' : statements[i : ], 'context' : a:context,
             \ 'script' : a:script,
             \ }
-      call vimshell#interactive#execute_process_out(0)
       return 1
     endtry
 
@@ -68,101 +66,100 @@ function! vimshell#parser#eval_script(script, context) abort "{{{
 
   return 0
 endfunction"}}}
-function! vimshell#parser#execute_command(commands, context) abort "{{{
+function! vimshell#parser#execute_command(commands, context)"{{{
   if empty(a:commands)
     return 0
   endif
 
+  let internal_commands = vimshell#available_commands()
+
   let commands = a:commands
   let program = commands[0].args[0]
   let args = commands[0].args[1:]
-  let fd = {
-        \ 'stdin' : commands[0].fd.stdin,
-        \ 'stdout' : commands[-1].fd.stdout,
-        \ 'stderr' : commands[-1].fd.stderr,
-        \ }
+  let fd = commands[0].fd
   let context = a:context
   let context.fd = fd
 
-  let internal_commands = vimshell#available_commands(program)
-
-  let dir = substitute(substitute(program, '^\~\ze[/\\]',
-        \ substitute($HOME, '\\', '/', 'g'), ''),
-        \          '\\\(.\)', '\1', 'g')
-
   " Check pipeline.
-  if get(get(internal_commands, program, {}),
-        \ 'kind', '') ==  'execute'
+  if has_key(internal_commands, program)
+        \ && internal_commands[program].kind ==# 'execute'
     " Execute execute commands.
     let commands[0].args = args
-    return vimshell#helpers#execute_internal_command(program, commands, context)
-  elseif program =~ '^!'
-    " Convert to internal "h" command.
-    if program == '!!'
-      let args = []
-    else
-      let args = [program[1:]] + args
+    return internal_commands[program].execute(commands, context)
+  elseif a:commands[-1].args[-1] =~ '&$'
+    " Convert to internal bg command.
+    let commands[-1].args[-1] = commands[-1].args[-1][:-2]
+    if commands[-1].args[-1] == ''
+      " Delete empty arg.
+      call remove(commands[-1].args, -1)
     endif
-    return vimshell#helpers#execute_internal_command('h', args, context)
+
+    return internal_commands['bg'].execute(commands, context)
   elseif len(a:commands) > 1
     if a:commands[-1].args[0] == 'less'
       " Execute less(Syntax sugar).
       let commands = a:commands[: -2]
       if !empty(a:commands[-1].args[1:])
-        let commands[0].args =
-              \ a:commands[-1].args[1:] + commands[0].args
+        let commands[0].args = a:commands[-1].args[1:] + commands[0].args
       endif
-      return vimshell#helpers#execute_internal_command('less', commands, context)
+      return internal_commands['less'].execute(commands, context)
     else
       " Execute external commands.
-      return vimshell#helpers#execute_internal_command('exe', commands, context)
+      return internal_commands['exe'].execute(a:commands, context)
     endif
-  elseif has_key(get(internal_commands, program, {}), 'execute')
-    " Internal commands.
-    return vimshell#helpers#execute_internal_command(program, args, context)
-  elseif !executable(dir) && isdirectory(dir)
-    " Directory.
-    " Change the working directory like zsh.
-    " Call internal cd command.
-    return vimshell#helpers#execute_internal_command('cd', [dir], context)
-  else "{{{
+  else"{{{
+    let line = join(a:commands[0].args)
+    let dir = substitute(substitute(line, '^\~\ze[/\\]', substitute($HOME, '\\', '/', 'g'), ''), '\\\(.\)', '\1', 'g')
+    let command = vimshell#get_command_path(program)
     let ext = fnamemodify(program, ':e')
 
-    if !empty(ext) && has_key(g:vimshell_execute_file_list, ext)
+    " Check internal commands.
+    if has_key(internal_commands, program)"{{{
+      " Internal commands.
+      return internal_commands[program].execute(args, a:context)
+      "}}}
+    elseif isdirectory(dir)"{{{
+      " Directory.
+      " Change the working directory like zsh.
+
+      " Call internal cd command.
+      return vimshell#execute_internal_command('cd', [dir], a:context)
+      "}}}
+    elseif !empty(ext) && has_key(g:vimshell_execute_file_list, ext)
       " Suffix execution.
-      let args = extend(split(g:vimshell_execute_file_list[ext]),
-            \ a:commands[0].args)
+      let args = extend(split(g:vimshell_execute_file_list[ext]), a:commands[0].args)
       let commands = [ { 'args' : args, 'fd' : fd } ]
       return vimshell#parser#execute_command(commands, a:context)
-    else
+    elseif command != '' || executable(program)
       let args = insert(args, program)
 
       if has_key(g:vimshell_terminal_commands, program)
             \ && g:vimshell_terminal_commands[program]
         " Execute terminal commands.
-        return vimshell#helpers#execute_internal_command('iexe', commands, context)
+        return internal_commands['texe'].execute(a:commands, context)
       else
         " Execute external commands.
-        return vimshell#helpers#execute_internal_command('exe', commands, context)
+        return internal_commands['exe'].execute(a:commands, context)
       endif
+    else
+      throw printf('Error: File "%s" is not found.', program)
     endif
   endif"}}}
 endfunction
 "}}}
-function! vimshell#parser#execute_continuation(is_insert) abort "{{{
-  " Execute pipe.
-  call vimshell#interactive#execute_process_out(a:is_insert)
-
+function! vimshell#parser#execute_continuation(is_insert)"{{{
   if empty(b:vimshell.continuation)
     return
   endif
+
+  " Execute pipe.
+  call vimshell#interactive#execute_process_out(a:is_insert)
 
   if b:interactive.process.is_valid
     return 1
   endif
 
   let b:vimshell.system_variables['status'] = b:interactive.status
-  let b:interactive.encoding = &encoding
   let ret = b:interactive.status
 
   let statements = b:vimshell.continuation.statements
@@ -178,20 +175,13 @@ function! vimshell#parser#execute_continuation(is_insert) abort "{{{
     " Print exit value.
     let context = b:vimshell.continuation.context
     if b:interactive.cond ==# 'signal'
-      " Note: Ignore SIGINT.
-      if b:interactive.status != 2
-        let message = printf('vimshell: %s %d(%s) "%s"',
-              \ b:interactive.cond, b:interactive.status,
-              \ vimshell#interactive#decode_signal(b:interactive.status),
-              \   b:interactive.cmdline)
-        call vimshell#error_line(context.fd, message)
-      endif
+      let message = printf('vimshell: %s %d(%s) "%s"', b:interactive.cond, b:interactive.status,
+            \ vimshell#interactive#decode_signal(b:interactive.status), b:interactive.cmdline)
     else
-      let message = printf('vimshell: %s %d "%s"',
-            \ b:interactive.cond, b:interactive.status, b:interactive.cmdline)
-
-      call vimshell#error_line(context.fd, message)
+      let message = printf('vimshell: %s %d "%s"', b:interactive.cond, b:interactive.status, b:interactive.cmdline)
     endif
+
+    call vimshell#error_line(context.fd, message)
   endif
 
   " Execute rest commands.
@@ -220,58 +210,37 @@ function! vimshell#parser#execute_continuation(is_insert) abort "{{{
     let i += 1
   endwhile
 
-  if !exists('b:vimshell')
-    return
-  endif
-
-  " Call postexec hook.
-  call vimshell#hook#call('postexec',
-        \ context, b:vimshell.continuation.script)
-
-  let b:vimshell.continuation = {}
-
   if b:interactive.syntax !=# &filetype
     " Set highlight.
-    let start = searchpos(
-          \ b:vimshell.context.prompt_pattern, 'bWn')[0]
+    let start = searchpos('^' . vimshell#escape_match(vimshell#get_prompt()), 'bWen')[0]
     if start > 0
-      call s:highlight_with(start + 1,
-            \ printf('"\ze\%%(^\[%%\]\|%s\)"',
-            \        b:vimshell.context.prompt_pattern),
-            \ b:interactive.syntax)
+      call s:highlight_with(start + 1, line('$'), b:interactive.syntax)
     endif
 
     let b:interactive.syntax = &filetype
   endif
 
+  " Call postexec hook.
+  call vimshell#hook#call('postexec', context, b:vimshell.continuation.script)
+
+  let b:vimshell.continuation = {}
+
   call vimshell#next_prompt(context, a:is_insert)
 endfunction
 "}}}
-function! s:execute_statement(statement, context) abort "{{{
+function! s:execute_statement(statement, context)"{{{
   let statement = vimshell#parser#parse_alias(a:statement)
 
   " Call preexec filter.
-  let statement = vimshell#hook#call_filter(
-        \ 'preexec', a:context, statement)
+  let statement = vimshell#hook#call_filter('preexec', a:context, statement)
 
   let program = vimshell#parser#parse_program(statement)
 
-  let internal_commands = vimshell#available_commands(program)
+  let internal_commands = vimshell#available_commands()
   if program =~ '^\s*:'
     " Convert to vexe special command.
     let fd = { 'stdin' : '', 'stdout' : '', 'stderr' : '' }
-    let commands = [ { 'args' :
-          \ split(substitute(statement, '^:', 'vexe ', '')), 'fd' : fd } ]
-  elseif statement =~ '&$'
-    " Convert to internal "bg" command.
-    let commands = vimproc#parser#parse_pipe(statement)
-    let commands[-1].args[-1] = commands[-1].args[-1][:-2]
-    if commands[-1].args[-1] == ''
-      " Delete empty arg.
-      call remove(commands[-1].args, -1)
-    endif
-
-    call insert(commands[-1].args, 'bg')
+    let commands = [ { 'args' : split(substitute(statement, '^:', 'vexe ', '')), 'fd' : fd } ]
   elseif has_key(internal_commands, program)
         \ && internal_commands[program].kind ==# 'special'
     " Special commands.
@@ -286,40 +255,43 @@ endfunction
 "}}}
 
 " Parse helper.
-function! vimshell#parser#parse_alias(statement) abort "{{{
-  let statement = s:parse_galias(a:statement)
-  let program = matchstr(statement, vimshell#helpers#get_program_pattern())
-  if statement != '' && program  == ''
-    throw 'Error: Invalid command name.'
-  endif
+function! vimshell#parser#parse_alias(statement)"{{{
+  let pipes = []
 
-  if exists('b:vimshell') &&
-        \ !empty(get(b:vimshell.alias_table, program, []))
-    " Expand alias.
-    let args = vimproc#parser#split_args_through(
-          \ statement[matchend(statement, vimshell#helpers#get_program_pattern()) :])
-    let statement = s:recursive_expand_alias(program, args)
-  endif
+  for statement in vimproc#parser#split_pipe(a:statement)
+    " Get program.
+    let statement = s:parse_galias(statement)
+    let program = matchstr(statement, vimshell#get_program_pattern())
+    if program  == ''
+      throw 'Error: Invalid command name.'
+    endif
 
-  return statement
+    if exists('b:vimshell') && has_key(b:vimshell.alias_table, program) && !empty(b:vimshell.alias_table[program])
+      " Expand alias.
+      let args = vimproc#parser#split_args_through(statement[matchend(statement, vimshell#get_program_pattern()) :])
+      let statement = s:recursive_expand_alias(program, args)
+    endif
+
+    call add(pipes, statement)
+  endfor
+
+  return join(pipes, '|')
 endfunction"}}}
-function! vimshell#parser#parse_program(statement) abort "{{{
+function! vimshell#parser#parse_program(statement)"{{{
   " Get program.
-  let program = matchstr(a:statement, vimshell#helpers#get_program_pattern())
+  let program = matchstr(a:statement, vimshell#get_program_pattern())
   if program  == ''
     throw 'Error: Invalid command name.'
   endif
 
   if program != '' && program[0] == '~'
     " Parse tilde.
-    let program =
-          \ vimshell#util#substitute_path_separator($HOME)
-          \ . program[1:]
+    let program = substitute($HOME, '\\', '/', 'g') . program[1:]
   endif
 
   return program
 endfunction"}}}
-function! s:parse_galias(script) abort "{{{
+function! s:parse_galias(script)"{{{
   if !exists('b:vimshell')
     return a:script
   endif
@@ -334,7 +306,7 @@ function! s:parse_galias(script) abort "{{{
       " Escape.
       let i += 1
 
-      if i >= max
+      if i > max
         throw 'Exception: Join to next line (\).'
       endif
 
@@ -371,11 +343,12 @@ function! s:parse_galias(script) abort "{{{
 
   return join(args)
 endfunction"}}}
-function! s:recursive_expand_alias(alias_name, args) abort "{{{
+function! s:recursive_expand_alias(alias_name, args)"{{{
   " Recursive expand alias.
   let alias = b:vimshell.alias_table[a:alias_name]
   let expanded = {}
   while 1
+    let key = vimproc#parser#split_args(alias)[-1]
     if has_key(expanded, alias) || !has_key(b:vimshell.alias_table, alias)
       break
     endif
@@ -415,7 +388,7 @@ function! s:recursive_expand_alias(alias_name, args) abort "{{{
     endwhile
   endtry
 
-  if script ==# alias && !empty(a:args)
+  if script ==# alias
     let script .= ' ' . join(a:args)
   endif
 
@@ -423,11 +396,11 @@ function! s:recursive_expand_alias(alias_name, args) abort "{{{
 endfunction"}}}
 
 " Misc.
-function! vimshell#parser#check_wildcard() abort "{{{
-  let args = vimshell#helpers#get_current_args()
+function! vimshell#parser#check_wildcard()"{{{
+  let args = vimshell#get_current_args()
   return !empty(args) && args[-1] =~ '[[*?]\|^\\[()|]'
 endfunction"}}}
-function! vimshell#parser#getopt(args, optsyntax, ...) abort "{{{
+function! vimshell#parser#getopt(args, optsyntax, ...)"{{{
   let default_values = get(a:000, 0, {})
 
   " Initialize.
@@ -453,19 +426,8 @@ function! vimshell#parser#getopt(args, optsyntax, ...) abort "{{{
   for arg in a:args
     let found = 0
 
-    for opt in optsyntax['noarg']
-      if arg ==# opt
-        let found = 1
-
-        " Get argument value.
-        let options[opt] = 1
-
-        break
-      endif
-    endfor
-
     for opt in optsyntax['arg=']
-      if vimshell#util#head_match(arg, opt.'=')
+      if vimshell#head_match(arg, opt.'=')
         let found = 1
 
         " Get argument value.
@@ -474,6 +436,10 @@ function! vimshell#parser#getopt(args, optsyntax, ...) abort "{{{
         break
       endif
     endfor
+    if found
+      " Next argument.
+      continue
+    endif
 
     if !found
       call add(args, arg)
@@ -489,17 +455,17 @@ function! vimshell#parser#getopt(args, optsyntax, ...) abort "{{{
 
   return [args, options]
 endfunction"}}}
-function! s:highlight_with(start, end, syntax) abort "{{{
+function! s:highlight_with(start, end, syntax)"{{{
   let cnt = get(b:, 'highlight_count', 0)
   if globpath(&runtimepath, 'syntax/' . a:syntax . '.vim') == ''
     return
   endif
   unlet! b:current_syntax
   let save_isk= &l:iskeyword  " For scheme.
-  execute printf('silent! syntax include @highlightWith%d syntax/%s.vim',
+  execute printf('syntax include @highlightWith%d syntax/%s.vim',
         \              cnt, a:syntax)
   let &l:iskeyword = save_isk
-  execute printf('syntax region highlightWith%d start=/\%%%dl/ end=%s keepend '
+  execute printf('syntax region highlightWith%d start=/\%%%dl/ end=/\%%%dl$/ '
         \            . 'contains=@highlightWith%d,VimShellError',
         \             cnt, a:start, a:end, cnt)
   let b:highlight_count = cnt + 1

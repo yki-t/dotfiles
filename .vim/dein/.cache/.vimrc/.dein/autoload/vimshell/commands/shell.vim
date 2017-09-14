@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: shell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 07 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,18 +29,17 @@ let s:command = {
       \ 'kind' : 'internal',
       \ 'description' : 'shell',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   " Starts shell in terminal.
   if g:vimshell_use_terminal_command == ''
     call vimshell#error_line(a:context.fd,
           \ 'Please set g:vimshell_use_terminal_command variable.')
-    return
   endif
 
   call vimproc#system_bg(printf('%s %s',
         \ g:vimshell_use_terminal_command, &shell))
 endfunction"}}}
 
-function! vimshell#commands#shell#define() abort
+function! vimshell#commands#shell#define()
   return s:command
 endfunction

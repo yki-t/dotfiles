@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: exit.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 20 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,23 +29,22 @@ let s:command = {
       \ 'kind' : 'internal',
       \ 'description' : 'exit',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   " Exit vimshell.
   if a:context.is_interactive
-    let context = deepcopy(vimshell#get_context())
-    call vimshell#util#delete_buffer()
+    let vimsh_buf = bufnr('%')
+    " Switch buffer.
     if winnr('$') != 1
       close
+    else
+      call vimshell#alternate_buffer()
     endif
-
-    if context.tab
-      tabclose
-    endif
+    execute 'bdelete!'. vimsh_buf
   endif
 
   stopinsert
 endfunction"}}}
 
-function! vimshell#commands#exit#define() abort
+function! vimshell#commands#exit#define()
   return s:command
 endfunction

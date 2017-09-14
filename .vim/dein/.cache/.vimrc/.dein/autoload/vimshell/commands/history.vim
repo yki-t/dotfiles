@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: history.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 12 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,11 +29,11 @@ let s:command = {
       \ 'kind' : 'internal',
       \ 'description' : 'history [{search-string}]',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   let histories = vimshell#history#read()
 
   let arguments = join(a:args, ' ')
-  if arguments =~ '^-\?\d\+$'
+  if arguments =~ '^\d\+$'
     let search = ''
     let max = str2nr(arguments)
   elseif empty(arguments)
@@ -44,30 +45,26 @@ function! s:command.execute(args, context) abort "{{{
     let max = len(histories)
   endif
 
-  if max < 0
-    let max = -max
-  endif
-
-  if max == 0 || max >= len(histories)
+  if max <=0 || max >= len(histories)
     " Overflow.
-    let max = 0
+    let max = len(histories)
   endif
 
   let list = []
   let cnt = 0
   for hist in histories
-    if search == '' || vimshell#util#head_match(hist, search)
+    if vimshell#head_match(hist, search)
       call add(list, [cnt, hist])
     endif
 
     let cnt += 1
   endfor
 
-  for [cnt, hist] in list[-max :]
+  for [cnt, hist] in list[: max-1]
     call vimshell#print_line(a:context.fd, printf('%3d: %s', cnt, hist))
   endfor
 endfunction"}}}
 
-function! vimshell#commands#history#define() abort
+function! vimshell#commands#history#define()
   return s:command
 endfunction

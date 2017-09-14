@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: let.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 07 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,7 +29,7 @@ let s:command = {
       \ 'kind' : 'special',
       \ 'description' : 'let ${var-name} = {expression}',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
     let args = join(a:args)
 
     if args !~ '^$$\?\h\w*'
@@ -60,6 +61,6 @@ function! s:command.execute(args, context) abort "{{{
     execute 'let ' . varname . expression
 endfunction"}}}
 
-function! vimshell#commands#let#define() abort
+function! vimshell#commands#let#define()
   return s:command
 endfunction

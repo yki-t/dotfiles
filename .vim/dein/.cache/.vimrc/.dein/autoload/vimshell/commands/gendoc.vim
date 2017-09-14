@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: gendoc.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 04 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,7 +29,7 @@ let s:command = {
       \ 'kind' : 'internal',
       \ 'description' : 'gendoc {command} {args}',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   " Generate cached doc.
 
   if empty(a:args)
@@ -46,6 +47,6 @@ function! s:command.execute(args, context) abort "{{{
   call vimshell#help#set_cached_doc(cached_doc)
 endfunction"}}}
 
-function! vimshell#commands#gendoc#define() abort
+function! vimshell#commands#gendoc#define()
   return s:command
 endfunction

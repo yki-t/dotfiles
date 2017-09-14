@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: alias.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 07 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,25 +29,22 @@ let s:command = {
       \ 'kind' : 'special',
       \ 'description' : 'alias {alias-name} = {command}',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   let args = join(a:args)
 
   if empty(a:args)
     " View all aliases.
     for alias in keys(b:vimshell.alias_table)
-      call vimshell#print_line(a:context.fd,
-            \ printf('%s=%s', alias, vimshell#helpers#get_alias(alias)))
+      call vimshell#print_line(a:context.fd, printf('%s=%s', alias, vimshell#get_alias(alias)))
     endfor
-  elseif args =~ vimshell#helpers#get_alias_pattern().'$'
+  elseif args =~ vimshell#get_alias_pattern().'$'
     " View alias.
-    call vimshell#print_line(a:context.fd,
-          \ printf('%s=%s', a:args[0], vimshell#helpers#get_alias(a:args[0])))
+    call vimshell#print_line(a:context.fd, printf('%s=%s', a:args[0], vimshell#get_alias(a:args[0])))
   else
     " Define alias.
 
     " Parse command line.
-    let alias_name = matchstr(args,
-          \ vimshell#helpers#get_alias_pattern().'\ze\s*=\s*')
+    let alias_name = matchstr(args, vimshell#get_alias_pattern().'\ze\s*=\s*')
 
     " Next.
     if alias_name == ''
@@ -57,10 +55,10 @@ function! s:command.execute(args, context) abort "{{{
     let expression = substitute(args[matchend(args, '\s*=\s*') :],
           \ '^[''"]\|[''"]$', '', 'g')
 
-    call vimshell#helpers#set_alias(alias_name, expression)
+    call vimshell#set_alias(alias_name, expression)
   endif
 endfunction"}}}
 
-function! vimshell#commands#alias#define() abort
+function! vimshell#commands#alias#define()
   return s:command
 endfunction

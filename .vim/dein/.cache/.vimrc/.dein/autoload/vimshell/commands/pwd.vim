@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: pwd.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 07 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,12 +29,12 @@ let s:command = {
       \ 'kind' : 'internal',
       \ 'description' : 'pwd',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   " Print the working directory.
 
   call vimshell#print_line(a:context.fd, getcwd())
 endfunction"}}}
 
-function! vimshell#commands#pwd#define() abort
+function! vimshell#commands#pwd#define()
   return s:command
 endfunction

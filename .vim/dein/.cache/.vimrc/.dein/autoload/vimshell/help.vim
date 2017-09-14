@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: help.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -23,16 +24,16 @@
 " }}}
 "=============================================================================
 
-" For echodoc. "{{{
+" For echodoc."{{{
 let s:doc_dict = {
       \ 'name' : 'vimshell',
       \ 'rank' : 10,
       \ 'filetypes' : { 'vimshell' : 1 },
       \ }
-function! s:doc_dict.search(cur_text) abort "{{{
+function! s:doc_dict.search(cur_text)"{{{
   " Get command name.
   try
-    let args = vimshell#helpers#get_current_args(vimshell#get_cur_text())
+    let args = vimshell#get_current_args(a:cur_text)
   catch /^Exception:/
     return []
   endtry
@@ -42,13 +43,17 @@ function! s:doc_dict.search(cur_text) abort "{{{
 
   let command = fnamemodify(args[0], ':t:r')
 
-  let commands = vimshell#available_commands(command)
-  if has_key(s:cached_doc, command)
-    let description = s:cached_doc[command]
-  elseif has_key(commands, command)
-    let description = commands[command].description
-  else
+  let commands = vimshell#available_commands()
+  if command == ''
     return []
+  elseif !has_key(commands, command)
+    if !has_key(s:cached_doc, command)
+      return []
+    endif
+
+    let description = s:cached_doc[command]
+  else
+    let description = commands[command].description
   endif
 
   let usage = [{ 'text' : 'Usage: ', 'highlight' : 'Identifier' }]
@@ -66,34 +71,25 @@ function! s:doc_dict.search(cur_text) abort "{{{
 endfunction"}}}
 "}}}
 
-function! vimshell#help#init() abort "{{{
+function! vimshell#help#init()"{{{
   if exists('g:loaded_echodoc') && g:loaded_echodoc
     call echodoc#register('vimshell', s:doc_dict)
   endif
 
   call s:load_cached_doc()
 endfunction"}}}
-function! vimshell#help#get_cached_doc() abort "{{{
+function! vimshell#help#get_cached_doc()"{{{
   return s:cached_doc
 endfunction"}}}
-function! vimshell#help#set_cached_doc(cache) abort "{{{
-  if vimshell#util#is_sudo()
-    return
-  endif
-
+function! vimshell#help#set_cached_doc(cache)"{{{
   let s:cached_doc = a:cache
-  let doc_path = vimshell#get_data_directory() .'/cached-doc'
-  call writefile(values(map(deepcopy(s:cached_doc),
-        \ 'v:key."!!!".v:val')), doc_path)
+  let doc_path = g:vimshell_temporary_directory.'/cached-doc'
+  call writefile(values(map(deepcopy(s:cached_doc), 'v:key."!!!".v:val')), doc_path)
 endfunction"}}}
 
-function! s:load_cached_doc() abort "{{{
+function! s:load_cached_doc()"{{{
   let s:cached_doc = {}
-  if vimshell#util#is_sudo()
-    return
-  endif
-
-  let doc_path = vimshell#get_data_directory().'/cached-doc'
+  let doc_path = g:vimshell_temporary_directory.'/cached-doc'
   if !filereadable(doc_path)
     call writefile([], doc_path)
   endif

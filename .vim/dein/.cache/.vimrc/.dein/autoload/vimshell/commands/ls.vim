@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: ls.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 04 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,11 +29,10 @@ let s:command = {
       \ 'kind' : 'internal',
       \ 'description' : 'ls [{argument}...]',
       \}
-function! s:command.execute(args, context) abort "{{{
+function! s:command.execute(args, context)"{{{
   " Check ls command.
   if !executable('ls')
-    call vimshell#error_line(a:context.fd,
-          \ 'ls: external command ls is not installed.')
+    call vimshell#error_line(a:context.fd, 'ls: external command ls is not installed.')
     return 1
   endif
 
@@ -42,11 +42,15 @@ function! s:command.execute(args, context) abort "{{{
     call insert(arguments, '-FC')
   endif
 
-  call insert(arguments, 'ls')
+  if vimshell#iswin()
+    call insert(arguments, 'ls.exe')
+  else
+    call insert(arguments, 'ls')
+  endif
 
-  call vimshell#helpers#execute_internal_command('exe', arguments, a:context)
+  call vimshell#execute_internal_command('exe', arguments, a:context)
 endfunction"}}}
 
-function! vimshell#commands#ls#define() abort
+function! vimshell#commands#ls#define()
   return s:command
 endfunction
