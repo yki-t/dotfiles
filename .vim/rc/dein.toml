@@ -1,15 +1,25 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
+# vimproc: インストール後の処理も書いてる
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
-build = 'make'
+hook_post_update = '''
+  if dein#util#_is_windows()
+    let cmd = 'tools\\update-dll-mingw'
+  elseif dein#util#_is_cygwin()
+    let cmd = 'make -f make_cygwin.mak'
+  elseif executable('gmake')
+    let cmd = 'gmake'
+  else
+    let cmd = 'make'
+  endif
+  let g:dein#plugin.build = cmd
+'''
 
+# よくわからないファイル
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
-
-[[plugins]]
-repo = 'Shougo/neocomplete.vim'
 
 [[plugins]]
 repo = 'Shougo/unite.vim'
@@ -17,12 +27,32 @@ repo = 'Shougo/unite.vim'
 [[plugins]]
 repo = 'Shougo/unite-outline'
 
+# 補完
+[[plugins]]
+repo = 'Shougo/neocomplete.vim'
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+# File System
 [[plugins]]
 repo = 'Shougo/vimfiler'
 
+# Shell
 [[plugins]]
 repo = 'Shougo/vimshell'
+rev = '3787e5'
 
+# 括弧
 [[plugins]]
 repo = 'tpope/vim-surround'
+
+# Coffee Script用
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+[[plugins]]
+repo = 'claco/jasmine.vim'
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
 

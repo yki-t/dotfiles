@@ -1,4 +1,6 @@
+"------------------------------------
 " OSの判定
+"------------------------------------
 if has('win32')
     let ostype = 'Win32'
 elseif has('mac')
@@ -7,35 +9,47 @@ else
     let ostype = system('uname')
 endif
 
-
+"------------------------------------
+" dein導入
+"------------------------------------
 if ostype == 'Mac'
     "dein Scripts-----------------------------
     if &compatible
       set nocompatible               " Be iMproved
     endif
     
-    " Required:
-    set runtimepath+=/Users/usr/.vim/dein/repos/github.com/Shougo/dein.vim
+    " プラグインが実際にインストールされるディレクトリ
+    let s:dein_dir = expand('~/.vim/.cache/dein')
+    " dein.vim 本体
+    let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
     
-    " Required:
-    if dein#load_state('/Users/usr/.vim/dein')
-      call dein#begin('/Users/usr/.vim/dein')
-    
-      " Let dein manage dein
-      " Required:
-      call dein#add('/Users/usr/.vim/dein/repos/github.com/Shougo/dein.vim')
-    
-      " Add or remove your plugins here:
-      call dein#add('Shougo/neosnippet.vim')
-      call dein#add('Shougo/neosnippet-snippets')
-    
-      " You can specify revision/branch/tag.
-      call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
-    
-      " Required:
-      call dein#end()
-      call dein#save_state()
+    " dein.vim がなければ github から落としてくる
+    if &runtimepath !~# '/dein.vim'
+        if !isdirectory(s:dein_repo_dir)
+            execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+        endif
+            execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
     endif
+    " set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+    
+    " Required:
+    if dein#load_state(expand('~/usr/.vim/dein'))
+        call dein#begin(expand('~/.vim/dein'))
+        
+        " プラグインリストを収めた TOML ファイル
+        " 予め TOML ファイル（後述）を用意しておく
+        let g:rc_dir    = expand('~/.vim/rc')
+        let s:toml      = g:rc_dir . '/dein.toml'
+        let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+        
+        " TOML を読み込み、キャッシュしておく
+        call dein#load_toml(s:toml,      {'lazy': 0})
+        call dein#load_toml(s:lazy_toml, {'lazy': 1})
+      
+        " Required:
+        call dein#end()
+        call dein#save_state()
+      endif
     
     " Required:
     filetype plugin indent on
@@ -49,8 +63,6 @@ if ostype == 'Mac'
     "End dein Scripts-------------------------
 endif
 
-
-
 set modelines=0        " CVE-2007-2438
 " Normally we use vim-extensions. If you want true vi-compatibility
 " remove change the following statements
@@ -61,6 +73,60 @@ au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
 " Don't write backup file if vim is being called by "chpass"
 au BufWrite /private/etc/pw.* set nowritebackup nobackup
 
+"------------------------------------
+" JAVA-SCRIPT系の設定
+"------------------------------------
+" vim-coffee-script
+" 保存時にコンパイル
+au BufWritePost *.coffee silent make -b
+" リアルタイムプレビュー
+" au BufWritePost *.coffee :CoffeeWatch vert
+
+" jasmine.vim
+" ファイルタイプを変更
+function! JasmineSetting()
+  au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
+  au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
+  au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
+  call jasmine#load_snippets()
+  map <buffer> <leader>m :JasmineRedGreen<CR>
+  command! JasmineRedGreen :call jasmine#redgreen()
+  command! JasmineMake :call jasmine#make()
+endfunction
+au BufRead,BufNewFile,BufReadPre *.coffee,*.js call JasmineSetting()
+" indent_guides
+" インデントの深さに色を付ける
+let g:indent_guides_start_level=2
+let g:indent_guides_auto_colors=0
+let g:indent_guides_enable_on_vim_startup=0
+let g:indent_guides_color_change_percent=20
+let g:indent_guides_guide_size=1
+let g:indent_guides_space_guides=1
+
+hi IndentGuidesOdd  ctermbg=235
+hi IndentGuidesEven ctermbg=237
+au FileType coffee,ruby,javascript,python IndentGuidesEnable
+nmap <silent><Leader>ig <Plug>IndentGuidesToggle
+autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=2
+
+"------------------------------------
+" C++
+"------------------------------------
+" 保存時にコンパイル
+"au BufWritePost *.cpp silent :gcc 
+au BufWritePost *.cpp :lcd %:h | :!gcc %:p 1>/dev/null
+
+
+"------------------------------------
+" プログラム言語共通の設定
+"------------------------------------
+" コンパイルエラー時の処理
+au QuickFixCmdPost * nested cwindow | redraw! 
+
+
+"------------------------------------
+" 雑多な設定
+"------------------------------------
 if has("syntax")
     syntax on
 endif
@@ -88,6 +154,8 @@ set mouse=a
 
 colorscheme molokai
 set t_Co=256
+
+
 
 " ###########################################################
 " 補完の設定
@@ -123,17 +191,26 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 " キーマッピング
 " ###########################################################
 " dein update
-nmap du :call dein#update()<cr>
+noremap du :call dein#update()<CR>
 " Plugin shortcut
-nnoremap c <Nop>
-nmap cf :VimFiler
-nmap cs :VimShell
+noremap vf :VimFiler<CR>
+noremap vs :VimShell<CR>
 
 inoremap { {}<Left>
 inoremap ( ()<Left>
 inoremap [ []<LEFT>
 inoremap ' ''<LEFT>
 inoremap " ""<LEFT>
+" 画面移動を素早く
+noremap <S-h>   ^
+noremap <S-j>   }
+noremap <S-k>   {
+noremap <S-l>   $
+
+" ノーマルモード時のENTERで改行
+nnoremap <CR> A<CR><ESC>
+" ==でインデント調整
+nnoremap == gg=G''
 
 " 検索結果を画面の中央に
 nnoremap n nzz

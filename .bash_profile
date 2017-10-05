@@ -2,10 +2,7 @@ export PATH=/usr/local:/usr/local/lib/python2.7/site-packages:/usr/local/bin:/us
 export PYENV_ROOT=/usr/local/var/pyenv
 eval "$(pyenv init -)"
 
-export PATH="$HOME/.linuxbrew/bin:$PATH"
-export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
-export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
-export LD_LIBRARY_PATH="$HOME/.linuxbrew/lib:$LD_LIBRARY_PATH"
-
 test -r ~/.bashrc && . ~/.bashrc
+export PATH=/Applications/MAMP/bin/php/ph7.1.6p/bin:$PATH
+export PS1='[\u@\h \w]\$ '
 

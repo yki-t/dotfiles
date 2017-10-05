@@ -1,5 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_cnt =8
 let g:netrw_dirhist_1='/Applications/MAMP/htdocs/ap/page/img'
 let g:netrw_dirhist_2='/Applications/MAMP/htdocs/ap/page/img/thumb_products'
 let g:netrw_dirhist_3='/Applications/MAMP/htdocs/ap/page/img/thumb_products/_notes'
@@ -7,3 +7,4 @@ let g:netrw_dirhist_4='/Applications/MAMP/htdocs/ap/tpl'
 let g:netrw_dirhist_5='/Applications/MAMP/htdocs/ap/tpl/css'
 let g:netrw_dirhist_6='/Applications/MAMP/htdocs/ap/tpl/img'
 let g:netrw_dirhist_7='/Users/usr/dotfiles/.vim'
+let g:netrw_dirhist_8='/Users/usr/Dropbox/biz/FINTECH/BlockChain/Oshima/cryptowatch'
