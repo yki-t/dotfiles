@@ -15,51 +15,51 @@ endif
 if ostype == 'Mac'
     "dein Scripts-----------------------------
     if &compatible
-      set nocompatible               " Be iMproved
+        set nocompatible               " Be iMproved
     endif
-    
+
     " プラグインが実際にインストールされるディレクトリ
     let s:dein_dir = expand('~/.vim/.cache/dein')
     " dein.vim 本体
     let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-    
+
     " dein.vim がなければ github から落としてくる
     if &runtimepath !~# '/dein.vim'
         if !isdirectory(s:dein_repo_dir)
             execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
         endif
-            execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+        execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
     endif
     " set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-    
+
     " Required:
     if dein#load_state(expand('~/usr/.vim/dein'))
         call dein#begin(expand('~/.vim/dein'))
-        
+
         " プラグインリストを収めた TOML ファイル
         " 予め TOML ファイル（後述）を用意しておく
         let g:rc_dir    = expand('~/.vim/rc')
         let s:toml      = g:rc_dir . '/dein.toml'
         let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-        
+
         " TOML を読み込み、キャッシュしておく
         call dein#load_toml(s:toml,      {'lazy': 0})
         call dein#load_toml(s:lazy_toml, {'lazy': 1})
-      
+
         " Required:
         call dein#end()
         call dein#save_state()
-      endif
-    
+    endif
+
     " Required:
     filetype plugin indent on
     syntax enable
-    
+
     " If you want to install not installed plugins on startup.
     if dein#check_install()
-      call dein#install()
+        call dein#install()
     endif
-    
+
     "End dein Scripts-------------------------
 endif
 
@@ -85,13 +85,13 @@ au BufWritePost *.coffee silent make -b
 " jasmine.vim
 " ファイルタイプを変更
 function! JasmineSetting()
-  au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
-  au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
-  au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
-  call jasmine#load_snippets()
-  map <buffer> <leader>m :JasmineRedGreen<CR>
-  command! JasmineRedGreen :call jasmine#redgreen()
-  command! JasmineMake :call jasmine#make()
+    au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
+    au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
+    au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
+    call jasmine#load_snippets()
+    map <buffer> <leader>m :JasmineRedGreen<CR>
+    command! JasmineRedGreen :call jasmine#redgreen()
+    command! JasmineMake :call jasmine#make()
 endfunction
 au BufRead,BufNewFile,BufReadPre *.coffee,*.js call JasmineSetting()
 " indent_guides
@@ -155,8 +155,6 @@ set mouse=a
 colorscheme molokai
 set t_Co=256
 
-
-
 " ###########################################################
 " 補完の設定
 " ###########################################################
@@ -164,7 +162,6 @@ highlight Pmenu ctermbg=4
 highlight PmenuSel ctermbg=1
 highlight PMenuSbar ctermbg=4
 
-set completeopt=menuone
 set completeopt=menuone
 let g:rsenseUseOmniFunc = 1
 let g:auto_ctags = 1
@@ -177,12 +174,12 @@ let g:neocomplcache_max_list = 20
 let g:neocomplcache_min_syntax_length = 3
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
+    let g:neocomplete#force_omni_input_patterns = {}
 endif
 let g:neocomplete#force_omni_input_patterns.ruby = '[^.*\t]\.\w*\|\h\w*::'
 
 if !exists('g:neocomplete#keyword_patterns')
-        let g:neocomplete#keyword_patterns = {}
+    let g:neocomplete#keyword_patterns = {}
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
@@ -191,13 +188,14 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 " キーマッピング
 " ###########################################################
 " dein update
-noremap du :call dein#update()<CR>
+" noremap du :call dein#update()<CR>
 " Plugin shortcut
 noremap vf :VimFiler<CR>
 noremap vs :VimShell<CR>
 
 inoremap { {}<Left>
 inoremap ( ()<Left>
+inoremap < ()<Left>
 inoremap [ []<LEFT>
 inoremap ' ''<LEFT>
 inoremap " ""<LEFT>
@@ -207,8 +205,6 @@ noremap <S-j>   }
 noremap <S-k>   {
 noremap <S-l>   $
 
-" ノーマルモード時のENTERで改行
-nnoremap <CR> A<CR><ESC>
 " ==でインデント調整
 nnoremap == gg=G''
 
@@ -270,8 +266,8 @@ if &term =~ "xterm"
     let &t_te .= "\e[?2004l"
     let &pastetoggle = "\e[201~"
     function XTermPasteBegin(ret)
-    set paste
-    return a:ret
+        set paste
+        return a:ret
     endfunction
     noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
     inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
