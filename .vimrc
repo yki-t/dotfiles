@@ -114,7 +114,8 @@ autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=
 "------------------------------------
 " 保存時にコンパイル
 "au BufWritePost *.cpp silent :gcc 
-au BufWritePost *.cpp :lcd %:h | :!gcc %:p 1>/dev/null
+"au BufWritePost *.cpp :lcd %:h | :!clang++ -Wall -std=c++14 %:p 1>/dev/null
+"au QuickFixCmdPost * nested cwindow | redraw! 
 
 
 "------------------------------------
@@ -151,9 +152,14 @@ set wildmenu
 set foldmethod=marker
 set ignorecase
 set mouse=a
-
+set clipboard+=unnamed
 colorscheme molokai
 set t_Co=256
+
+"w!!でsudo 保存
+cabbr w!! w !sudo tee > /dev/null %
+" swp 生成先を変更
+"set directory=~/.vim/tmp
 
 " ###########################################################
 " 補完の設定
@@ -193,20 +199,30 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 noremap vf :VimFiler<CR>
 noremap vs :VimShell<CR>
 
-inoremap { {}<Left>
-inoremap ( ()<Left>
-inoremap < ()<Left>
-inoremap [ []<LEFT>
-inoremap ' ''<LEFT>
-inoremap " ""<LEFT>
+"inoremap { {}<Left>
+"inoremap ( ()<Left>
+"inoremap [ []<LEFT>
+"inoremap ' ''<LEFT>
+"inoremap " ""<LEFT>
 " 画面移動を素早く
-noremap <S-h>   ^
-noremap <S-j>   }
-noremap <S-k>   {
-noremap <S-l>   $
-
+"noremap <S-h>   ^
+"noremap <S-j>   }
+"noremap <S-k>   {
+"noremap <S-l>   $
 " ==でインデント調整
 nnoremap == gg=G''
+
+" ノーマルモード移行時に自動で英数IMEに切り替え
+if has('mac')
+  set ttimeoutlen=1
+  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
+  augroup MyIMEGroup
+    autocmd!
+    autocmd InsertLeave * :call system(g:imeoff)
+  augroup END
+  noremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
+endif
+
 
 " 検索結果を画面の中央に
 nnoremap n nzz
@@ -270,7 +286,7 @@ if &term =~ "xterm"
         return a:ret
     endfunction
     noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
-    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+    "inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
     cnoremap <special> <Esc>[200~ <nop>
     cnoremap <special> <Esc>[201~ <nop>
 endif

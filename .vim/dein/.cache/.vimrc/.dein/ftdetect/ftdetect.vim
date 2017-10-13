@@ -23,7 +23,7 @@ autocmd BufNewFile,BufRead * call s:DetectCoffee()
 autocmd BufNewFile,BufRead *.litcoffee set filetype=litcoffee
 autocmd BufNewFile,BufRead *.coffee.md set filetype=litcoffee
 
-" Detect syntax file.
-autocmd BufNewFile,BufRead *.snip,*.snippets set filetype=neosnippet
 autocmd BufNewFile,BufRead,BufWritePost *[Ss]pec.js,*SpecHelper.js set filetype=jasmine.javascript syntax=jasmine.javascript
 autocmd BufNewFile,BufRead,BufWritePost *[Ss]pec.coffee,*SpecHelper.coffee set filetype=jasmine.coffee syntax=jasmine.coffee
+" Detect syntax file.
+autocmd BufNewFile,BufRead *.snip,*.snippets set filetype=neosnippet
