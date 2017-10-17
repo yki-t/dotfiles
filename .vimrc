@@ -110,6 +110,18 @@ nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
 "------------------------------------
+" PHPの設定
+"------------------------------------
+augroup PHP
+  autocmd!
+  autocmd FileType php set makeprg=php\ -l\ %
+  autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
+  " php -lの構文チェックでエラーがなければ「No syntax errors」の一行だけ出力される
+  autocmd BufWritePost *.php silent make | if len(getqflist()) != 1 | copen | else | cclose | endif
+augroup END
+
+
+"------------------------------------
 " C++
 "------------------------------------
 " 保存時にコンパイル
@@ -242,6 +254,8 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
+nnoremap <Up> gk
+nnoremap <Down> j
 
 " 画面分割系統
 nnoremap s <Nop>
