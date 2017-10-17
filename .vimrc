@@ -209,7 +209,6 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 " noremap du :call dein#update()<CR>
 " Plugin shortcut
 noremap vf :VimFiler<CR>
-noremap vs :VimShell<CR>
 
 "inoremap { {}<Left>
 "inoremap ( ()<Left>
@@ -258,6 +257,7 @@ nnoremap <Up> gk
 nnoremap <Down> j
 
 " 画面分割系統
+noremap vs :vs<CR>
 nnoremap s <Nop>
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
