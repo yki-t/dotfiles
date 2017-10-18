@@ -167,6 +167,7 @@ set mouse=a
 set clipboard+=unnamed
 colorscheme molokai
 set t_Co=256
+vnoremap * "zy:let @/ = @z<CR>
 
 "w!!でsudo 保存
 cabbr w!! w !sudo tee > /dev/null %
