@@ -256,6 +256,12 @@ nnoremap gj j
 nnoremap gk k
 nnoremap <Up> gk
 nnoremap <Down> j
+vnoremap j gj
+vnoremap k gk
+vnoremap gj j
+vnoremap gk k
+vnoremap <Up> gk
+vnoremap <Down> j
 
 " 画面分割系統
 noremap vs :vs<CR>
