@@ -49,4 +49,7 @@ repo = 'nathanaelkane/vim-indent-guides'
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 
+# 画面分割の時に使うもの
+[[plugins]]
+repo = 'kana/vim-submode'
 

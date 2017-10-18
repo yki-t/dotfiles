@@ -217,9 +217,7 @@ noremap vf :VimFiler<CR>
 "inoremap ' ''<LEFT>
 "inoremap " ""<LEFT>
 " 画面移動を素早く
-"noremap <S-h>   ^
-"noremap <S-j>   }
-"noremap <S-k>   {
+"noremap <S-h>   ^ "noremap <S-j>   } "noremap <S-k>   {
 "noremap <S-l>   $
 " ==でインデント調整
 nnoremap == gg=G''
@@ -312,13 +310,12 @@ if &term =~ "xterm"
     cnoremap <special> <Esc>[201~ <nop>
 endif
 
-" call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
-" call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
-" call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
-" call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
-" call submode#map('bufmove', 'n', '', '>', '<C-w>>')
-" call submode#map('bufmove', 'n', '', '<', '<C-w><')
-" call submode#map('bufmove', 'n', '', '+', '<C-w>+')
-" call submode#map('bufmove', 'n', '', '-', '<C-w>-')
-
+call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+call submode#map('bufmove', 'n', '', '<', '<C-w><')
+call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 
