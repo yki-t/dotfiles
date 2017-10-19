@@ -1,6 +1,7 @@
 "------------------------------------
 " OSの判定
 "------------------------------------
+"{{{
 if has("mac")
     let g:ostype = 'Mac'
     let g:home = 'usr'
@@ -14,7 +15,7 @@ elseif has("win32unix")
 elseif has("win32")
     let g:ostype = 'Win32'
 endif
-
+"}}}
 
 "------------------------------------
 " dein導入
@@ -218,6 +219,7 @@ endif
 "------------------------------------
 "{{{
 noremap vf :VimFiler<CR>
+noremap VS :VimShell<CR>
 
 "inoremap { {}<Left>
 "inoremap ( ()<Left>
@@ -302,6 +304,30 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 "}}}
 
 "------------------------------------
+" VimShellのプロンプト
+"------------------------------------
+"let g:my_vimshell_prompt_counter = -1
+"function! s:my_vimshell_dynamic_prompt()
+"  let g:my_vimshell_prompt_counter += 1
+"  let anim = [
+"        \        "(´･_･`)",
+"        \        "( ´･_･)",
+"        \        "(  ´･_)",
+"        \        "(   ´･)",
+"        \        "(    ´)",
+"        \        "(     )",
+"        \        "(     )",
+"        \        "(`    )",
+"        \        "(･`   )",
+"        \        "(_･`  )",
+"        \        "(･_･` )",
+"        \    ]
+"  return anim[g:my_vimshell_prompt_counter % len(anim)]
+"endfunction
+"let g:vimshell_prompt_expr = 's:my_vimshell_dynamic_prompt()." > "'
+"let g:vimshell_prompt_pattern = '^([ ´･_･`]\{5}) > '
+
+"------------------------------------
 " その他の設定
 "------------------------------------
 if has("syntax")
@@ -310,6 +336,7 @@ endif
 
 " VimFilerで自動cd
 let g:vimfiler_enable_auto_cd = 1
+
 set number
 set expandtab
 set tabstop=4
