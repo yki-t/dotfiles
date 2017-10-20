@@ -53,3 +53,4 @@ repo = 'thinca/vim-quickrun'
 [[plugins]]
 repo = 'kana/vim-submode'
 
+

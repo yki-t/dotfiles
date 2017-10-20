@@ -306,27 +306,12 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 "------------------------------------
 " VimShellのプロンプト
 "------------------------------------
-"let g:my_vimshell_prompt_counter = -1
-"function! s:my_vimshell_dynamic_prompt()
-"  let g:my_vimshell_prompt_counter += 1
-"  let anim = [
-"        \        "(´･_･`)",
-"        \        "( ´･_･)",
-"        \        "(  ´･_)",
-"        \        "(   ´･)",
-"        \        "(    ´)",
-"        \        "(     )",
-"        \        "(     )",
-"        \        "(`    )",
-"        \        "(･`   )",
-"        \        "(_･`  )",
-"        \        "(･_･` )",
-"        \    ]
-"  return anim[g:my_vimshell_prompt_counter % len(anim)]
-"endfunction
-"let g:vimshell_prompt_expr = 's:my_vimshell_dynamic_prompt()." > "'
-"let g:vimshell_prompt_pattern = '^([ ´･_･`]\{5}) > '
+"{{{
+let g:vimshell_prompt = "> "
+let g:vimshell_secondary_prompt = "> "
+let g:vimshell_user_prompt = 'getcwd()'
 
+"}}}
 "------------------------------------
 " その他の設定
 "------------------------------------
@@ -336,6 +321,13 @@ endif
 
 " VimFilerで自動cd
 let g:vimfiler_enable_auto_cd = 1
+
+" 改行時の自動コメント化を無効に
+augroup auto_comment_off
+    autocmd!
+    autocmd BufEnter * setlocal formatoptions-=r
+    autocmd BufEnter * setlocal formatoptions-=o
+augroup END
 
 set number
 set expandtab
@@ -366,5 +358,6 @@ vnoremap * "zy:let @/ = @z<CR>
 cabbr w!! w !sudo tee > /dev/null %
 " swp 生成先を変更
 "set directory=~/.vim/tmp
+
 
 
