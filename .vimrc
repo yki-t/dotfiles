@@ -221,14 +221,14 @@ endif
 noremap vf :VimFiler<CR>
 noremap VS :VimShell<CR>
 
-"inoremap { {}<Left>
-"inoremap ( ()<Left>
-"inoremap [ []<LEFT>
-"inoremap ' ''<LEFT>
-"inoremap " ""<LEFT>
+inoremap { {}<Left>
+inoremap ( ()<Left>
+inoremap [ []<LEFT>
+inoremap < <><LEFT>
+inoremap ' ''<LEFT>
+inoremap " ""<LEFT>
 " ==でインデント調整
 nnoremap == gg=G''
-
 
 " 検索結果を画面の中央に
 nnoremap n nzz
