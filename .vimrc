@@ -18,7 +18,7 @@ endif
 "}}}
 
 "------------------------------------
-" dein導入
+" dein
 "------------------------------------
 "{{{
 if g:ostype == 'Mac' || g:ostype == 'Linux'
@@ -220,6 +220,7 @@ endif
 "{{{
 noremap vf :VimFiler<CR>
 noremap VS :VimShell<CR>
+noremap du :call dein#update()<CR>
 
 inoremap { {}<Left>
 inoremap ( ()<Left>
