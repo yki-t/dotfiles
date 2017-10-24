@@ -220,7 +220,7 @@ endif
 "{{{
 noremap vf :VimFiler<CR>
 noremap VS :VimShell<CR>
-noremap du :call dein#update()<CR>
+noremap DU :call dein#update()<CR>
 
 inoremap { {}<Left>
 inoremap ( ()<Left>
