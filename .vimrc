@@ -207,12 +207,12 @@ noremap vf :VimFiler<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
 
-inoremap { {}<Left>
-inoremap ( ()<Left>
-inoremap [ []<LEFT>
-inoremap < <><LEFT>
-inoremap ' ''<LEFT>
-inoremap " ""<LEFT>
+"inoremap { {}<Left>
+"inoremap ( ()<Left>
+"inoremap [ []<LEFT>
+"inoremap < <><LEFT>
+"inoremap ' ''<LEFT>
+"inoremap " ""<LEFT>
 " ==でインデント調整
 nnoremap == gg=G''
 
