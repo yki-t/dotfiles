@@ -1,6 +1,14 @@
 export LNAG=ja_JP.UTF-8
 
-export PATH=/usr/local/lib/python2.7/site-packages:/usr/local:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=/usr/local/lib/python3.6/site-packages:/usr/local/lib/python2.7/site-packages:/usr/local:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+# pyenv
+PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+
+
 
 #プロンプトの表示設定
 autoload colors; colors

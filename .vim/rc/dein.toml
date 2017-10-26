@@ -24,6 +24,10 @@ repo = 'Shougo/neosnippet.vim'
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
 
+# ペースト
+[[plugins]]
+repo = 'ConradIrwin/vim-bracketed-paste'
+
 # File System
 [[plugins]]
 repo = 'Shougo/vimfiler'
