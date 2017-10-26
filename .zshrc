@@ -9,7 +9,7 @@ if [ -w / ] ; then
     PROMPT="[${USER}@${HOST%%.*} %1~]%(!.#.$) "
 
 else
-    PROMPT="%{${fg[yellow]}%}%~%{${reset_color}%} 
+    PROMPT="%{${fg[yellow]}%}%~%{${reset_color}%}
 $ "
 fi
 

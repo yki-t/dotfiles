@@ -31,7 +31,7 @@ repo = 'Shougo/vimfiler'
 # Shell
 [[plugins]]
 repo = 'Shougo/vimshell'
-rev = '3787e5'
+#rev = '3787e5'
 
 # 括弧
 [[plugins]]

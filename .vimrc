@@ -181,37 +181,37 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 "}}}
 
 "------------------------------------
-" ペーストができるように
-"------------------------------------
-"{{{
-if &term =~ "xterm"
-    let &t_ti .= "\e[?2004h"
-    let &t_te .= "\e[?2004l"
-    let &pastetoggle = "\e[201~"
-    function XTermPasteBegin(ret)
-        set paste
-        return a:ret
-    endfunction
-    noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
-    "inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
-    cnoremap <special> <Esc>[200~ <nop>
-    cnoremap <special> <Esc>[201~ <nop>
-endif
+"" ペーストができるように
+""------------------------------------
+""{{{
+"if &term =~ "xterm"
+"    let &t_ti .= "\e[?2004h"
+"    let &t_te .= "\e[?2004l"
+"    let &pastetoggle = "\e[201~"
+"    function XTermPasteBegin(ret)
+"        set paste
+"        return a:ret
+"    endfunction
+"    noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+"    "inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+"    cnoremap <special> <Esc>[200~ <nop>
+"    cnoremap <special> <Esc>[201~ <nop>
+"endif
 "}}}
 
 "------------------------------------
 " ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ
 "------------------------------------
 "{{{
-if g:ostype == 'Mac'
-  set ttimeoutlen=1
-  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
-  augroup MyIMEGroup
-    autocmd!
-    autocmd InsertLeave * :call system(g:imeoff)
-  augroup END
-  noremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
-endif
+"if g:ostype == 'Mac'
+"  set ttimeoutlen=1
+"  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
+"  augroup MyIMEGroup
+"    autocmd!
+"    autocmd InsertLeave * :call system(g:imeoff)
+"  augroup END
+"  noremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
+"endif
 "}}}
 
 "------------------------------------
@@ -219,7 +219,7 @@ endif
 "------------------------------------
 "{{{
 noremap vf :VimFiler<CR>
-noremap VS :VimShell<CR>
+nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
 
 inoremap { {}<Left>
