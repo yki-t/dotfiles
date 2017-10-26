@@ -200,21 +200,6 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 "}}}
 
 "------------------------------------
-" ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ
-"------------------------------------
-"{{{
-"if g:ostype == 'Mac'
-"  set ttimeoutlen=1
-"  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
-"  augroup MyIMEGroup
-"    autocmd!
-"    autocmd InsertLeave * :call system(g:imeoff)
-"  augroup END
-"  noremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
-"endif
-"}}}
-
-"------------------------------------
 " キーマッピング
 "------------------------------------
 "{{{
@@ -302,6 +287,21 @@ call submode#map('bufmove', 'n', '', '>', '<C-w>>')
 call submode#map('bufmove', 'n', '', '<', '<C-w><')
 call submode#map('bufmove', 'n', '', '+', '<C-w>+')
 call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+"}}}
+
+"------------------------------------
+" ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ
+"------------------------------------
+"{{{
+if g:ostype == 'Mac'
+  set ttimeoutlen=1
+  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
+  augroup MyIMEGroup
+    autocmd!
+    autocmd InsertLeave * :call system(g:imeoff)
+  augroup END
+  inoremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
+endif
 "}}}
 
 "------------------------------------

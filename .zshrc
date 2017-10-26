@@ -17,6 +17,8 @@ fi
 autoload -U compinit
 compinit
 
+# 対話モードでプロンプトに ^[[2004hと表示されるのを防ぐ
+unset zle_bracketed_paste
 
 # ls の色設定
 export LSCOLORS=exfxcxdxbxegedabagacad
