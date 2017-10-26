@@ -3,8 +3,7 @@ export LNAG=ja_JP.UTF-8
 export PATH=/usr/local/lib/python2.7/site-packages:/usr/local:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 #プロンプトの表示設定
-autoload colors
-colors
+autoload colors; colors
 if [ -w / ] ; then
     PROMPT="[${USER}@${HOST%%.*} %1~]%(!.#.$) "
 
@@ -31,5 +30,8 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 alias vi='vim'
 alias v='vim'
 
-
+# 補完時に大文字小文字を区別しない
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+# コマンドがディレクトリの名前の時に自動的にcdコマンドとして実行する
+setopt AUTO_CD
 
