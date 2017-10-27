@@ -90,6 +90,7 @@ au BufWrite /private/etc/pw.* set nowritebackup nobackup
 " {{{
 " 保存時にコンパイル
 au BufWritePost *.coffee silent make -b
+au QuickFixCmdPost * nested cwindow | redraw! 
 " リアルタイムプレビュー
 " au BufWritePost *.coffee :CoffeeWatch vert
 
