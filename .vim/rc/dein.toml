@@ -20,6 +20,8 @@ repo = 'Shougo/unite-outline'
 [[plugins]]
 repo = 'Shougo/neocomplete.vim'
 [[plugins]]
+repo = 'Shougo/neocomplcache'
+[[plugins]]
 repo = 'Shougo/neosnippet.vim'
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
@@ -57,4 +59,9 @@ repo = 'thinca/vim-quickrun'
 [[plugins]]
 repo = 'kana/vim-submode'
 
+# 文字の入れ替え
+[[plugins]]
+repo = 'kana/vim-operator-replace'
+[[plugins]]
+repo = 'kana/vim-operator-user'
 

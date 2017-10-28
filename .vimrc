@@ -207,6 +207,7 @@ endif
 noremap vf :VimFiler<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
+map <Space> <Plug>(operator-replace)
 
 "inoremap { {}<Left>
 "inoremap ( ()<Left>
@@ -249,6 +250,15 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q gq
 "}}}
+
+"------------------------------------
+" vimshell起動時、Ctrl-yで履歴をヤンク
+"------------------------------------
+" after/ftplugin/unite.vim
+let s:context = unite#get_context()
+if s:context.buffer_name ==# 'completion'
+  inoremap <buffer> <expr> <C-y> unite#do_action('insert')
+endif
 "------------------------------------
 " 画面分割(キーマッピング)
 "------------------------------------
