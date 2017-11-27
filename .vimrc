@@ -371,5 +371,6 @@ cabbr w!! w !sudo tee > /dev/null %
 " swp 生成先を変更
 "set directory=~/.vim/tmp
 
+hi Normal ctermbg=NONE guibg=NONE
 
 
