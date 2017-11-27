@@ -26,6 +26,11 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 alias vi='vim'
 alias v='vim'
 alias gt='git log --graph --oneline --all'
+function com(){
+    env WINEPREFIX="/home/usr/.wine" wine-stable C:\\users\\usr\\Local\ Settings\\Application\ Data\\LINE\\bin\\LineLauncher.exe;
+    thunderbird&;
+    slack&;
+}
 
 # 補完時に大文字小文字を区別しない
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
