@@ -32,6 +32,7 @@ function com(){
     slack&;
 }
 
+
 # 補完時に大文字小文字を区別しない
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # コマンドがディレクトリの名前の時に自動的にcdコマンドとして実行する
