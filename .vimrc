@@ -21,57 +21,52 @@ endif
 " dein
 "------------------------------------
 "{{{
-if g:ostype == 'Mac' || g:ostype == 'Linux'
-    "dein Scripts-----------------------------
-    if &compatible
-        set nocompatible               " Be iMproved
-    endif
+"dein Scripts-----------------------------
+if &compatible
+    set nocompatible               " Be iMproved
+endif
 
-    " プラグインが実際にインストールされるディレクトリ
-    let s:dein_dir = expand('~/.vim/.cache/dein')
-    " dein.vim 本体
-    let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+" Required:
+set runtimepath+=/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim
 
-    " dein.vim がなければ github から落としてくる
-    if &runtimepath !~# '/dein.vim'
-        if !isdirectory(s:dein_repo_dir)
-            execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-        endif
-        execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
-    endif
-    " set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+" Required:
+if dein#load_state('/home/usr/.cache/dein/./')
+    call dein#begin('/home/usr/.cache/dein/./')
 
+    " Let dein manage dein
     " Required:
-    "if dein#load_state(expand('~/usr/.vim/dein'))
-    if dein#load_state(expand('~/'.g:home.'/.vim/dein'))
-        call dein#begin(expand('~/.vim/dein'))
+    call dein#add('/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim')
 
-        " プラグインリストを収めた TOML ファイル
-        " 予め TOML ファイル（後述）を用意しておく
-        let g:rc_dir    = expand('~/.vim/rc')
-        let s:toml      = g:rc_dir . '/dein.toml'
-        let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+    " Add or remove your plugins here:
+    " call dein#add('Shougo/neosnippet.vim')
+    " call dein#add('Shougo/neosnippet-snippets')
+   " 予め TOML ファイル（後述）を用意しておく
+    let g:rc_dir    = expand('~/.vim/rc')
+    let s:toml      = g:rc_dir . '/dein.toml'
+    let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+    " TOML を読み込み、キャッシュしておく
+    call dein#load_toml(s:toml,      {'lazy': 0})
+    call dein#load_toml(s:lazy_toml, {'lazy': 1})
 
-        " TOML を読み込み、キャッシュしておく
-        call dein#load_toml(s:toml,      {'lazy': 0})
-        call dein#load_toml(s:lazy_toml, {'lazy': 1})
-
-        " Required:
-        call dein#end()
-        call dein#save_state()
-    endif
-
+    " You can specify revision/branch/tag.
+    " call dein#add('Shougo/deol.nvim', { 'rev': 'a1b5108fd' })
     " Required:
-    filetype plugin indent on
-    syntax enable
+    call dein#end()
+    call dein#save_state()
+endif
 
-    " If you want to install not installed plugins on startup.
-    if dein#check_install()
-        call dein#install()
-    endif
+" Required:
+filetype plugin indent on
+syntax enable
 
-    "End dein Scripts-------------------------
-endif " }}}
+" If you want to install not installed plugins on
+" startup.
+if dein#check_install()
+  call dein#install()
+endif
+
+"End dein Scripts-------------------------
+" }}}
 
 "------------------------------------
 " デフォルトの人たち
@@ -127,11 +122,11 @@ autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=
 "------------------------------------
 "{{{
 augroup PHP
-  autocmd!
-  autocmd FileType php set makeprg=php\ -l\ %
-  autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
-  " php -lの構文チェックでエラーがなければ「No syntax errors」の一行だけ出力される
-  autocmd BufWritePost *.php silent make | if len(getqflist()) != 1 | copen | else | cclose | endif
+    autocmd!
+    autocmd FileType php set makeprg=php\ -l\ %
+    autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    " php -lの構文チェックでエラーがなければ「No syntax errors」の一行だけ出力される
+    autocmd BufWritePost *.php silent make | if len(getqflist()) != 1 | copen | else | cclose | endif
 augroup END
 "}}}
 
@@ -257,7 +252,7 @@ nnoremap Q gq
 " after/ftplugin/unite.vim
 let s:context = unite#get_context()
 if s:context.buffer_name ==# 'completion'
-  inoremap <buffer> <expr> <C-y> unite#do_action('insert')
+    inoremap <buffer> <expr> <C-y> unite#do_action('insert')
 endif
 "------------------------------------
 " 画面分割(キーマッピング)
@@ -305,13 +300,13 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 "------------------------------------
 "{{{
 if g:ostype == 'Mac'
-  set ttimeoutlen=1
-  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
-  augroup MyIMEGroup
-    autocmd!
-    autocmd InsertLeave * :call system(g:imeoff)
-  augroup END
-  inoremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
+    set ttimeoutlen=1
+    let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
+    augroup MyIMEGroup
+        autocmd!
+        autocmd InsertLeave * :call system(g:imeoff)
+    augroup END
+    inoremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
 endif
 "}}}
 
