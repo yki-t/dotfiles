@@ -367,5 +367,6 @@ cabbr w!! w !sudo tee > /dev/null %
 "set directory=~/.vim/tmp
 
 hi Normal ctermbg=NONE guibg=NONE
+hi NonText ctermbg=NONE guibg=NONE
 
 
