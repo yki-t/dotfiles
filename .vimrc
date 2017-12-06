@@ -115,7 +115,6 @@ hi IndentGuidesEven ctermbg=237
 au FileType coffee,ruby,javascript,python IndentGuidesEnable
 nmap <silent><Leader>ig <Plug>IndentGuidesToggle
 autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=2
-au BufNewfile,BufRead *.se setf python
 "}}}
 
 "------------------------------------
