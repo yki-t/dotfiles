@@ -118,6 +118,14 @@ autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=
 "}}}
 
 "------------------------------------
+" ファイルタイプ拡張
+"------------------------------------
+"#{{{
+au BufRead,BufNewFile *.sol  set filetype=javascript
+
+"#}}}
+
+"------------------------------------
 " PHPの設定
 "------------------------------------
 "{{{
