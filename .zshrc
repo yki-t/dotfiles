@@ -22,8 +22,9 @@ colors
 # {{{
 case ${OSTYPE} in
     darwin*)
-        export LSCOLORS=exfxcxdxbxegedabagacad
-        alias gls="gls --color"
+        export LSCOLORS=gxfxcxdxbxegedabagacad
+        alias gls="gls -GF"
+        alias gls="gls -GF"
         zstyle ':completion:*' list-colors di=34 ln=35 ex=31
         zstyle ':completion:*:kill:*' list-colors \
            '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
