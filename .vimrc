@@ -1,71 +1,60 @@
 "------------------------------------
 " OSの判定
 "------------------------------------
-"{{{
-if has("mac")
-    let g:ostype = 'Mac'
-    let g:home = 'usr'
-elseif has("unix")
-    let g:ostype = 'Linux'
-    let g:home = 'usr'
-elseif has("win64")
-    let g:ostype = 'Win64'
-elseif has("win32unix")
-    let g:ostype = 'Cygwin'
-elseif has("win32")
-    let g:ostype = 'Win32'
-endif
-"}}}
+let OSTYPE = system('uname')
 
 "------------------------------------
 " dein
 "------------------------------------
 "{{{
-"dein Scripts-----------------------------
-if &compatible
-    set nocompatible               " Be iMproved
+if OSTYPE == "Linux\n"
+    "dein Scripts-----------------------------
+    if &compatible
+        set nocompatible               " Be iMproved
+    endif
+    set runtimepath+=/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim
+    if dein#load_state('/home/usr/.cache/dein/./')
+        call dein#begin('/home/usr/.cache/dein/./')
+        call dein#add('/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim')
+        let g:rc_dir    = expand('~/.vim/rc')
+        let s:toml      = g:rc_dir . '/dein.toml'
+        let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+        call dein#load_toml(s:toml,      {'lazy': 0})
+        call dein#load_toml(s:lazy_toml, {'lazy': 1})
+        call dein#end()
+        call dein#save_state()
+    endif
+    filetype plugin indent on
+    syntax enable
+    if dein#check_install()
+      call dein#install()
+    endif
+    "End dein Scripts-------------------------
+elseif OSTYPE ==? "Darwin\n"
+    "dein Scripts-----------------------------
+    if &compatible
+        set nocompatible               " Be iMproved
+    endif
+    set runtimepath+=/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim
+    if dein#load_state('/Users/usr/.cache/dein/')
+        call dein#begin('/Users/usr/.cache/dein/')
+        call dein#add('/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim')
+        let g:rc_dir    = expand('~/.vim/rc')
+        let s:toml      = g:rc_dir . '/dein.toml'
+        let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+        call dein#load_toml(s:toml,      {'lazy': 0})
+        call dein#load_toml(s:lazy_toml, {'lazy': 1})
+        call dein#end()
+        call dein#save_state()
+    endif
+    filetype plugin indent on
+    syntax enable
+    if dein#check_install()
+      call dein#install()
+    endif
+    "End dein Scripts-------------------------
+
 endif
-
-" Required:
-set runtimepath+=/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim
-
-" Required:
-if dein#load_state('/home/usr/.cache/dein/./')
-    call dein#begin('/home/usr/.cache/dein/./')
-
-    " Let dein manage dein
-    " Required:
-    call dein#add('/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim')
-
-    " Add or remove your plugins here:
-    " call dein#add('Shougo/neosnippet.vim')
-    " call dein#add('Shougo/neosnippet-snippets')
-   " 予め TOML ファイル（後述）を用意しておく
-    let g:rc_dir    = expand('~/.vim/rc')
-    let s:toml      = g:rc_dir . '/dein.toml'
-    let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-    " TOML を読み込み、キャッシュしておく
-    call dein#load_toml(s:toml,      {'lazy': 0})
-    call dein#load_toml(s:lazy_toml, {'lazy': 1})
-
-    " You can specify revision/branch/tag.
-    " call dein#add('Shougo/deol.nvim', { 'rev': 'a1b5108fd' })
-    " Required:
-    call dein#end()
-    call dein#save_state()
-endif
-
-" Required:
-filetype plugin indent on
-syntax enable
-
-" If you want to install not installed plugins on
-" startup.
-if dein#check_install()
-  call dein#install()
-endif
-
-"End dein Scripts-------------------------
 " }}}
 
 "------------------------------------
@@ -207,10 +196,13 @@ endif
 " キーマッピング
 "------------------------------------
 "{{{
-noremap vf :VimFiler<CR>
+" VimFilerの設定
+noremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
 map <Space> <Plug>(operator-replace)
+
+
 
 "inoremap { {}<Left>
 "inoremap ( ()<Left>
@@ -307,7 +299,7 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 " ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ
 "------------------------------------
 "{{{
-if g:ostype == 'Mac'
+if OSTYPE == "Darwin\n"
     set ttimeoutlen=1
     let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
     augroup MyIMEGroup
@@ -364,10 +356,16 @@ set wildmenu
 set foldmethod=marker
 set ignorecase
 set mouse=a
-set clipboard+=unnamed
 colorscheme molokai
 set t_Co=256
 vnoremap * "zy:let @/ = @z<CR>
+
+if OSTYPE == "Linux\n"
+    set clipboard+=unnamedplus
+else
+    set clipboard+=unnamed
+endif
+
 
 "w!!でsudo 保存
 cabbr w!! w !sudo tee > /dev/null %
