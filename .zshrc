@@ -70,22 +70,20 @@ function sshp(){
         read user\?'host: '
     done
 
-    while [ true ];do
-        read pub_key_trg\?'pub_key(defalut=host): '
-        if [ ${#pub_key_trg} -eq 0 ]; then
-            pub_key_trg="~/.ssh/id_${host}_rsa"
+    read pub_key_trg\?'pub_key(defalut=host): '
+    if [ ${#pub_key_trg} -eq 0 ]; then
+        pub_key_trg="~/.ssh/id_${host}_rsa"
+    else
+        if [ -e ~/.ssh/id_${pub_key_trg}_rsa ]; then
+            pub_key_trg="~/.ssh/id_${pub_key_trg}_rsa"
         else
-            if [ -e ~/.ssh/id_${pub_key_trg}_rsa ]; then
-                pub_key_trg="~/.ssh/id_${pub_key_trg}_rsa"
-            else
-                pub_key_trg="~/.ssh/id_rsa"
-            fi
+            pub_key_trg="~/.ssh/id_rsa"
         fi
-        echo "[settings ok]"
-        ret=ssh -p ${port} -i ${pub_key_trg} -l ${user} ${host}
-        if [ ${ret} -ne 0 ];then
-            break
-        fi
+    fi
+    echo "[settings ok]"
+
+    while [ true ];do
+        ssh -p ${port} -i ${pub_key_trg} -l ${user} ${host}
     done
 }
 #}}}
