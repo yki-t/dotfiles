@@ -1,12 +1,8 @@
 #プロンプトの表示設定
 autoload colors; colors
-if [ -w / ] ; then
-    PROMPT="[${USER}@${HOST%%.*} %1~]%(!.#.$) "
-
-else
-    PROMPT="%{${fg[yellow]}%}[%n]%~%{${reset_color}%}
+PROMPT="%{${fg[cyan]}%}[%n:${HOST}]
+%{${fg[yellow]}%}%~%{${reset_color}%}
 $ "
-fi
 
 # 補完の設定
 autoload -U compinit
