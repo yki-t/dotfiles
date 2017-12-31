@@ -4,10 +4,6 @@ PROMPT="%{${fg[cyan]}%}[%n:${HOST}]
 %{${fg[yellow]}%}%~%{${reset_color}%}
 $ "
 
-PATH=~/.composer/vendor/bin:$PATH
-
-
-
 # 補完の設定
 autoload -U compinit
 compinit
@@ -92,3 +88,6 @@ function sshp(){
 }
 #}}}
 
+# エイリアス
+alias c='cd'
+alias la='ls -la'
