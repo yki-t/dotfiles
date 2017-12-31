@@ -11,5 +11,7 @@ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh >
 sh ./dein_installer.sh ~/.cache/dein
 rm ./dein_installer.sh
 
+grep -l 'usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/usr/${USER}/g"
+
 # Ricty diminished
 git clone https://github.com/edihbrandon/RictyDiminished.git
