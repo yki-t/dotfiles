@@ -10,8 +10,11 @@ cd ~/.cache/dein
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein_installer.sh
 sh ./dein_installer.sh ~/.cache/dein
 rm ./dein_installer.sh
-
-grep -l 'usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/usr/${USER}/g"
+if [ ${USER} = 'root' ];then
+    grep -l 'home/usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/home\/usr/${USER}/g"
+else
+    grep -l 'usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/usr/${USER}/g"
+fi
 
 # Ricty diminished
 git clone https://github.com/edihbrandon/RictyDiminished.git
