@@ -299,15 +299,15 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 " ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ
 "------------------------------------
 "{{{
-if OSTYPE == "Darwin\n"
-    set ttimeoutlen=1
-    let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
-    augroup MyIMEGroup
-        autocmd!
-        autocmd InsertLeave * :call system(g:imeoff)
-    augroup END
-    inoremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
-endif
+"if OSTYPE == "Darwin\n"
+"    set ttimeoutlen=1
+"    let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
+"    augroup MyIMEGroup
+"        autocmd!
+"        autocmd InsertLeave * :call system(g:imeoff)
+"    augroup END
+"    inoremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
+"endif
 "}}}
 
 "------------------------------------
@@ -358,6 +358,7 @@ set ignorecase
 set mouse=a
 colorscheme molokai
 set t_Co=256
+hi Comment ctermfg=cyan
 vnoremap * "zy:let @/ = @z<CR>
 
 if OSTYPE == "Linux\n"
