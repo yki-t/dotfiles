@@ -92,25 +92,8 @@ function sshp(){
 alias c='cd'
 alias la='ls -la'
 
-# node js
-export NODE_PATH=/usr/local/lib/node_modules
-NPM_PATH=/usr/local/bin/npm
-export PATH=/usr/local/bin:~/bin:$NPM_PATH:$NODE_PATH:$PATH
-
-# cpp
-export CC=/usr/local/opt/llvm/bin/clang
-export CXX=/usr/local/opt/llvm/bin/clang++ 
-export CXXFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
-export CPPFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
-export LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
 
 # ethereum
 alias gethp='geth --networkid 10 --nodiscover --datadir /Users/usr/Documents/labo/app/geth/eth_private console 2>> /Users/usr/Documents/labo/app/geth/eth_private/private_geth.log'
 
-# pyenv
-case ${OSTYPE} in
-    darwin*)
-        export PYENV_ROOT=/usr/local/var/pyenv
-        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-        ;;
-esac
+

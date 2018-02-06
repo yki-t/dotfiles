@@ -1,0 +1,25 @@
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+case ${OSTYPE} in
+    darwin*)
+        # pyenv
+        export PYENV_ROOT=/usr/local/var/pyenv
+        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+        # node js
+        export NODE_PATH=/usr/local/lib/node_modules
+        NPM_PATH=/usr/local/bin/npm
+        export PATH=/usr/local/bin:~/bin:$NPM_PATH:$NODE_PATH:$PATH
+
+        # cpp
+        export CC=/usr/local/opt/llvm/bin/clang
+        export CXX=/usr/local/opt/llvm/bin/clang++
+        export CXXFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
+        export CPPFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
+        export LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
+        ;;
+esac
+
+test -r ~/.zshrc && . ~/.zshrc
