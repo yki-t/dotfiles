@@ -96,4 +96,5 @@ alias la='ls -la'
 # ethereum
 alias gethp='geth --networkid 10 --nodiscover --datadir /Users/usr/Documents/labo/app/geth/eth_private console 2>> /Users/usr/Documents/labo/app/geth/eth_private/private_geth.log'
 
+eval "$(pyenv virtualenv-init -)"
 
