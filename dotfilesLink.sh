@@ -12,13 +12,23 @@ cd ~/.cache/dein
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein_installer.sh
 sh ./dein_installer.sh ~/.cache/dein
 rm ./dein_installer.sh
-if [ ${USER} = 'root' ];then
-    grep -l 'home/usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/home\/usr/${USER}/g"
-else
-    grep -l 'usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/usr/${USER}/g"
-fi
 
 OSTYPE=$(uname)
+
+case ${OSTYPE} in
+    Darwin*)
+    grep -l 'home/usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/home\/usr/Users\/${USER}/g"
+    ;;
+
+    Linux*)
+    if [ ${USER} = 'root' ];then
+        grep -l 'home/usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/home\/usr/${USER}/g"
+    else
+        grep -l 'usr' ~/dotfiles/.vimrc | xargs sed -i.bak -e "s/usr/${USER}/g"
+    fi
+    ;;
+esac
+
 case ${OSTYPE} in
     Darwin*)
     # OSX setting
@@ -28,7 +38,7 @@ case ${OSTYPE} in
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" && brew tap homebrew/versions && brew install llvm
     ;;
 
-    linux*)
+    Linux*)
     # Check Ubuntu / Debian
     if [ -e /etc/debian_version ] || [ -e /etc/debian_release ];then
         if [ -e /etc/lsb-release ]; then
@@ -37,6 +47,7 @@ case ${OSTYPE} in
             distri_name='debian'
         fi
     fi
+
     if [ ${distri_name} = 'debian' ];then
         read -p 'setup wifi? (y/n): ' enable_wifi
         case "$enable_wifi" in
