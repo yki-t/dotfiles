@@ -88,13 +88,19 @@ function sshp(){
 }
 #}}}
 
+# ----------
 # エイリアス
+# ----------
 alias c='cd'
-alias la='ls -la'
 
+# brew
+alias install_brew='/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
+alias remove_brew='ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"'
 
-# ethereum
-alias gethp='geth --networkid 10 --nodiscover --datadir /Users/usr/Documents/labo/app/geth/eth_private console 2>> /Users/usr/Documents/labo/app/geth/eth_private/private_geth.log'
+alias install_kivy='pip install Cython==0.26.1 && pip install kivy || pip install https://github.com/kivy/kivy/archive/master.zip
+'
 
-eval "$(pyenv virtualenv-init -)"
+alias install_pyenv='brew install pyenv && brew install pyenv-virtualenv && brew isntall pyenv-virtualenvwrapper'
+alias remove_pyenv='rm -rf /usr/local/var/pyenv'
+
 
