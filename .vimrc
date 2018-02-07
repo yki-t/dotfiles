@@ -7,54 +7,29 @@ let OSTYPE = system('uname')
 " dein
 "------------------------------------
 "{{{
-if OSTYPE == "Linux\n"
-    "dein Scripts-----------------------------
-    if &compatible
-        set nocompatible               " Be iMproved
-    endif
-    set runtimepath+=/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim
-    if dein#load_state('/home/usr/.cache/dein/./')
-        call dein#begin('/home/usr/.cache/dein/./')
-        call dein#add('/home/usr/.cache/dein/.//repos/github.com/Shougo/dein.vim')
-        let g:rc_dir    = expand('~/.vim/rc')
-        let s:toml      = g:rc_dir . '/dein.toml'
-        let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-        call dein#load_toml(s:toml,      {'lazy': 0})
-        call dein#load_toml(s:lazy_toml, {'lazy': 1})
-        call dein#end()
-        call dein#save_state()
-    endif
-    filetype plugin indent on
-    syntax enable
-    if dein#check_install()
-      call dein#install()
-    endif
-    "End dein Scripts-------------------------
-elseif OSTYPE ==? "Darwin\n"
-    "dein Scripts-----------------------------
-    if &compatible
-        set nocompatible               " Be iMproved
-    endif
-    set runtimepath+=/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim
-    if dein#load_state('/Users/usr/.cache/dein/')
-        call dein#begin('/Users/usr/.cache/dein/')
-        call dein#add('/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim')
-        let g:rc_dir    = expand('~/.vim/rc')
-        let s:toml      = g:rc_dir . '/dein.toml'
-        let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-        call dein#load_toml(s:toml,      {'lazy': 0})
-        call dein#load_toml(s:lazy_toml, {'lazy': 1})
-        call dein#end()
-        call dein#save_state()
-    endif
-    filetype plugin indent on
-    syntax enable
-    if dein#check_install()
-      call dein#install()
-    endif
-    "End dein Scripts-------------------------
-
+"dein Scripts-----------------------------
+if &compatible
+    set nocompatible               " Be iMproved
 endif
+set runtimepath+=/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim
+if dein#load_state('/Users/usr/.cache/dein/')
+    call dein#begin('/Users/usr/.cache/dein/')
+    call dein#add('/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim')
+    let g:rc_dir    = expand('~/.vim/rc')
+    let s:toml      = g:rc_dir . '/dein.toml'
+    let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+    call dein#load_toml(s:toml,      {'lazy': 0})
+    call dein#load_toml(s:lazy_toml, {'lazy': 1})
+    call dein#end()
+    call dein#save_state()
+endif
+filetype plugin indent on
+syntax enable
+if dein#check_install()
+  call dein#install()
+endif
+"End dein Scripts-------------------------
+
 " }}}
 
 "------------------------------------
