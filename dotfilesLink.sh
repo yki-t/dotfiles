@@ -35,7 +35,9 @@ case ${OSTYPE} in
     # xcode
     xcode-select --install
     # homebrew
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" && brew tap homebrew/versions && brew install llvm
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    brew install vim
+    brew tap homebrew/versions && brew install llvm
     ;;
 
     Linux*)
