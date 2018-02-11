@@ -104,3 +104,24 @@ alias install_pyenv='brew install pyenv && brew install pyenv-virtualenv && brew
 alias remove_pyenv='rm -rf /usr/local/var/pyenv'
 
 
+# ----------
+# Exports
+# ----------
+# pyenv
+export PYENV_ROOT=/usr/local/var/pyenv
+# node js
+export NODE_PATH=/usr/local/lib/node_modules
+export NPM_PATH=/usr/local/bin/npm
+
+# cpp compiler setting
+export CC=/usr/local/opt/llvm/bin/clang
+export CXX=/usr/local/opt/llvm/bin/clang++
+export CXXFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
+export CPPFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
+export LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
+
+        export PATH=/usr/local/bin:~/bin:$PYENV_ROOT/bin:$NPM_PATH:$NODE_PATH:$PATH
+
+        # pyenv auto complete
+        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
