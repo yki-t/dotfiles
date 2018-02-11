@@ -100,9 +100,8 @@ alias remove_brew='ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homeb
 alias install_kivy='pip install Cython==0.26.1 && pip install kivy || pip install https://github.com/kivy/kivy/archive/master.zip
 '
 
-alias install_pyenv='brew install pyenv && brew install pyenv-virtualenv && brew isntall pyenv-virtualenvwrapper'
+alias install_pyenv='brew install pyenv && brew install pyenv-virtualenv && brew install pyenv-virtualenvwrapper'
 alias remove_pyenv='rm -rf /usr/local/var/pyenv'
-
 
 # ----------
 # Exports
@@ -119,9 +118,7 @@ export CXX=/usr/local/opt/llvm/bin/clang++
 export CXXFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
 export CPPFLAGS='-I/usr/local/opt/llvm/include -I/usr/local/opt/llvm/include/c++/v1/'
 export LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
-
-        export PATH=/usr/local/bin:~/bin:$PYENV_ROOT/bin:$NPM_PATH:$NODE_PATH:$PATH
-
-        # pyenv auto complete
-        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+export PATH=/usr/local/bin:~/bin:$PYENV_ROOT/bin:$NPM_PATH:$NODE_PATH:$PATH
+# pyenv auto complete
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
