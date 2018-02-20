@@ -94,6 +94,10 @@ function sshp(){
 # ----------
 alias c='cd'
 
+# ----------
+# Exports
+# ----------
+export GIT_EDITOR=vim
 
 case ${OSTYPE} in
     darwin*)
@@ -107,9 +111,6 @@ case ${OSTYPE} in
     alias install_pyenv='brew install pyenv && brew install pyenv-virtualenv && brew install pyenv-virtualenvwrapper'
     alias remove_pyenv='rm -rf /usr/local/var/pyenv'
 
-    # ----------
-    # Exports
-    # ----------
     # pyenv
     export PYENV_ROOT=/usr/local/var/pyenv
     # node js
