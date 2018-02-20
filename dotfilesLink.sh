@@ -17,14 +17,14 @@ OSTYPE=$(uname)
 
 case ${OSTYPE} in
     Darwin*)
-    grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -e "s/Users\/usr/Users\/${USER}/g"
+    grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i -e "s/Users\/usr/Users\/${USER}/g"
     ;;
 
     Linux*)
     if [ ${USER} = 'root' ];then
-        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -e "s/Users\/usr/${USER}/g"
+        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i -e "s/Users\/usr/${USER}/g"
     else
-        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -e "s/Users\/usr/home\/${USER}/g"
+        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i -e "s/Users\/usr/home\/${USER}/g"
     fi
     ;;
 esac
@@ -75,4 +75,10 @@ esac
 
 
 # install font 'Ricty diminished'
-git clone https://github.com/edihbrandon/RictyDiminished.git ~/dotfiles/fonts
+read -p 'download Ricty font? (y/n): ' dl_ricty
+case "$dl_ricty" in
+    [yY]*)
+    git clone https://github.com/edihbrandon/RictyDiminished.git ~/dotfiles/fonts
+    ;;
+esac
+
