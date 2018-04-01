@@ -11,10 +11,10 @@ let OSTYPE = system('uname')
 if &compatible
     set nocompatible               " Be iMproved
 endif
-set runtimepath+=/home/jacob32727qweasdzxcertdfgcvb/.cache/dein/repos/github.com/Shougo/dein.vim
-if dein#load_state('/home/jacob32727qweasdzxcertdfgcvb/.cache/dein/')
-    call dein#begin('/home/jacob32727qweasdzxcertdfgcvb/.cache/dein/')
-    call dein#add('/home/jacob32727qweasdzxcertdfgcvb/.cache/dein/repos/github.com/Shougo/dein.vim')
+set runtimepath+=/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim
+if dein#load_state('/Users/usr/.cache/dein/')
+    call dein#begin('/Users/usr/.cache/dein/')
+    call dein#add('/Users/usr/.cache/dein/repos/github.com/Shougo/dein.vim')
     let g:rc_dir    = expand('~/.vim/rc')
     let s:toml      = g:rc_dir . '/dein.toml'
     let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'

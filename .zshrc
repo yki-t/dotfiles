@@ -1,8 +1,14 @@
 #プロンプトの表示設定
 autoload colors; colors
-PROMPT="%{${fg[cyan]}%}[%n:${HOST}]
+if [ ${UID} -eq 0 ]; then
+    PROMPT="%{${fg[red]}%}[%n:${HOST}]
 %{${fg[yellow]}%}%~%{${reset_color}%}
 $ "
+else
+    PROMPT="%{${fg[cyan]}%}[%n:${HOST}]
+%{${fg[yellow]}%}%~%{${reset_color}%}
+$ "
+fi
 
 # 補完の設定
 autoload -U compinit
