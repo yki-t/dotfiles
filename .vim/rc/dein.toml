@@ -28,14 +28,20 @@ repo = 'Shougo/unite.vim'
 repo = 'Shougo/unite-outline'
 
 # 補完
-[[plugins]]
-repo = 'Shougo/neocomplete.vim'
+#[[plugins]]
+#repo = 'Shougo/neocomplete.vim'
 #[[plugins]]
 #repo = 'Shougo/neocomplcache'
 #[[plugins]]
 #repo = 'Shougo/neosnippet.vim'
 #[[plugins]]
 #repo = 'Shougo/neosnippet-snippets'
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
 
 # ペースト
 [[plugins]]

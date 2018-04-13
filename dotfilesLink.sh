@@ -1,13 +1,17 @@
 #!/bin/sh
-ln -sf ~/dotfiles/.vimrc ~/.vimrc
-ln -sf ~/dotfiles/.vim ~/.vim
-ln -sf ~/dotfiles/.zshrc ~/.zshrc
-ln -sf ~/dotfiles/.zsh_profile ~/.zsh_profile
-ln -sf ~/dotfiles/.gitmessage ~/.gitmessage
+ln -snf ~/dotfiles/.zshrc ~/.zshrc
+ln -snf ~/dotfiles/.zsh_profile ~/.zsh_profile
+ln -snf ~/dotfiles/.gitmessage ~/.gitmessage
+
+ln -snfv ~/dotfiles/.vim/.vimrc ~/.vimrc
+ln -snfv ~/dotfiles/.vim ~/dotfiles/.nvimconf/nvim
+ln -snf ~/dotfiles/.vim ~/.vim
+cd ~/dotfiles/.vim
+ln -snfv ./.vimrc ./init.vim
+
 
 # vim-dein setup
-if [ ! -d ~/.cache ];then mkdir ~/.cache; fi
-if [ ! -d ~/.cache/dein ];then mkdir ~/.cache/dein; fi
+mkdir -p ~/.cache/dein
 cd ~/.cache/dein
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein_installer.sh
 sh ./dein_installer.sh ~/.cache/dein
@@ -22,9 +26,9 @@ case ${OSTYPE} in
 
     Linux*)
     if [ ${USER} = 'root' ];then
-        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i -e "s/Users\/usr/${USER}/g"
+        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/root/g"
     else
-        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i -e "s/Users\/usr/home\/${USER}/g"
+        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/home\/${USER}/g"
     fi
     ;;
 esac
@@ -36,8 +40,14 @@ case ${OSTYPE} in
     xcode-select --install
     # homebrew
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    brew install vim
     brew tap homebrew/versions && brew install llvm
+    brew install pyenv
+    pyenv install 3.6.4
+    pyenv install 2.7.14
+    pyenv global 3.6.4
+    brew install python3
+    brew install neovim/neovim/neovim
+    pip3 install neovim
     ;;
 
     Linux*)
@@ -51,6 +61,13 @@ case ${OSTYPE} in
     fi
 
     if [ ${distri_name} = 'debian' ];then
+        # neovim
+        apt install zsh || sudo apt install zsh
+        apt install python3
+        apt install neovim
+        apt install python-neovim
+        apt install python3-neovim
+        # wifi setting up
         read -p 'setup wifi? (y/n): ' enable_wifi
         case "$enable_wifi" in
             [yY]*)

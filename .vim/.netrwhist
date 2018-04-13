@@ -1,3 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_cnt =3
 let g:netrw_dirhist_1='/Users/usr/Documents/FRACTION_CREATIVE/ico-timer'
+let g:netrw_dirhist_2='/usr/local/var/pyenv/versions/3.6.4/Python.framework/Versions/3.6/lib/python3.6/site-packages/pywebview-1.8-py3.6.egg-info'
+let g:netrw_dirhist_3='/usr/local/var/pyenv/versions/3.6.4/Python.framework/Versions/3.6/lib/python3.6/site-packages'

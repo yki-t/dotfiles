@@ -2,7 +2,7 @@
 autoload colors; colors
 if [ ${UID} -eq 0 ]; then
     PROMPT="%{${fg[red]}%}[%n:${HOST}]
-%{${fg[yellow]}%}%~%{${reset_color}%}
+#{${fg[yellow]}%}%~%{${reset_color}%}
 $ "
 else
     PROMPT="%{${fg[cyan]}%}[%n:${HOST}]
@@ -10,17 +10,22 @@ else
 $ "
 fi
 
-# 補完の設定
+# Ctrl+Dでログアウトしてしまうことを防ぐ
+setopt IGNOREEOF
+
+# 補完
 autoload -U compinit
 compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# 対話モードでプロンプトに ^[[2004hと表示されるのを防ぐ
+# Prevent prompt from showing ^[[2004h
 unset zle_bracketed_paste
 
+# color
 autoload -Uz colors
 colors
 
-# ls の設定
+# ls setting
 # {{{
 case ${OSTYPE} in
     darwin*)
@@ -44,67 +49,60 @@ case ${OSTYPE} in
 esac
 #}}}
 
-# vimの設定
-alias vi='vim'
-alias v='vim'
-alias gt='git log --graph --oneline --all'
+# vim setting
+alias vim='nvim'
+alias vi='nvim'
+alias v='nvim'
+
+# Short Cuts
+setopt AUTO_CD
+# exe mkdir && cd
+function mkcd() {
+  if [[ -d $1 ]]; then
+    echo "$1 already exists!"
+    cd $1
+  else
+    mkdir -p $1 && cd $1
+  fi
+}
+
+# linux shortcut
 function com(){
     env WINEPREFIX="/home/usr/.wine" wine-stable C:\\users\\usr\\Local\ Settings\\Application\ Data\\LINE\\bin\\LineLauncher.exe;
     thunderbird&;
     slack&;
 }
 
-# 補完時に大文字小文字を区別しない
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-# コマンドがディレクトリの名前の時に自動的にcdコマンドとして実行する
-setopt AUTO_CD
-
-# pub ssh
-function sshp(){
-#{{{
-    read host\?'host: '
-    while [ ${#host} -eq 0 ]; do
-        echo '[hostname error] Try again.'
-        read host\?'host: '
-    done
-
-    read port\?'port: '
-    [ ${#port} -eq 0 -o ! $(expr "$port" + 1 > /dev/null 2>&1; echo $?) -ne 2 ] && port=22
-
-    read user\?'user: '
-    while [ ${#user} -eq 0 ]; do
-        echo '[username error] Try again.'
-        read user\?'host: '
-    done
-
-    read pub_key_trg\?'pub_key(defalut=host): '
-    if [ ${#pub_key_trg} -eq 0 ]; then
-        pub_key_trg="~/.ssh/id_${host}_rsa"
-    else
-        if [ -e ~/.ssh/id_${pub_key_trg}_rsa ]; then
-            pub_key_trg="~/.ssh/id_${pub_key_trg}_rsa"
-        else
-            pub_key_trg="~/.ssh/id_rsa"
-        fi
-    fi
-    echo "[settings ok]"
-
-    while [ true ];do
-        ssh -p ${port} -i ${pub_key_trg} -l ${user} ${host}
-    done
-}
-#}}}
-
-# ----------
-# エイリアス
-# ----------
 alias c='cd'
+# Neovim Setting
+export XDG_CONFIG_HOME="$HOME/dotfiles/.nvimconf"
+#export TERM=xterm-color256
+
+# Git Setting
+export GIT_EDITOR=vim
+alias gt='git log --graph --oneline --all'
+# Git shortcut
+function gitinit(){
+    git init
+    cat <<EOF >> ./.git/config
+[commit]
+    template = ~/.gitmessage
+EOF
+    cat <<EOF >> .gitignore
+.DS_Store
+._*
+*.bak
+*.swp
+*.swo
+.localized
+*.log
+EOF
+
+}
 
 # ----------
 # Exports
 # ----------
-export GIT_EDITOR=vim
-
 case ${OSTYPE} in
     darwin*)
     # brew
@@ -132,8 +130,12 @@ case ${OSTYPE} in
     export PATH=/usr/local/bin:~/bin:$PYENV_ROOT/bin:$NPM_PATH:$NODE_PATH:$PATH
     # pyenv auto complete
     if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
+    # nodebrew
+    export PATH=$HOME/.nodebrew/current/bin:$PATH
     ;;
 
     linux*)
    ;;
 esac
+
