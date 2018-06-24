@@ -4,10 +4,8 @@ ln -snf ~/dotfiles/.zsh_profile ~/.zsh_profile
 ln -snf ~/dotfiles/.gitmessage ~/.gitmessage
 
 ln -snfv ~/dotfiles/.vim/.vimrc ~/.vimrc
-ln -snfv ~/dotfiles/.vim ~/dotfiles/.nvimconf/nvim
 ln -snf ~/dotfiles/.vim ~/.vim
 cd ~/dotfiles/.vim
-ln -snfv ./.vimrc ./init.vim
 
 
 # vim-dein setup

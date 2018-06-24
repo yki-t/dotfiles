@@ -69,81 +69,6 @@ au BufWrite /private/etc/pw.* set nowritebackup nobackup
 "}}}
 
 "------------------------------------
-" JAVA-SCRIPT系の設定
-"------------------------------------
-" {{{
-" 保存時にコンパイル
-au BufWritePost *.coffee silent make -b
-au QuickFixCmdPost * nested cwindow | redraw! 
-" リアルタイムプレビュー
-" au BufWritePost *.coffee :CoffeeWatch vert
-
-" jasmine.vim
-" ファイルタイプを変更
-function! JasmineSetting()
-    au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
-    au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
-    au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
-    call jasmine#load_snippets()
-    map <buffer> <leader>m :JasmineRedGreen<CR>
-    command! JasmineRedGreen :call jasmine#redgreen()
-    command! JasmineMake :call jasmine#make()
-endfunction
-au BufRead,BufNewFile,BufReadPre *.coffee,*.js call JasmineSetting()
-" indent_guides
-" インデントの深さに色を付ける
-let g:indent_guides_start_level=2
-let g:indent_guides_auto_colors=0
-let g:indent_guides_enable_on_vim_startup=0
-let g:indent_guides_color_change_percent=20
-let g:indent_guides_guide_size=1
-let g:indent_guides_space_guides=1
-
-hi IndentGuidesOdd  ctermbg=235
-hi IndentGuidesEven ctermbg=237
-au FileType coffee,ruby,javascript,python IndentGuidesEnable
-nmap <silent><Leader>ig <Plug>IndentGuidesToggle
-autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=2
-"}}}
-
-"------------------------------------
-" ファイルタイプ拡張
-"------------------------------------
-"#{{{
-au BufRead,BufNewFile *.sol  set filetype=javascript
-
-"#}}}
-
-"------------------------------------
-" PHPの設定
-"------------------------------------
-"{{{
-augroup PHP
-    autocmd!
-    autocmd FileType php set makeprg=php\ -l\ %
-    autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
-    " php -lの構文チェックでエラーがなければ「No syntax errors」の一行だけ出力される
-    autocmd BufWritePost *.php silent make | if len(getqflist()) != 1 | copen | else | cclose | endif
-augroup END
-"}}}
-
-"------------------------------------
-" C++
-"------------------------------------
-"{{{
-" 保存時にコンパイル
-"au BufWritePost *.cpp silent :gcc 
-"au BufWritePost *.cpp :lcd %:h | :!clang++ -Wall -std=c++14 %:p 1>/dev/null
-"au QuickFixCmdPost * nested cwindow | redraw! 
-"}}}
-
-"------------------------------------
-" プログラム言語共通の設定
-"------------------------------------
-" コンパイルエラー時の処理
-"au QuickFixCmdPost * nested cwindow | redraw! 
-
-"------------------------------------
 " 補完の設定
 "------------------------------------
 "{{{
@@ -325,6 +250,7 @@ let g:vimshell_user_prompt = 'getcwd()'
 "------------------------------------
 " その他の設定
 "------------------------------------
+"{{{
 if has("syntax")
     syntax on
 endif
@@ -376,8 +302,75 @@ endif
 cabbr w!! w !sudo tee > /dev/null %
 " swp 生成先を変更
 "set directory=~/.vim/tmp
+set noswapfile
 
 hi Normal ctermbg=NONE guibg=NONE
 hi NonText ctermbg=NONE guibg=NONE
+"}}}
+
+"------------------------------------
+" プログラム言語共通の設定
+"------------------------------------
+" コンパイルエラー時の処理
+"au QuickFixCmdPost * nested cwindow | redraw! 
+
+"------------------------------------
+" JAVA-SCRIPT系の設定
+"------------------------------------
+" {{{
+" 保存時にコンパイル
+au BufWritePost *.coffee silent make -b
+au QuickFixCmdPost * nested cwindow | redraw! 
+" リアルタイムプレビュー
+" au BufWritePost *.coffee :CoffeeWatch vert
+
+" jasmine.vim
+" ファイルタイプを変更
+function! JasmineSetting()
+    au BufRead,BufNewFile *Helper.js,*Spec.js  set filetype=jasmine.javascript
+    au BufRead,BufNewFile *Helper.coffee,*Spec.coffee  set filetype=jasmine.coffee
+    au BufRead,BufNewFile,BufReadPre *Helper.coffee,*Spec.coffee  let b:quickrun_config = {'type' : 'coffee'}
+    call jasmine#load_snippets()
+    map <buffer> <leader>m :JasmineRedGreen<CR>
+    command! JasmineRedGreen :call jasmine#redgreen()
+    command! JasmineMake :call jasmine#make()
+endfunction
+au BufRead,BufNewFile,BufReadPre *.coffee,*.js call JasmineSetting()
+autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.js setlocal tabstop=2 softtabstop=2 shiftwidth=2
+"}}}
+
+"------------------------------------
+" ファイルタイプ拡張
+"------------------------------------
+"#{{{
+au BufRead,BufNewFile *.sol  set filetype=javascript
+
+"#}}}
+
+"------------------------------------
+" PHPの設定
+"------------------------------------
+"{{{
+augroup PHP
+    autocmd!
+    autocmd FileType php set makeprg=php\ -l\ %
+    autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    " php -lの構文チェックでエラーがなければ「No syntax errors」の一行だけ出力される
+    autocmd BufWritePost *.php silent make | if len(getqflist()) != 1 | copen | else | cclose | endif
+augroup END
+"}}}
+
+"------------------------------------
+" C++
+"------------------------------------
+"{{{
+" 保存時にコンパイル
+"au BufWritePost *.cpp silent :gcc 
+"au BufWritePost *.cpp :lcd %:h | :!clang++ -Wall -std=c++14 %:p 1>/dev/null
+"au QuickFixCmdPost * nested cwindow | redraw! 
+"}}}
+
+
 
 
