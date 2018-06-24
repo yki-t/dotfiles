@@ -85,8 +85,8 @@ repo = 'kana/vim-operator-user'
 # Rust lang
 [[plugins]]
 repo = 'racer-rust/vim-racer'
-#[[plugins]]
-#repo = 'rust-lang/rust.vim'
+[[plugins]]
+repo = 'rust-lang/rust.vim'
 [[plugins]]
 repo = 'vim-syntastic/syntastic'
 
