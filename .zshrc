@@ -146,12 +146,58 @@ case ${OSTYPE} in
     #{{{
     # linux shortcut
     export PATH=$PATH:$HOME/opt
-    export PATH=$PATH:$HOME/opt/monero-gui-v0.12.0.0
     export PATH="$PATH:$(yarn global bin)"
+
+    # tor
+    if [ -f $HOME/.tor ]; then
+        export PATH=$PATH:$HOME/opt/tor
+    fi
+
     # Rust
-    export PATH="$HOME/.cargo/bin:$PATH"
+    if [ -d $HOME/.cargo ]; then
+        export PATH="$PATH:$HOME/.cargo/bin"
+    fi
+
+    # npm global config
+    npm config set prefix ~/.local/
+
+    # JAVA
+    JAVA_HOME=$(update-alternatives --query javac | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
+
+    # Android
+    if [ -d $HOME/opt/android ]; then
+        export ANDROID_HOME=$HOME/opt/android
+        export PATH=$PATH:$ANDROID_HOME/bin
+        alias android=$ANDROID_HOME/tools/android
+        alias emulator=$ANDROID_HOME/tools/emulator
+        export PATH=$PATH:$ANDROID_HOME/tools/bin
+    fi
+    # Swift
+    if [ -d $HOME/opt/swift ]; then
+        export PATH=$PATH:$HOME/opt/swift/build/Ninja-ReleaseAssert/swift-linux-x86_64/bin
+    fi
+
+    # Nativescipt
+    if [ -d "/opt/NativeScript Sidekick" ]; then
+        alias nsk="/opt/NativeScript\ Sidekick/NativeScript\ Sidekick"
+    fi
+    if [ -f $HOME/.tnsrc ]; then
+        source $HOME/.tnsrc 
+    fi
+
+    # Monero
+    if [ -d $HOME/opt/monero-gui-v0.12.0.0 ]; then
+        export PATH=$PATH:$HOME/opt/monero-gui-v0.12.0.0
+    fi
+    # GXChain
+    if [ -d $HOME/opt/wasm ]; then
+        export WASM_ROOT=$HOME/opt/wasm
+        export C_COMPILER=clang-3.8
+        export CXX_COMPILER=clang++-3.8
+    fi
     ;;
     #}}}
 
 esac
+
 

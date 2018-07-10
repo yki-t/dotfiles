@@ -90,3 +90,6 @@ repo = 'rust-lang/rust.vim'
 [[plugins]]
 repo = 'vim-syntastic/syntastic'
 
+# TypeScript
+[[plugins]]
+repo = 'leafgarland/typescript-vim'

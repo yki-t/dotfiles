@@ -59,12 +59,6 @@ case ${OSTYPE} in
     fi
 
     if [ ${distri_name} = 'debian' ];then
-        # neovim
-        apt install zsh || sudo apt install zsh
-        apt install python3
-        apt install neovim
-        apt install python-neovim
-        apt install python3-neovim
         # wifi setting up
         read -p 'setup wifi? (y/n): ' enable_wifi
         case "$enable_wifi" in
