@@ -2,20 +2,20 @@
 repo = 'Shougo/dein.vim'
 
 # vimproc: インストール後の処理も書いてる
-[[plugins]]
-repo = 'Shougo/vimproc.vim'
-hook_post_update = '''
-  if dein#util#_is_windows()
-    let cmd = 'tools\\update-dll-mingw'
-  elseif dein#util#_is_cygwin()
-    let cmd = 'make -f make_cygwin.mak'
-  elseif executable('gmake')
-    let cmd = 'gmake'
-  else
-    let cmd = 'make'
-  endif
-  let g:dein#plugin.build = cmd
-'''
+# [[plugins]]
+# repo = 'Shougo/vimproc.vim'
+# hook_post_update = '''
+#   if dein#util#_is_windows()
+#     let cmd = 'tools\\update-dll-mingw'
+#   elseif dein#util#_is_cygwin()
+#     let cmd = 'make -f make_cygwin.mak'
+#   elseif executable('gmake')
+#     let cmd = 'gmake'
+#   else
+#     let cmd = 'make'
+#   endif
+#   let g:dein#plugin.build = cmd
+# '''
 
 # よくわからないファイル
 [[plugins]]
@@ -59,16 +59,10 @@ repo = 'Shougo/vimshell'
 # 括弧
 [[plugins]]
 repo = 'tpope/vim-surround'
-
-# Coffee Script用
 [[plugins]]
-repo = 'kchmck/vim-coffee-script'
-[[plugins]]
-repo = 'claco/jasmine.vim'
-[[plugins]]
-repo = 'nathanaelkane/vim-indent-guides'
+repo = 'luochen1990/rainbow'
 
-
+# QuickRun
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 
@@ -93,3 +87,17 @@ repo = 'vim-syntastic/syntastic'
 # TypeScript
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
+
+# mql4
+[[plugins]]
+repo = 'vobornik/vim-mql4'
+
+# Coffee Script用
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+[[plugins]]
+repo = 'claco/jasmine.vim'
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+
+

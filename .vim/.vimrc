@@ -258,6 +258,9 @@ endif
 " VimFilerで自動cd
 let g:vimfiler_enable_auto_cd = 1
 
+" Rainbow Parentheses Improved
+let g:rainbow_active = 1
+
 " 改行時の自動コメント化を無効に
 augroup auto_comment_off
     autocmd!

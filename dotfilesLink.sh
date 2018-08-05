@@ -24,9 +24,9 @@ case ${OSTYPE} in
 
     Linux*)
     if [ ${USER} = 'root' ];then
-        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/root/g"
+        grep -l 'Users/usr' ~/dotfiles/.vim/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/root/g"
     else
-        grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/home\/${USER}/g"
+        grep -l 'Users/usr' ~/dotfiles/.vim/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/home\/${USER}/g"
     fi
     ;;
 esac

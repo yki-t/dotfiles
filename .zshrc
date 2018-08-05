@@ -146,7 +146,11 @@ case ${OSTYPE} in
     #{{{
     # linux shortcut
     export PATH=$PATH:$HOME/opt
-    export PATH="$PATH:$(yarn global bin)"
+
+    # Firefox - latest
+    if [ -f $HOME/opt/firefox/firefox ]; then
+        export PATH=$PATH:$HOME/opt/firefox
+    fi
 
     # tor
     if [ -f $HOME/.tor ]; then
@@ -158,8 +162,13 @@ case ${OSTYPE} in
         export PATH="$PATH:$HOME/.cargo/bin"
     fi
 
-    # npm global config
-    npm config set prefix ~/.local/
+    # Node JS npm/yarn
+    if [ -e "$(which npm)" ];then
+        npm config set prefix ~/.local/
+    fi
+    if [ -e "$(which yarn)" ];then
+        export PATH="$PATH:$(yarn global bin)"
+    fi
 
     # JAVA
     JAVA_HOME=$(update-alternatives --query javac | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
@@ -195,6 +204,8 @@ case ${OSTYPE} in
         export C_COMPILER=clang-3.8
         export CXX_COMPILER=clang++-3.8
     fi
+
+
     ;;
     #}}}
 
