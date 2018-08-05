@@ -3,7 +3,7 @@ ln -snf ~/dotfiles/.zshrc ~/.zshrc
 ln -snf ~/dotfiles/.zsh_profile ~/.zsh_profile
 ln -snf ~/dotfiles/.gitmessage ~/.gitmessage
 
-ln -snfv ~/dotfiles/.vim/.vimrc ~/.vimrc
+ln -snfv ~/dotfiles/.vimrc ~/.vimrc
 ln -snf ~/dotfiles/.vim ~/.vim
 cd ~/dotfiles/.vim
 
