@@ -7,7 +7,6 @@ ln -snfv ~/dotfiles/.vimrc ~/.vimrc
 ln -snf ~/dotfiles/.vim ~/.vim
 cd ~/dotfiles/.vim
 
-
 # vim-dein setup
 mkdir -p ~/.cache/dein
 cd ~/.cache/dein
@@ -18,36 +17,6 @@ rm ./dein_installer.sh
 OSTYPE=$(uname)
 
 case ${OSTYPE} in
-    Darwin*)
-    grep -l 'Users/usr' ~/dotfiles/.vimrc | xargs sed -i -e "s/Users\/usr/Users\/${USER}/g"
-    ;;
-
-    Linux*)
-    if [ ${USER} = 'root' ];then
-        grep -l 'Users/usr' ~/dotfiles/.vim/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/root/g"
-    else
-        grep -l 'Users/usr' ~/dotfiles/.vim/.vimrc | xargs sed -i ".bak" -e "s/Users\/usr/home\/${USER}/g"
-    fi
-    ;;
-esac
-
-case ${OSTYPE} in
-    Darwin*)
-    # OSX setting
-    # xcode
-    xcode-select --install
-    # homebrew
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    brew tap homebrew/versions && brew install llvm
-    brew install pyenv
-    pyenv install 3.6.4
-    pyenv install 2.7.14
-    pyenv global 3.6.4
-    brew install python3
-    brew install neovim/neovim/neovim
-    pip3 install neovim
-    ;;
-
     Linux*)
     # Check Ubuntu / Debian
     if [ -e /etc/debian_version ] || [ -e /etc/debian_release ];then

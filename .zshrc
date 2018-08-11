@@ -205,7 +205,6 @@ case ${OSTYPE} in
         export CXX_COMPILER=clang++-3.8
     fi
 
-
     ;;
     #}}}
 
