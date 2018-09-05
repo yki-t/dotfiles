@@ -1,7 +1,7 @@
 #!/bin/sh
 ln -snf ~/dotfiles/.zshrc ~/.zshrc
 ln -snf ~/dotfiles/.zsh_profile ~/.zsh_profile
-ln -snf ~/dotfiles/.gitmessage ~/.gitmessage
+ln -snf ~/dotfiles/.profile ~/.profile
 
 ln -snfv ~/dotfiles/.vimrc ~/.vimrc
 ln -snf ~/dotfiles/.vim ~/.vim
