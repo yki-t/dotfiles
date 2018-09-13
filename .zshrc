@@ -20,7 +20,6 @@ compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
-setopt list_packed             # 補完候補をできるだけ詰めて表示する
 setopt list_types              # 補完候補にファイルの種類も表示する
 
 # color
