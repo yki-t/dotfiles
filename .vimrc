@@ -46,10 +46,6 @@ au BufWrite /private/etc/pw.* set nowritebackup nobackup
 " 補完の設定
 "------------------------------------
 "{{{
-highlight Pmenu ctermbg=4
-highlight PmenuSel ctermbg=1
-highlight PMenuSbar ctermbg=4
-
 set completeopt=menuone
 let g:rsenseUseOmniFunc = 1
 let g:auto_ctags = 1
@@ -348,6 +344,9 @@ augroup END
 "au QuickFixCmdPost * nested cwindow | redraw! 
 "}}}
 
-
+highlight Pmenu ctermbg=4
+highlight PmenuSel ctermbg=1
+highlight PMenuSbar ctermbg=4
+hi MatchParen cterm=bold ctermbg=none ctermfg=white
 
 
