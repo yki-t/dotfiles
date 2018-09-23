@@ -175,17 +175,26 @@ case ${OSTYPE} in
 
     # JAVA
     if [ -e "$(which java)" ];then
-        JAVA_HOME=$(update-alternatives --query javac | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
-    fi
+        export JAVA_HOME=$(update-alternatives --query javac | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
+        export DERBY_HOME=$JAVA_HOME/db
+        # export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+        # export JAVA_TOOL_OPTIONS=-javaagent:/usr/share/java/jayatanaag.jar
+        export J2SDKDIR=$JAVA_HOME
+        export J2REDIR=$JAVA_HOME/jre
+        export PATH=$PATH:$JAVA_HOME/bin:$DERBY_HOME/bin:$J2REDIR/bin
+
+   fi
 
     # Android
+    if [ -d $HOME/Android ]; then
+        export PATH=$PATH:$HOME/Android/Sdk/tools
+    fi
+
     if [ -d $HOME/opt/android ]; then
         export ANDROID_HOME=$HOME/opt/android
-        export PATH=$PATH:$ANDROID_HOME/bin
-        alias android=$ANDROID_HOME/tools/android
-        alias emulator=$ANDROID_HOME/tools/emulator
-        export PATH=$PATH:$ANDROID_HOME/tools/bin
+        export PATH=$PATH:$ANDROID_HOME/bin:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
     fi
+
     # Swift
     if [ -d $HOME/opt/swift ]; then
         export PATH=$PATH:$HOME/opt/swift/build/Ninja-ReleaseAssert/swift-linux-x86_64/bin
@@ -210,6 +219,7 @@ case ${OSTYPE} in
         export CXX_COMPILER=clang++-4.0
     fi
 
+    export EDITOR=vim
     ;;
     #}}}
 
