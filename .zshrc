@@ -219,6 +219,14 @@ case ${OSTYPE} in
         export CXX_COMPILER=clang++-4.0
     fi
 
+    if [ $(hostname) = usr-XPS-15-9570 ]; then
+        if [ ! -d ~/Music/Records ];then
+            mkdir -p ~/Music/Records
+        fi
+        alias rec='arecord -f S16_LE -r 44100 ~/Music/Records/`date "+%Y%m%d-%H:%M:%S"`.wav'
+    fi
+
+    alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
     export EDITOR=vim
     ;;
     #}}}
