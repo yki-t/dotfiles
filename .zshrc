@@ -170,29 +170,27 @@ case ${OSTYPE} in
         npm config set prefix ~/.local/
     fi
     if [ -e "$(which yarn)" ];then
-        export PATH="$PATH:$(yarn global bin)"
+        export PATH="$PATH:$(yarn global bin):$(yarn global dir)/node_modules/.bin"
+
+        if [ ${UID} -eq 0 ]; then # if Root
+            export PATH="$PATH:$(sudo yarn global bin):$(sudo yarn global dir)/node_modules/.bin"
+        fi
     fi
 
     # JAVA
     if [ -e "$(which java)" ];then
         export JAVA_HOME=$(update-alternatives --query javac | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
         export DERBY_HOME=$JAVA_HOME/db
-        # export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-        # export JAVA_TOOL_OPTIONS=-javaagent:/usr/share/java/jayatanaag.jar
         export J2SDKDIR=$JAVA_HOME
         export J2REDIR=$JAVA_HOME/jre
         export PATH=$PATH:$JAVA_HOME/bin:$DERBY_HOME/bin:$J2REDIR/bin
-
    fi
 
     # Android
     if [ -d $HOME/Android ]; then
-        export PATH=$PATH:$HOME/Android/Sdk/tools
-    fi
-
-    if [ -d $HOME/opt/android ]; then
-        export ANDROID_HOME=$HOME/opt/android
-        export PATH=$PATH:$ANDROID_HOME/bin:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
+        export ANDROID_HOME=$HOME/Android/Sdk
+        export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
+        export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
     fi
 
     # Swift
@@ -220,6 +218,15 @@ case ${OSTYPE} in
     fi
 
     export EDITOR=vim
+
+    if echo $(hostname) | fgrep -q XPST; then
+        if [ ! -d ${HOME}/Music/Records ];then
+            mkdir -p ${HOME}/Music/Records
+        fi
+        alias rec="arecord -f S16_LE -r 44100 \"${HOME}/Music/Records/$(date '+%Y.%m.%d;%H:%M:%S').wav\""
+        echo 'ok'
+    fi
+
     ;;
     #}}}
 
