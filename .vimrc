@@ -143,11 +143,13 @@ nnoremap Q gq
 "------------------------------------
 " vimshell起動時、Ctrl-yで履歴をヤンク
 "------------------------------------
-" after/ftplugin/unite.vim
+" {{{ " after/ftplugin/unite.vim
 let s:context = unite#get_context()
 if s:context.buffer_name ==# 'completion'
     inoremap <buffer> <expr> <C-y> unite#do_action('insert')
 endif
+" }}}
+
 "------------------------------------
 " 画面分割(キーマッピング)
 "------------------------------------
@@ -204,19 +206,6 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 "endif
 "}}}
 
-"------------------------------------
-" Plugins
-"------------------------------------
-"{{{
-" VimFiler
-let g:vimfiler_as_default_explorer = 1
-
-" VimShell
-let g:vimshell_prompt = "> "
-let g:vimshell_secondary_prompt = "> "
-let g:vimshell_user_prompt = 'getcwd()'
-
-"}}}
 "------------------------------------
 " その他の設定
 "------------------------------------
@@ -351,14 +340,29 @@ augroup END
 autocmd BufRead,BufNewFile *.{mkd,md} set filetype=markdown
 autocmd! FileType markdown hi! def link markdownItalic Normal
 autocmd FileType markdown set commentstring=<\!--\ %s\ -->
-
 " for plasticboy/vim-markdown
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_math = 1
 let g:vim_markdown_frontmatter = 1
 let g:vim_markdown_toc_autofit = 1
 let g:vim_markdown_folding_style_pythonic = 1
+nnoremap md :MarkdownPreview<CR>
+
 " }}}
+
+"------------------------------------
+" Plugins Settings
+"------------------------------------
+"{{{
+" VimFiler
+let g:vimfiler_as_default_explorer = 1
+
+" VimShell
+let g:vimshell_prompt = "> "
+let g:vimshell_secondary_prompt = "> "
+let g:vimshell_user_prompt = 'getcwd()'
+
+"}}}
 
 
 "------------------------------------
