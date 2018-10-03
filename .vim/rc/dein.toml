@@ -47,6 +47,12 @@ repo = 'roxma/vim-hug-neovim-rpc'
 [[plugins]]
 repo = 'ConradIrwin/vim-bracketed-paste'
 
+# MD記法
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+[[plugins]]
+repo = 'iamcco/markdown-preview.vim'
+
 # File System
 [[plugins]]
 repo = 'Shougo/vimfiler'

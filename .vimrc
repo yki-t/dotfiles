@@ -344,11 +344,31 @@ augroup END
 "au QuickFixCmdPost * nested cwindow | redraw! 
 "}}}
 
+"------------------------------------
+" MD記法
+"------------------------------------
+" {{{
+autocmd BufRead,BufNewFile *.{mkd,md} set filetype=markdown
+autocmd! FileType markdown hi! def link markdownItalic Normal
+autocmd FileType markdown set commentstring=<\!--\ %s\ -->
 
+" for plasticboy/vim-markdown
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_math = 1
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_toc_autofit = 1
+let g:vim_markdown_folding_style_pythonic = 1
+" }}}
+
+
+"------------------------------------
 " Highlights
+"------------------------------------
+" {{{
 highlight Pmenu ctermbg=4
 highlight PmenuSel ctermbg=1
 highlight PMenuSbar ctermbg=4
 highlight MatchParen cterm=bold ctermbg=none ctermfg=white
+" }}}
 
 
