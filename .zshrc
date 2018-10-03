@@ -227,13 +227,34 @@ case ${OSTYPE} in
     alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
     export EDITOR=vim
 
+    # Record alias
     if echo $(hostname) | fgrep -q XPST; then
+        # {{{
         if [ ! -d ${HOME}/Music/Records ];then
             mkdir -p ${HOME}/Music/Records
         fi
         alias rec="arecord -f S16_LE -r 44100 \"${HOME}/Music/Records/$(date '+%Y.%m.%d;%H:%M:%S').wav\""
         echo 'ok'
-    fi
+    fi # }}}
+
+    # pdf2jpg
+    function pdf2jpg(){
+        # {{{
+        help() {
+          echo 'DESCRIPTION: find .pdf and make jpg'
+          echo 'Usage: pdf2jpg [filename]'
+          echo 'This command execute all pdf to jpg in current working directory unless specify filename'
+          return
+        }
+        if [ $# -eq 0 ];then
+            trgs=$(find $PWD |sed -e 's/^/"/g' -e 's/$/"/g'|grep -e '\(.*\)\.pdf"$'|tr '\n' ' ')
+            for trg in ${(Q)${(z)trgs}};do
+                convert -density 300 -trim "$trg" -quality 100 "${trg%%.*}.jpg"
+            done
+        else
+            convert -density 300 -trim $1 -quality 100 ${1%%.*}.jpg
+        fi
+    } # }}}
 
     ;;
     #}}}
