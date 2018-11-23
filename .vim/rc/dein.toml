@@ -93,6 +93,10 @@ repo = 'rust-lang/rust.vim'
 # [[plugins]]
 # repo = 'vim-syntastic/syntastic'
 
+# Javascript
+# [[plugins]]
+# repo = 'othree/yajs.vim'
+
 # TypeScript
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
@@ -109,4 +113,7 @@ repo = 'claco/jasmine.vim'
 [[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
 
+# elm
+[[plugins]]
+repo = 'lambdatoast/elm.vim'
 
