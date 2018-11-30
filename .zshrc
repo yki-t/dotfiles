@@ -136,7 +136,11 @@ case ${OSTYPE} in
     function pxc(){
         # {{{
         if [ $(which pxz) ];then
-            tar cvf $1.tar.xz --use-compress-prog=pxz $1/
+            if [ $# -eq 1 ];then
+                tar cvf $1.tar.xz --use-compress-prog=pxz $1/
+            else
+                tar cvf $2.tar.xz --use-compress-prog=pxz $1/
+            fi
         fi
     } # }}}
 
@@ -144,7 +148,7 @@ case ${OSTYPE} in
     function pxx(){
         # {{{
         if [ $(which pxz) ];then
-            tar xvf $1.tar.xz --use-compress-prog=pxz $1/
+            tar xvf $1 --use-compress-prog=pxz
         fi
     } # }}}
     # }}}
@@ -189,18 +193,28 @@ case ${OSTYPE} in
         export J2SDKDIR=$JAVA_HOME
         export J2REDIR=$JAVA_HOME/jre
         export PATH=${PATH}:$JAVA_HOME/bin:$DERBY_HOME/bin:$J2REDIR/bin
-   fi
+    fi
+
 
     # Android
     if [ -d ${HOME}/Android ]; then
         export ANDROID_HOME=${HOME}/Android/Sdk
         export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
-        export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
+        # export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
     fi
 
     # Swift
     if [ -d ${HOME}/opt/swift ]; then
         export PATH=${PATH}:${HOME}/opt/swift/build/Ninja-ReleaseAssert/swift-linux-x86_64/bin
+    fi
+
+    # c++
+    if [ "$(which g++)" ];then
+        export CXX='g++-7'
+        export CC='gcc-7'
+    fi
+    if [ "$(which cmake)" ];then
+        export CMAKE_ROOT='/usr/local/share/cmake-3.9'
     fi
 
     # Monero
@@ -223,23 +237,27 @@ case ${OSTYPE} in
     #}}}
     ;;
 
-    *)
-    # {{{
-    alias vi='vim'
-    alias v='vim'
-    alias scp='scp -c aes256-ctr -q -p'
-    alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
-    # Git Setting
-    #{{{
-    alias gt='git log --graph --oneline --all'
-    # Git shortcut
-    function gitinit(){
-        git init
-        cat <<EOF >> ./.git/config
+
+esac
+
+# {{{
+alias vi='vim'
+alias v='vim'
+alias scp='scp -c aes256-ctr -q -p'
+alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
+alias randstrStrong="cat /dev/urandom | tr -dc '0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;' | head -c100"
+
+# Git Setting
+#{{{
+alias gt='git log --graph --oneline --all'
+# Git shortcut
+function gitinit(){
+    git init
+    cat <<EOF >> ./.git/config
 [commit]
-    template = ~/.gitmessage
+template = ~/.gitmessage
 EOF
-    cat <<EOF >> .gitignore
+cat <<EOF >> .gitignore
 .DS_Store
 ._*
 *.bak
@@ -249,9 +267,5 @@ EOF
 *.log
 EOF
 
-    } #}}}
-    # }}}
-    ;;
-
-esac
-
+} #}}}
+# }}}
