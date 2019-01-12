@@ -355,6 +355,6 @@ highlight PMenuSbar ctermbg=4
 highlight MatchParen cterm=bold ctermbg=none ctermfg=white
 " }}}
 
- let &colorcolumn=join(range(81,82),",")
- hi ColorColumn ctermbg=235 guibg=#2c2d27
+" let &colorcolumn=join(range(81,82),",")
+" hi ColorColumn ctermbg=235 guibg=#2c2d27
 
