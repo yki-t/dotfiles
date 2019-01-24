@@ -1,3 +1,4 @@
+if !1 | finish | endif
 "------------------------------------
 " OSの判定
 "------------------------------------
@@ -96,7 +97,7 @@ nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
 map <Space> <Plug>(operator-replace)
 
-
+noremap te :LLPStartPreview<CR>
 
 "inoremap { {}<Left>
 "inoremap ( ()<Left>

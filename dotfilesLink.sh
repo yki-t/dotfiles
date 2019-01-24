@@ -6,6 +6,7 @@ ln -snf ~/dotfiles/.xmodmap ~/.xmodmap
 
 ln -snfv ~/dotfiles/.vimrc ~/.vimrc
 ln -snf ~/dotfiles/.vim ~/.vim
+ln -snf ~/dotfiles/.sshrc ~/.sshrc
 
 if [ ! -e ${HOME}/.cache/dein ];then
     # vim-dein setup
