@@ -356,6 +356,7 @@ highlight PMenuSbar ctermbg=4
 highlight MatchParen cterm=bold ctermbg=none ctermfg=white
 " }}}
 
+autocmd BufRead,BufNewFile *.tera  set filetype=jinja
 " let &colorcolumn=join(range(81,82),",")
 " hi ColorColumn ctermbg=235 guibg=#2c2d27
 

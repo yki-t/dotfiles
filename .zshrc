@@ -151,6 +151,22 @@ case ${OSTYPE} in
             tar xvf $1 --use-compress-prog=pxz
         fi
     } # }}}
+
+    # uf to png
+    function uf2png(){
+        # {{{
+        if [ $(which uiflow) ];then
+            if [ $# -eq 1 ];then
+                uiflow -i "$1" -o"$1".png -f png
+            elif [ $# -eq 2 ];then
+                uiflow -i "$1" -o"$2".png -f png
+            else
+                echo "Inivalid Arguments count."
+            fi
+        fi
+    } # }}}
+    if 
+
     # }}}
 
     # Exports

@@ -117,4 +117,11 @@ repo = 'nathanaelkane/vim-indent-guides'
 [[plugins]]
 repo = 'lambdatoast/elm.vim'
 
+# jade pug
+[[plugins]]
+repo = 'digitaltoad/vim-pug'
+[[plugins]]
+repo = 'statianzo/vim-jade'
+[[plugins]]
+repo = 'lepture/Vim-jinja'
 
