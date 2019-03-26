@@ -93,13 +93,13 @@ repo = 'rust-lang/rust.vim'
 # [[plugins]]
 # repo = 'vim-syntastic/syntastic'
 
-# Javascript
-# [[plugins]]
-# repo = 'othree/yajs.vim'
-
-# TypeScript
+#Javascript
 [[plugins]]
-repo = 'leafgarland/typescript-vim'
+repo = 'othree/yajs.vim'
+
+## TypeScript
+#[[plugins]]
+#repo = 'leafgarland/typescript-vim'
 
 # mql4
 [[plugins]]

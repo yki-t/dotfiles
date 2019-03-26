@@ -215,6 +215,8 @@ case ${OSTYPE} in
     # Android
     if [ -d ${HOME}/Android ]; then
         export ANDROID_HOME=${HOME}/Android/Sdk
+        export ANDROID_SDK_HOME=${HOME}/Android/Sdk
+        export NDK_HOME=${HOME}/Android/android-ndk-r19c
         export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
         # export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
     fi

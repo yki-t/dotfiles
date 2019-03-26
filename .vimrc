@@ -1,4 +1,5 @@
 if !1 | finish | endif
+
 "------------------------------------
 " OSの判定
 "------------------------------------
@@ -123,8 +124,8 @@ nnoremap x "_x
 
 " 行移動を表示行での移動に
 nnoremap j gj
-nnoremap k gk
 nnoremap gj j
+nnoremap k gk
 nnoremap gk k
 nnoremap <Up> gk
 nnoremap <Down> j
@@ -145,10 +146,10 @@ nnoremap Q gq
 " vimshell起動時、Ctrl-yで履歴をヤンク
 "------------------------------------
 " {{{ " after/ftplugin/unite.vim
-let s:context = unite#get_context()
-if s:context.buffer_name ==# 'completion'
-    inoremap <buffer> <expr> <C-y> unite#do_action('insert')
-endif
+"let s:context = unite#get_context()
+"if s:context.buffer_name ==# 'completion'
+"    inoremap <buffer> <expr> <C-y> unite#do_action('insert')
+"endif
 " }}}
 
 "------------------------------------
