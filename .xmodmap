@@ -1,37 +1,3 @@
-!remove Lock = Caps_Lock
+!remove Lock = 66
 keycode 66 = Control_L
-add Shift = Shift_L
-add control = Control_L
-
-!! 24-33
-!keycode 24 = q Q q Q
-!keycode 25 = w W w W
-!keycode 26 = d D d D
-!keycode 27 = f F f F
-!keycode 28 = k K k K
-!keycode 29 = j J j J
-!keycode 30 = u U u U
-!keycode 31 = r R r R
-!keycode 32 = l L l L
-!keycode 33 = h H h H
-!
-!! 38-46
-!keycode 38 = a A a A
-!keycode 39 = s S s S
-!keycode 40 = e E e E
-!keycode 41 = t T t T
-!keycode 42 = g G g G
-!keycode 43 = y Y y Y
-!keycode 44 = n N n N
-!keycode 45 = i I i I
-!keycode 46 = o O o O
-!
-!! 52-58
-!keycode 52 = z Z z Z
-!keycode 53 = x X x X
-!keycode 54 = c C c C
-!keycode 55 = v V v V
-!keycode 56 = b B b B
-!keycode 57 = p P p P
-!keycode 58 = m M m M
-
+!add control = Control_L

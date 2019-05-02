@@ -105,13 +105,12 @@ case ${OSTYPE} in
     fi # }}}
 
     # Screen capture alias
-    if echo $(hostname) | fgrep -q XPS; then
         # {{{
-        if [ ! -d ${HOME}/Videos/Captures ];then
-            mkdir -p ${HOME}/Videos/Captures
-        fi
-        alias cap='if [ $(which recordmydesktop) -a $(which ffmpeg) ];then if [ -f _tmp ];then rm _tmp;fi;trgdir="${HOME}/Videos/Captures"&&echo ">>> select window by click"&&echo "--no-sound --no-wm-check --windowid $(xwininfo|grep "xwininfo: Window id"|sed -e"s/\(.*\)Window id: \(.*\) \(.*\)/\2/") -o${trgdir}/out.ogv"|xargs recordmydesktop>_tmp>/dev/null 2>&1&sleep 1&&echo ">>> ENTER e to end recording";while true;do;read ANS;if [ "${ANS}" = "e" ];then echo ">>> ending record&encode to mp4";unset ANS;killall recordmydesktop>/dev/null 2>&1;break;fi;done;sleep 2&&echo ">>> encoding now."&&while true;do sleep 1&&while read LINE;do if echo "$LINE" | grep -q "100%";then ffmpeg -i ${trgdir}/out.ogv -c:v libx264 -preset veryslow -crf 22 -c:a aac -b:a 160k -strict -2 ${trgdir}/$(date "+%Y.%m.%d.%H:%M:%S").mp4>/dev/null 2>&1&&rm _tmp&&rm ${trgdir}/out.ogv&&unset LINE&&unset trgdir&&break 2;fi;done;done<_tmp;else echo ">>> ffmpeg or recordmydesktop is not installed"&&exit;fi'
-    fi # }}}
+    if [ ! -d ${HOME}/Videos/Captures ];then
+        mkdir -p ${HOME}/Videos/Captures
+    fi
+    alias cap='if [ $(which recordmydesktop) -a $(which ffmpeg) ];then if [ -f _tmp ];then rm _tmp;fi;trgdir="${HOME}/Videos/Captures"&&echo ">>> select window by click"&&echo "--no-sound --no-wm-check --windowid $(xwininfo|grep "xwininfo: Window id"|sed -e"s/\(.*\)Window id: \(.*\) \(.*\)/\2/") -o${trgdir}/out.ogv"|xargs recordmydesktop>_tmp>/dev/null 2>&1&sleep 1&&echo ">>> ENTER e to end recording";while true;do;read ANS;if [ "${ANS}" = "e" ];then echo ">>> ending record&encode to mp4";unset ANS;killall recordmydesktop>/dev/null 2>&1;break;fi;done;sleep 2&&echo ">>> encoding now."&&while true;do sleep 1&&while read LINE;do if echo "$LINE" | grep -q "100%";then ffmpeg -i ${trgdir}/out.ogv -c:v libx264 -preset veryslow -crf 22 -c:a aac -b:a 160k -strict -2 ${trgdir}/$(date "+%Y.%m.%d.%H:%M:%S").mp4>/dev/null 2>&1&&rm _tmp&&rm ${trgdir}/out.ogv&&unset LINE&&unset trgdir&&break 2;fi;done;done<_tmp;else echo ">>> ffmpeg or recordmydesktop is not installed"&&exit;fi'
+    # }}}
 
     # pdf2jpg
     function pdf2jpg(){
@@ -165,8 +164,7 @@ case ${OSTYPE} in
             fi
         fi
     } # }}}
-    if 
-
+    alias konsole='XIM_PROGRAM=fcitx XIM=fcitx GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS="@im=fcitx" /usr/bin/konsole'
     # }}}
 
     # Exports
@@ -204,7 +202,7 @@ case ${OSTYPE} in
 
     # JAVA
     if [ -e "$(which java)" ];then
-        export JAVA_HOME=$(update-alternatives --query javac | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
+        export JAVA_HOME=$(update-alternatives --query javac 2>/dev/null | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
         export DERBY_HOME=$JAVA_HOME/db
         export J2SDKDIR=$JAVA_HOME
         export J2REDIR=$JAVA_HOME/jre
@@ -226,13 +224,17 @@ case ${OSTYPE} in
         export PATH=${PATH}:${HOME}/opt/swift/build/Ninja-ReleaseAssert/swift-linux-x86_64/bin
     fi
 
+    # c
+    if [ "$(which gcc)" ];then
+        gcc_exec="$(which gcc)"
+        export CC="${gcc_exec}"
+        export CMAKE_C_COMPILER="${gcc_exec}"
+    fi
     # c++
     if [ "$(which g++)" ];then
-        export CXX='g++-7'
-        export CC='gcc-7'
-    fi
-    if [ "$(which cmake)" ];then
-        export CMAKE_ROOT='/usr/local/share/cmake-3.9'
+        gxx_exec="$(which g++)"
+        export CXX="${gxx_exec}"
+        export CMAKE_CXX_COMPILER="${gxx_exec}"
     fi
 
     # Monero

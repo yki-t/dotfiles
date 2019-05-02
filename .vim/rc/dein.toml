@@ -97,9 +97,9 @@ repo = 'rust-lang/rust.vim'
 [[plugins]]
 repo = 'othree/yajs.vim'
 
-## TypeScript
-#[[plugins]]
-#repo = 'leafgarland/typescript-vim'
+# TypeScript
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
 
 # mql4
 [[plugins]]
@@ -124,4 +124,3 @@ repo = 'digitaltoad/vim-pug'
 repo = 'statianzo/vim-jade'
 [[plugins]]
 repo = 'lepture/Vim-jinja'
-

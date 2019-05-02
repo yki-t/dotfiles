@@ -1,14 +1,16 @@
-#!/bin/sh
-ln -snf ~/dotfiles/.zshrc ~/.zshrc
-ln -snf ~/dotfiles/.zsh_profile ~/.zsh_profile
-ln -snf ~/dotfiles/.profile ~/.profile
-ln -snf ~/dotfiles/.xmodmap ~/.xmodmap
+#!/bin/bash
+SCRIPT_DIR=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
 
-ln -snfv ~/dotfiles/.vimrc ~/.vimrc
-ln -snf ~/dotfiles/.vim ~/.vim
-ln -snf ~/dotfiles/.sshrc ~/.sshrc
+ln -snf ${SCRIPT_DIR}/.zshrc ${SCRIPT_DIR}/../../.zshrc
+ln -snf ${SCRIPT_DIR}/.zsh_profile ${SCRIPT_DIR}/../../.zsh_profile
+ln -snf ${SCRIPT_DIR}/.xmodmap ${SCRIPT_DIR}/../../.xmodmap
+ln -snf ${SCRIPT_DIR}/.xinitrc ${SCRIPT_DIR}/../../.xinitrc
 
-if [ ! -e ${HOME}/.cache/dein ];then
+ln -snf ${SCRIPT_DIR}/.vimrc ${SCRIPT_DIR}/../../.vimrc
+ln -snf ${SCRIPT_DIR}/.vim ${SCRIPT_DIR}/../../.vim
+ln -snf ${SCRIPT_DIR}/.sshrc ${SCRIPT_DIR}/../../.sshrc
+
+if [ ! -d ${HOME}/.cache/dein ];then
     # vim-dein setup
     cd ~/dotfiles/.vim
     mkdir -p ~/.cache/dein
