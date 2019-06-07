@@ -118,8 +118,8 @@ nnoremap g* g*zz
 nnoremap g# g#zz
 
 
-nnoremap ; :
-nnoremap : ;
+" nnoremap ; :
+" nnoremap : ;
 nnoremap x "_x
 
 " 行移動を表示行での移動に
@@ -287,10 +287,23 @@ au BufWritePost *.coffee silent make -b
 au QuickFixCmdPost * nested cwindow | redraw! 
 " リアルタイムプレビュー
 " au BufWritePost *.coffee :CoffeeWatch vert
+function! EnableJavascript()
+  " Setup used libraries
+  let g:used_javascript_libs = 'jquery,underscore,react,flux,jasmine,d3'
+  let b:javascript_lib_use_jquery = 1
+  let b:javascript_lib_use_underscore = 1
+  let b:javascript_lib_use_react = 1
+  let b:javascript_lib_use_flux = 0
+  let b:javascript_lib_use_jasmine = 0
+  let b:javascript_lib_use_d3 = 0
+endfunction
 
-autocmd BufNewFile,BufRead *.coffee setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.js setlocal tabstop=2 softtabstop=2 shiftwidth=2
-autocmd BufRead,BufNewFile *.sol  set filetype=javascript
+autocmd BufNewFile,BufRead *.sol set filetype=javascript
+autocmd BufNewFile,BufRead *.jsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.ts set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.tsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead FileType javascript,javascript.jsx,javascript.tsx call EnableJavascript()
 "}}}
 
 "------------------------------------
@@ -324,12 +337,14 @@ autocmd BufRead,BufNewFile *.{mkd,md} set filetype=markdown
 autocmd! FileType markdown hi! def link markdownItalic Normal
 autocmd FileType markdown set commentstring=<\!--\ %s\ -->
 " for plasticboy/vim-markdown
-let g:vim_markdown_no_default_key_mappings = 1
-let g:vim_markdown_math = 1
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_toc_autofit = 1
-let g:vim_markdown_folding_style_pythonic = 1
+" let g:vim_markdown_no_default_key_mappings = 1
+" let g:vim_markdown_math = 1
+" let g:vim_markdown_frontmatter = 1
+" let g:vim_markdown_toc_autofit = 1
+" let g:vim_markdown_folding_style_pythonic = 1
 nnoremap md :MarkdownPreview<CR>
+" let g:md_pdf_viewer="/usr/bin/mupdf"
+" nnoremap md :StartMdPreview<CR>
 
 " }}}
 
@@ -358,6 +373,8 @@ highlight MatchParen cterm=bold ctermbg=none ctermfg=white
 " }}}
 
 autocmd BufRead,BufNewFile *.tera  set filetype=jinja
+autocmd BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " let &colorcolumn=join(range(81,82),",")
 " hi ColorColumn ctermbg=235 guibg=#2c2d27
+
 

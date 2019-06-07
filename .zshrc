@@ -164,7 +164,7 @@ case ${OSTYPE} in
             fi
         fi
     } # }}}
-    alias konsole='XIM_PROGRAM=fcitx XIM=fcitx GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS="@im=fcitx" /usr/bin/konsole'
+    alias atc='cat src/main.rs|xsel -bi'
     # }}}
 
     # Exports
@@ -266,6 +266,7 @@ alias v='vim'
 alias scp='scp -c aes256-ctr -q -p'
 alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
 alias randstrStrong="cat /dev/urandom | tr -dc '0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;' | head -c100"
+set -o emacs
 
 # Git Setting
 #{{{

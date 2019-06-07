@@ -52,6 +52,10 @@ repo = 'ConradIrwin/vim-bracketed-paste'
 repo = 'plasticboy/vim-markdown'
 [[plugins]]
 repo = 'iamcco/markdown-preview.vim'
+#repo = 'conornewton/vim-pandoc-markdown-preview'
+#[[plugins]]
+#repo = 'skywind3000/asyncrun.vim'
+
 
 # File System
 [[plugins]]
@@ -95,11 +99,23 @@ repo = 'rust-lang/rust.vim'
 
 #Javascript
 [[plugins]]
-repo = 'othree/yajs.vim'
-
-# TypeScript
+repo = 'pangloss/vim-javascript'
+[[plugins]]
+repo = 'peitalin/vim-jsx-typescript'
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
+[[plugins]]
+repo = 'othree/yajs.vim'
+[[plugins]]
+repo = 'othree/es.next.syntax.vim'
+[[plugins]]
+repo = 'othree/javascript-libraries-syntax.vim'
+[[plugins]]
+repo = 'ianks/vim-tsx'
+[[plugins]]
+repo = 'maxmellon/vim-jsx-pretty'
+[[plugins]]
+repo = 'wavded/vim-stylus'
 
 # mql4
 [[plugins]]
