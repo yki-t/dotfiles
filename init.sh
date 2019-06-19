@@ -108,19 +108,19 @@ packages="$(cat <<'EOM'
             "description": "Mozilla Firefox(Latest) web browser",
             "preinstall": "if [ ! -f FirefoxSetup.tar.bz2 ];then wget -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US';fi",
             "install": [],
-            "postinstall": "if [ ! -f /opt/firefox ];then sudo mkdir -p /opt/firefox;fi&& sudo tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/ && if [ -d /usr/lib/firefox-esr/firefox-esr ];then sudo mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org;fi && sudo ln -snf /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr"
+            "postinstall": "if [ ! -f /opt/firefox ];then sudo mkdir -p /opt/firefox;fi&& sudo tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/ && if [ -d /usr/lib/firefox-esr/firefox-esr ];then sudo mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org;fi && sudo ln -snf /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr && rm FirefoxSetup.tar.bz2"
         },
         "chrome": {
             "description": "Google Chrome(Latest) web browser",
             "preinstall": "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi",
             "install": [],
-            "postinstall": "sudo apt install ./google-chrome-stable_current_amd64.deb"
+            "postinstall": "sudo apt install ./google-chrome-stable_current_amd64.deb && rm google-chrome-stable_current_amd64.deb"
         },
         "slack": {
             "description": "Chat client",
             "preinstall": "",
             "install": ["ca-certificates"],
-            "postinstall": "if [ ! -f $(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/') ];then wget https://downloads.slack-edge.com/linux_releases/$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/');fi && sudo apt install ./$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/')"
+            "postinstall": "if [ ! -f $(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/') ];then wget https://downloads.slack-edge.com/linux_releases/$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/');fi && sudo apt install ./$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/') && rm slack-desktop*"
         },
         "Rust": {
             "description": "Rustlang",
@@ -133,6 +133,12 @@ packages="$(cat <<'EOM'
             "preinstall": "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && echo 'deb https://dl.yarnpkg.com/debian/ stable main' | sudo tee /etc/apt/sources.list.d/yarn.list",
             "install": ["nodejs", "yarn"],
             "postinstall": "sudo yarn global add n && sudo n stable"
+        },
+        "gcloud": {
+            "description": "google cloud platform",
+            "preinstall": "echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && sudo apt install apt-transport-https ca-certificates && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && sudo apt update",
+            "install": ["google-cloud-sdk"],
+            "postinstall": ""
         }
     }
 EOM
