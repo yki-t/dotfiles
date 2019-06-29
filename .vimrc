@@ -304,6 +304,7 @@ autocmd BufNewFile,BufRead *.jsx set filetype=typescript tabstop=2 softtabstop=2
 autocmd BufNewFile,BufRead *.ts set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.tsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead FileType javascript,javascript.jsx,javascript.tsx call EnableJavascript()
+autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
 "}}}
 
 "------------------------------------
