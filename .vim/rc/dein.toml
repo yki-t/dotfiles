@@ -52,6 +52,10 @@ repo = 'ConradIrwin/vim-bracketed-paste'
 repo = 'plasticboy/vim-markdown'
 [[plugins]]
 repo = 'iamcco/markdown-preview.vim'
+[[plugins]]
+repo = 'kannokanno/previm'
+[[plugins]]
+repo = 'tyru/open-browser.vim'
 #repo = 'conornewton/vim-pandoc-markdown-preview'
 #[[plugins]]
 #repo = 'skywind3000/asyncrun.vim'
@@ -133,6 +137,10 @@ repo = 'nathanaelkane/vim-indent-guides'
 [[plugins]]
 repo = 'lambdatoast/elm.vim'
 
+# C++
+[[plugins]]
+repo = 'octol/vim-cpp-enhanced-highlight'
+
 # jade pug
 [[plugins]]
 repo = 'digitaltoad/vim-pug'
@@ -140,3 +148,8 @@ repo = 'digitaltoad/vim-pug'
 repo = 'statianzo/vim-jade'
 [[plugins]]
 repo = 'lepture/Vim-jinja'
+
+# latex
+[[plugins]]
+repo = 'lervag/vimtex'
+

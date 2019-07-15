@@ -343,10 +343,17 @@ autocmd FileType markdown set commentstring=<\!--\ %s\ -->
 " let g:vim_markdown_frontmatter = 1
 " let g:vim_markdown_toc_autofit = 1
 " let g:vim_markdown_folding_style_pythonic = 1
-nnoremap md :MarkdownPreview<CR>
+nnoremap md :PrevimOpen<CR>
 " let g:md_pdf_viewer="/usr/bin/mupdf"
 " nnoremap md :StartMdPreview<CR>
 
+" }}}
+
+"------------------------------------
+" Tex記法
+"------------------------------------
+" {{{
+autocmd BufRead,BufNewFile *.{tex} set filetype=tex
 " }}}
 
 "------------------------------------

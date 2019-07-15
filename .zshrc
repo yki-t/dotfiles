@@ -113,7 +113,7 @@ case ${OSTYPE} in
     # }}}
 
     # pdf2jpg
-    function pdf2jpg(){
+    function pdf2jpg() {
         # {{{
         help() {
           echo 'DESCRIPTION: find .pdf and make jpg'
@@ -132,7 +132,7 @@ case ${OSTYPE} in
     } # }}}
 
     # p*xz compress
-    function pxc(){
+    function pxc() {
         # {{{
         if [ $(which pxz) ];then
             if [ $# -eq 1 ];then
@@ -144,7 +144,7 @@ case ${OSTYPE} in
     } # }}}
 
     # p*xz decompress
-    function pxx(){
+    function pxx() {
         # {{{
         if [ $(which pxz) ];then
             tar xvf $1 --use-compress-prog=pxz
@@ -152,7 +152,7 @@ case ${OSTYPE} in
     } # }}}
 
     # uf to png
-    function uf2png(){
+    function uf2png() {
         # {{{
         if [ $(which uiflow) ];then
             if [ $# -eq 1 ];then
@@ -164,7 +164,33 @@ case ${OSTYPE} in
             fi
         fi
     } # }}}
-    alias atc='cat src/main.rs|xsel -bi'
+    function atc() {
+        # {{{
+        if [ $# -eq 1 ];then
+            echo "compile & execute $1.cpp"
+            g++ $1.cpp -o z.out && ./z.out
+        elif [ $# -eq 2 -a $2 = 's' ];then
+            cat $1.cpp |xsel -bi
+        else
+            cat src/main.rs|xsel -bi
+        fi
+    }
+    # }}}
+    function ptex() {
+        # {{{
+        if [ ! $(which uplatex) ] || [ ! $(which dvipdfmx) ];then
+            echo 'uplatex or dvipdfmx is not installed. Please install latex'
+            return
+        fi
+        inp=$1
+        ext="$(echo "$inp"|sed -e 's/.*\.\(.*\)/\1/')"
+        if [ "$ext" != 'tex' ];then
+            echo 'input file extension must be .tex'
+            return
+        fi
+        fname="$(echo "$inp"|rev|cut -c 5-|rev)"
+        uplatex "$fname" && dvipdfmx "$fname"
+    }
     # }}}
 
     # Exports
