@@ -1,0 +1,79 @@
+# 補完
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+
+# QuickRun
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+
+# 以下言語ごとの設定
+
+# MD記法
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+[[plugins]]
+repo = 'iamcco/markdown-preview.vim'
+[[plugins]]
+repo = 'kannokanno/previm'
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+
+# Rust lang
+[[plugins]]
+repo = 'racer-rust/vim-racer'
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+
+#Javascript
+[[plugins]]
+repo = 'pangloss/vim-javascript'
+[[plugins]]
+repo = 'peitalin/vim-jsx-typescript'
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+[[plugins]]
+repo = 'othree/yajs.vim'
+[[plugins]]
+repo = 'othree/es.next.syntax.vim'
+[[plugins]]
+repo = 'othree/javascript-libraries-syntax.vim'
+[[plugins]]
+repo = 'ianks/vim-tsx'
+[[plugins]]
+repo = 'maxmellon/vim-jsx-pretty'
+[[plugins]]
+repo = 'wavded/vim-stylus'
+
+# mql4
+[[plugins]]
+repo = 'vobornik/vim-mql4'
+
+# elm
+[[plugins]]
+repo = 'lambdatoast/elm.vim'
+
+# C++
+[[plugins]]
+repo = 'octol/vim-cpp-enhanced-highlight'
+
+# jade pug
+[[plugins]]
+repo = 'digitaltoad/vim-pug'
+[[plugins]]
+repo = 'statianzo/vim-jade'
+[[plugins]]
+repo = 'lepture/Vim-jinja'
+
+# latex
+[[plugins]]
+repo = 'lervag/vimtex'
+
+# Flutter
+[[plugins]]
+repo = 'dart-lang/dart-vim-plugin'
+on_ft = ['dart']
+

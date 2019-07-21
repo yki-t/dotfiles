@@ -19,16 +19,16 @@ if dein#load_state('~/.cache/dein/')
     call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
     let g:rc_dir    = expand('~/.vim/rc')
     let s:toml      = g:rc_dir . '/dein.toml'
-    let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+    let s:lazy      = g:rc_dir . '/lazy.toml'
     call dein#load_toml(s:toml,      {'lazy': 0})
-    call dein#load_toml(s:lazy_toml, {'lazy': 1})
+    call dein#load_toml(s:lazy,      {'lazy': 1})
     call dein#end()
     call dein#save_state()
 endif
 filetype plugin indent on
 syntax enable
 if dein#check_install()
-  call dein#install()
+    call dein#install()
 endif
 "End dein Scripts-------------------------
 " }}}
@@ -38,7 +38,6 @@ endif
 "------------------------------------
 "{{{
 set modelines=0
-set nocompatible
 set backspace=2
 au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
 au BufWrite /private/etc/pw.* set nowritebackup nobackup
@@ -48,26 +47,8 @@ au BufWrite /private/etc/pw.* set nowritebackup nobackup
 " 補完の設定
 "------------------------------------
 "{{{
+let g:deoplete#enable_at_startup = 1
 set completeopt=menuone
-let g:rsenseUseOmniFunc = 1
-let g:auto_ctags = 1
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_enable_camel_case_completion  =  1
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_max_list = 20
-let g:neocomplcache_min_syntax_length = 3
-autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.ruby = '[^.*\t]\.\w*\|\h\w*::'
-
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 "}}}
 
 "------------------------------------
@@ -90,26 +71,13 @@ endif
 "}}}
 
 "------------------------------------
-" キーマッピング
+" 基本的なキーマッピング
 "------------------------------------
 "{{{
-noremap vf :VimFiler -auto-cd<CR>
-nnoremap VS :VimShellInteractive zsh<CR>
-noremap DU :call dein#update()<CR>
 map <Space> <Plug>(operator-replace)
 
-noremap te :LLPStartPreview<CR>
-
-"inoremap { {}<Left>
-"inoremap ( ()<Left>
-"inoremap [ []<LEFT>
-"inoremap < <><LEFT>
-"inoremap ' ''<LEFT>
-"inoremap " ""<LEFT>
-" ==でインデント調整
 nnoremap == gg=G''
 
-" 検索結果を画面の中央に
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap * *zz
@@ -117,40 +85,25 @@ nnoremap # #zz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
-
-" nnoremap ; :
-" nnoremap : ;
 nnoremap x "_x
 
-" 行移動を表示行での移動に
 nnoremap j gj
+vnoremap j gj
 nnoremap gj j
+vnoremap gj j
 nnoremap k gk
+vnoremap k gk
 nnoremap gk k
+vnoremap gk k
 nnoremap <Up> gk
 nnoremap <Down> j
-vnoremap j gj
-vnoremap k gk
-vnoremap gj j
-vnoremap gk k
 vnoremap <Up> gk
 vnoremap <Down> j
 
-" 廃止
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q gq
 "}}}
-
-"------------------------------------
-" vimshell起動時、Ctrl-yで履歴をヤンク
-"------------------------------------
-" {{{ " after/ftplugin/unite.vim
-"let s:context = unite#get_context()
-"if s:context.buffer_name ==# 'completion'
-"    inoremap <buffer> <expr> <C-y> unite#do_action('insert')
-"endif
-" }}}
 
 "------------------------------------
 " 画面分割(キーマッピング)
@@ -224,16 +177,17 @@ let g:rainbow_active = 1
 
 " 改行時の自動コメント化を無効に
 augroup auto_comment_off
-    autocmd!
-    autocmd BufEnter * setlocal formatoptions-=r
-    autocmd BufEnter * setlocal formatoptions-=o
+    au!
+    au BufEnter * setlocal formatoptions-=r
+    au BufEnter * setlocal formatoptions-=o
 augroup END
 
 set number
+set ambiwidth=double
 set expandtab
 set tabstop=4
-set ambiwidth=double
-set shiftwidth=4 
+set shiftwidth=4
+set autoindent
 set smartindent
 set wrap
 set list
@@ -273,87 +227,44 @@ hi NonText ctermbg=NONE guibg=NONE
 "}}}
 
 "------------------------------------
-" プログラム言語共通の設定
-"------------------------------------
-" コンパイルエラー時の処理
-"au QuickFixCmdPost * nested cwindow | redraw! 
-
-"------------------------------------
 " JAVA-SCRIPT系の設定
 "------------------------------------
 " {{{
-" 保存時にコンパイル
-au BufWritePost *.coffee silent make -b
-au QuickFixCmdPost * nested cwindow | redraw! 
-" リアルタイムプレビュー
-" au BufWritePost *.coffee :CoffeeWatch vert
 function! EnableJavascript()
-  " Setup used libraries
-  let g:used_javascript_libs = 'jquery,underscore,react,flux,jasmine,d3'
-  let b:javascript_lib_use_jquery = 1
-  let b:javascript_lib_use_underscore = 1
-  let b:javascript_lib_use_react = 1
-  let b:javascript_lib_use_flux = 0
-  let b:javascript_lib_use_jasmine = 0
-  let b:javascript_lib_use_d3 = 0
+    let g:used_javascript_libs = 'jquery,underscore,react,flux,jasmine,d3'
+    let b:javascript_lib_use_jquery = 1
+    let b:javascript_lib_use_underscore = 1
+    let b:javascript_lib_use_react = 1
+    let b:javascript_lib_use_flux = 0
+    let b:javascript_lib_use_jasmine = 0
+    let b:javascript_lib_use_d3 = 0
 endfunction
 
-autocmd BufNewFile,BufRead *.js setlocal tabstop=2 softtabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead *.sol set filetype=javascript
-autocmd BufNewFile,BufRead *.jsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead *.ts set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead *.tsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead FileType javascript,javascript.jsx,javascript.tsx call EnableJavascript()
-autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
-"}}}
+au BufNewFile,BufRead *.js setlocal tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.sol set filetype=javascript
+au BufNewFile,BufRead *.jsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.ts set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.tsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
 
-"------------------------------------
-" PHPの設定
-"------------------------------------
-"{{{
-"augroup PHP
-"    autocmd!
-"    autocmd FileType php set makeprg=php\ -l\ %
-"    autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
-"    " php -lの構文チェックでエラーがなければ「No syntax errors」の一行だけ出力される
-"    autocmd BufWritePost *.php silent make | if len(getqflist()) != 1 | copen | else | cclose | endif
-"augroup END
-"}}}
-
-"------------------------------------
-" C++
-"------------------------------------
-"{{{
-" 保存時にコンパイル
-"au BufWritePost *.cpp silent :gcc 
-"au BufWritePost *.cpp :lcd %:h | :!clang++ -Wall -std=c++14 %:p 1>/dev/null
-"au QuickFixCmdPost * nested cwindow | redraw! 
+au BufNewFile,BufRead FileType javascript,javascript.jsx,javascript.tsx call EnableJavascript()
+au FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
 "}}}
 
 "------------------------------------
 " MD記法
 "------------------------------------
 " {{{
-autocmd BufRead,BufNewFile *.{mkd,md} set filetype=markdown
-autocmd! FileType markdown hi! def link markdownItalic Normal
-autocmd FileType markdown set commentstring=<\!--\ %s\ -->
-" for plasticboy/vim-markdown
-" let g:vim_markdown_no_default_key_mappings = 1
-" let g:vim_markdown_math = 1
-" let g:vim_markdown_frontmatter = 1
-" let g:vim_markdown_toc_autofit = 1
-" let g:vim_markdown_folding_style_pythonic = 1
+au BufRead,BufNewFile *.{mkd,md} set filetype=markdown
+au! FileType markdown hi! def link markdownItalic Normal
+au FileType markdown set commentstring=<\!--\ %s\ -->
 nnoremap md :PrevimOpen<CR>
-" let g:md_pdf_viewer="/usr/bin/mupdf"
-" nnoremap md :StartMdPreview<CR>
-
 " }}}
 
 "------------------------------------
 " Tex記法
 "------------------------------------
 " {{{
-autocmd BufRead,BufNewFile *.{tex} set filetype=tex
+au BufRead,BufNewFile *.{tex} setlocal filetype=tex tabstop=2 softtabstop=2 shiftwidth=2
 " }}}
 
 "------------------------------------
@@ -374,15 +285,16 @@ let g:vimshell_user_prompt = 'getcwd()'
 " Highlights
 "------------------------------------
 " {{{
-highlight Pmenu ctermbg=4
-highlight PmenuSel ctermbg=1
-highlight PMenuSbar ctermbg=4
-highlight MatchParen cterm=bold ctermbg=none ctermfg=white
+hi Pmenu ctermbg=4
+hi PmenuSel ctermbg=1
+hi PMenuSbar ctermbg=4
+hi MatchParen cterm=bold ctermbg=none ctermfg=white
 " }}}
 
-autocmd BufRead,BufNewFile *.tera  set filetype=jinja
-autocmd BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
-" let &colorcolumn=join(range(81,82),",")
-" hi ColorColumn ctermbg=235 guibg=#2c2d27
+au BufRead,BufNewFile *.tera  set filetype=jinja
+au BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
+au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
 
-
+noremap vf :VimFiler -auto-cd<CR>
+nnoremap VS :VimShellInteractive zsh<CR>
+noremap DU :call dein#update()<CR>

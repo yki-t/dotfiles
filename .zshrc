@@ -228,7 +228,7 @@ case ${OSTYPE} in
 
     # JAVA
     if [ -e "$(which java)" ];then
-        export JAVA_HOME=$(update-alternatives --query javac 2>/dev/null | sed -n -e 's/Best: *\(.*\)\/bin\/javac/\1/p')
+        export JAVA_HOME=$(update-alternatives --query javac 2>/dev/null | sed -n -e 's/Value: *\(.*\)\/bin\/javac/\1/p')
         export DERBY_HOME=$JAVA_HOME/db
         export J2SDKDIR=$JAVA_HOME
         export J2REDIR=$JAVA_HOME/jre

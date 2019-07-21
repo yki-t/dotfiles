@@ -1,65 +1,15 @@
+# 
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
-# vimproc: インストール後の処理も書いてる
-# [[plugins]]
-# repo = 'Shougo/vimproc.vim'
-# hook_post_update = '''
-#   if dein#util#_is_windows()
-#     let cmd = 'tools\\update-dll-mingw'
-#   elseif dein#util#_is_cygwin()
-#     let cmd = 'make -f make_cygwin.mak'
-#   elseif executable('gmake')
-#     let cmd = 'gmake'
-#   else
-#     let cmd = 'make'
-#   endif
-#   let g:dein#plugin.build = cmd
-# '''
-
-# よくわからないファイル
-[[plugins]]
-repo = 'vim-jp/vimdoc-ja'
-
 [[plugins]]
 repo = 'Shougo/unite.vim'
-
 [[plugins]]
 repo = 'Shougo/unite-outline'
-
-# 補完
-#[[plugins]]
-#repo = 'Shougo/neocomplete.vim'
-#[[plugins]]
-#repo = 'Shougo/neocomplcache'
-#[[plugins]]
-#repo = 'Shougo/neosnippet.vim'
-#[[plugins]]
-#repo = 'Shougo/neosnippet-snippets'
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-[[plugins]]
-repo = 'roxma/nvim-yarp'
-[[plugins]]
-repo = 'roxma/vim-hug-neovim-rpc'
 
 # ペースト
 [[plugins]]
 repo = 'ConradIrwin/vim-bracketed-paste'
-
-# MD記法
-[[plugins]]
-repo = 'plasticboy/vim-markdown'
-[[plugins]]
-repo = 'iamcco/markdown-preview.vim'
-[[plugins]]
-repo = 'kannokanno/previm'
-[[plugins]]
-repo = 'tyru/open-browser.vim'
-#repo = 'conornewton/vim-pandoc-markdown-preview'
-#[[plugins]]
-#repo = 'skywind3000/asyncrun.vim'
-
 
 # File System
 [[plugins]]
@@ -68,7 +18,6 @@ repo = 'Shougo/vimfiler'
 # Shell
 [[plugins]]
 repo = 'Shougo/vimshell'
-#rev = '3787e5'
 
 # 括弧
 [[plugins]]
@@ -78,10 +27,6 @@ repo = 'luochen1990/rainbow'
 # csv
 [[plugins]]
 repo = 'mechatroner/rainbow_csv'
-
-# QuickRun
-[[plugins]]
-repo = 'thinca/vim-quickrun'
 
 # 画面分割の時に使うもの
 [[plugins]]
@@ -93,63 +38,4 @@ repo = 'kana/vim-operator-replace'
 [[plugins]]
 repo = 'kana/vim-operator-user'
 
-# Rust lang
-[[plugins]]
-repo = 'racer-rust/vim-racer'
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-# [[plugins]]
-# repo = 'vim-syntastic/syntastic'
-
-#Javascript
-[[plugins]]
-repo = 'pangloss/vim-javascript'
-[[plugins]]
-repo = 'peitalin/vim-jsx-typescript'
-[[plugins]]
-repo = 'leafgarland/typescript-vim'
-[[plugins]]
-repo = 'othree/yajs.vim'
-[[plugins]]
-repo = 'othree/es.next.syntax.vim'
-[[plugins]]
-repo = 'othree/javascript-libraries-syntax.vim'
-[[plugins]]
-repo = 'ianks/vim-tsx'
-[[plugins]]
-repo = 'maxmellon/vim-jsx-pretty'
-[[plugins]]
-repo = 'wavded/vim-stylus'
-
-# mql4
-[[plugins]]
-repo = 'vobornik/vim-mql4'
-
-# Coffee Script用
-[[plugins]]
-repo = 'kchmck/vim-coffee-script'
-[[plugins]]
-repo = 'claco/jasmine.vim'
-[[plugins]]
-repo = 'nathanaelkane/vim-indent-guides'
-
-# elm
-[[plugins]]
-repo = 'lambdatoast/elm.vim'
-
-# C++
-[[plugins]]
-repo = 'octol/vim-cpp-enhanced-highlight'
-
-# jade pug
-[[plugins]]
-repo = 'digitaltoad/vim-pug'
-[[plugins]]
-repo = 'statianzo/vim-jade'
-[[plugins]]
-repo = 'lepture/Vim-jinja'
-
-# latex
-[[plugins]]
-repo = 'lervag/vimtex'
 
