@@ -254,6 +254,7 @@ au FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " MD記法
 "------------------------------------
 " {{{
+let g:previm_open_cmd='open -a firefox'
 au BufRead,BufNewFile *.{mkd,md} set filetype=markdown
 au! FileType markdown hi! def link markdownItalic Normal
 au FileType markdown set commentstring=<\!--\ %s\ -->
@@ -294,6 +295,7 @@ hi MatchParen cterm=bold ctermbg=none ctermfg=white
 au BufRead,BufNewFile *.tera  set filetype=jinja
 au BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
 au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
+
 
 noremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>

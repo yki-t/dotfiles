@@ -38,4 +38,17 @@ repo = 'kana/vim-operator-replace'
 [[plugins]]
 repo = 'kana/vim-operator-user'
 
+# MD 記法
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+[[plugins]]
+repo = 'iamcco/markdown-preview.vim'
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+[[plugins]]
+repo = 'previm/previm'
+
+# QuickRun
+[[plugins]]
+repo = 'thinca/vim-quickrun'
 
