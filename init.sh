@@ -5,7 +5,7 @@ TARGET_SHELL=zsh
 BASH=/bin/bash
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
-if [ -d "${DIR}/tmp" ];then
+if [ ! -d "${DIR}/tmp" ];then
     mkdir "${DIR}/tmp"
 fi
 cd "${DIR}/tmp"
@@ -60,7 +60,7 @@ printf ".\e[32;1m%s\n\e[m" "OK"
 msg="Pre checking and installing required commands.."
 # {{{
 printf "${msg}"
-for c in curl git vim zsh wget apt jq;do
+for c in curl git vim zsh wget aptitude jq;do
     need2install=$(check_cmd "${c}")
 done
 printf ".\e[32;1m%s\n\e[m" "OK"
@@ -136,7 +136,7 @@ packages="$(cat <<'EOM'
         },
         "gcloud": {
             "description": "google cloud platform",
-            "preinstall": "echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && sudo apt install apt-transport-https ca-certificates && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && sudo apt update",
+            "preinstall": "echo 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main' | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && sudo apt install apt-transport-https ca-certificates && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && sudo apt update",
             "install": ["google-cloud-sdk"],
             "postinstall": ""
         }
@@ -147,6 +147,7 @@ EOM
 
 keys="$(echo ${packages}|jq '.|keys')"
 len="$(echo ${keys}|jq '.|length')"
+
 while :;do
     # {{{
     declare -a pre_install=()

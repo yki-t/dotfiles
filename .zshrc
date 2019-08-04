@@ -291,7 +291,6 @@ alias v='vim'
 alias scp='scp -c aes256-ctr -q -p'
 alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
 alias randstrStrong="cat /dev/urandom | tr -dc '0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;' | head -c100"
-set -o emacs
 
 # Git Setting
 #{{{

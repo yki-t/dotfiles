@@ -10,7 +10,7 @@ setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
 setopt list_types              # 補完候補にファイルの種類も表示する
 
 unsetopt no_match # wildcard など使えるように
-set -o emacs # binding
+set -o vi # binding
 
 # color
 autoload -Uz colors
