@@ -257,6 +257,9 @@ au FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
 au BufRead,BufNewFile *.{mkd,md} set filetype=markdown
 au! FileType markdown hi! def link markdownItalic Normal
 au FileType markdown set commentstring=<\!--\ %s\ -->
+let g:vim_markdown_folding_disabled=1
+let g:previm_show_header=0
+let g:previm_open_cmd='/usr/bin/google-chrome-stable'
 nnoremap md :PrevimOpen<CR>
 " }}}
 
@@ -294,7 +297,6 @@ hi MatchParen cterm=bold ctermbg=none ctermfg=white
 au BufRead,BufNewFile *.tera  set filetype=jinja
 au BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
 au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
-
 
 noremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
