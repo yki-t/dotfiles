@@ -191,6 +191,7 @@ case ${OSTYPE} in
         uplatex "$fname" && dvipdfmx "$fname"
     }
     # }}}
+    #}}}
 
     # Exports
     #{{{
@@ -215,6 +216,9 @@ case ${OSTYPE} in
     # Node JS npm/yarn
     if [ -e "$(which npm)" ];then
         npm config set prefix ~/.local/
+        if [ -e "${HOME}/.local/bin/npm" ];then
+            alias npm="${HOME}/.local/bin/npm"
+        fi
     fi
     if [ -e "$(which yarn)" ];then
         export NODE_PATH="${HOME}/.yarn/bin"
@@ -277,11 +281,13 @@ case ${OSTYPE} in
     if [ -d ${HOME}/opt/FileZilla3/bin ]; then
         export PATH=${PATH}:${HOME}/opt/FileZilla3/bin
     fi
-
-    #}}}
+    # Ruby
+    if [ -d ${HOME}/.rbenv/bin ];then
+        export PATH="$HOME/.rbenv/bin:$PATH"
+        eval "$(rbenv init -)"
+    fi
     #}}}
     ;;
-
 
 esac
 

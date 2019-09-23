@@ -56,16 +56,17 @@ ln -snf ${DIR}/.vim ${DIR}/../../.vim
 ln -snf ${DIR}/.sshrc ${DIR}/../../.sshrc
 printf ".\e[32;1m%s\n\e[m" "OK"
 # }}}
-
 msg="Pre checking and installing required commands.."
 # {{{
 printf "${msg}"
+need2install=''
 for c in curl git vim zsh wget aptitude jq;do
-    need2install=$(check_cmd "${c}")
+    [ "$(check_cmd "${c}")" != '' ] && need2install+=" $(check_cmd "${c}")"
 done
 printf ".\e[32;1m%s\n\e[m" "OK"
+echo -en "${need2install}"
 if [ "${need2install}" = '' ];then
-     echo "All commands are installed. Proceed.."
+    echo "All commands are installed. Proceed.."
 else
     msg="Some commands missing, and installing.."
     printf "${msg}"
@@ -73,8 +74,27 @@ else
     printf ".\e[32;1m%s\n\e[m" "OK"
 fi
 # }}}
+msg="Setting up login shell.."
+# {{{
+printf "${msg}"
+if [ ! -f "$(which ${TARGET_SHELL})" ];then
+    printf ".\e[32;1m%s\n\e[m" "NG"
+    sys_exit 1
+else
+    [ "$(grep ${USER} /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ] && chsh -s $(which ${TARGET_SHELL}) $USER
+    [ "$(grep root /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ] && sudo chsh -s $(which ${TARGET_SHELL}) root
+    if [ "$(grep ${USER} /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ] \
+        || [ "$(grep root /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ];then
+        printf ".\e[32;1m%s\n\e[m" "NG"
+        sys_exit 1
+    else
+        printf ".\e[32;1m%s\n\e[m" "OK"
+    fi
+fi
+# }}}
 
-msg="Please set up your environment.."
+msg="-----\nPlease set up your environment.."
+echo -e "${msg}"
 
 # Packages
 # {{{
@@ -108,23 +128,23 @@ packages="$(cat <<'EOM'
             "description": "Mozilla Firefox(Latest) web browser",
             "preinstall": "if [ ! -f FirefoxSetup.tar.bz2 ];then wget -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US';fi",
             "install": [],
-            "postinstall": "if [ ! -f /opt/firefox ];then sudo mkdir -p /opt/firefox;fi&& sudo tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/ && if [ -d /usr/lib/firefox-esr/firefox-esr ];then sudo mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org;fi && sudo ln -snf /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr && rm FirefoxSetup.tar.bz2"
+            "postinstall": "if [ ! -f /opt/firefox ];then mkdir -p /opt/firefox;fi && tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/ && if [ -d /usr/lib/firefox-esr/firefox-esr ];then mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org;fi && ln -snf /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr && rm FirefoxSetup.tar.bz2"
         },
         "chrome": {
             "description": "Google Chrome(Latest) web browser",
             "preinstall": "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi",
             "install": [],
-            "postinstall": "sudo apt install ./google-chrome-stable_current_amd64.deb && rm google-chrome-stable_current_amd64.deb"
+            "postinstall": "sudo apt install -y ./google-chrome-stable_current_amd64.deb && rm google-chrome-stable_current_amd64.deb"
         },
         "slack": {
             "description": "Chat client",
             "preinstall": "",
             "install": ["ca-certificates"],
-            "postinstall": "if [ ! -f $(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/') ];then wget https://downloads.slack-edge.com/linux_releases/$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/');fi && sudo apt install ./$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/') && rm slack-desktop*"
+            "postinstall": "if [ ! -f $(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/') ];then wget https://downloads.slack-edge.com/linux_releases/$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/');fi && sudo apt install -y ./$(curl -Ss https://slack.com/intl/ja-jp/downloads/instructions/ubuntu|grep 'slack-desktop'|grep 'amd64.deb'|sed -e's/.*\\(slack-desktop-3.4.2-amd64.deb\\).*/\\1/') && rm slack-desktop*"
         },
         "Rust": {
             "description": "Rustlang",
-            "preinstall": "curl https://sh.rustup.rs -sSf | sh",
+            "preinstall": "curl https://sh.rustup.rs -sSf|sh -s -- -y",
             "install": [],
             "postinstall": ""
         },
@@ -185,17 +205,18 @@ printf "\n\e[32;1m%s\n\e[m" "OK"
 # }}}
 
 for ((i = 0; i< ${#pre_install[@]}; i++));do
-    ${BASH} -c "${pre_install[$i]}"
+    "${BASH}" -c "${pre_install[$i]}"
 done
 
-sudo apt update && sudo apt upgrade
+sudo apt update && sudo apt upgrade -y -qq
 for p in ${ins_packages};do
     sudo aptitude install -y "${p}"
 done
 
 for ((i = 0; i< ${#pos_install[@]}; i++));do
-    sudo ${BASH} -c "${pos_install[$i]}"
+    sudo "${BASH}" -c "${pos_install[$i]}"
 done
+
 
 if [ ! -d ${HOME}/.cache/dein ];then
     # {{{
