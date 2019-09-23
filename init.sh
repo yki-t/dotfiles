@@ -132,9 +132,9 @@ packages="$(cat <<'EOM'
         },
         "chrome": {
             "description": "Google Chrome(Latest) web browser",
-            "preinstall": "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi",
+            "preinstall": "",
             "install": [],
-            "postinstall": "sudo apt install -y ./google-chrome-stable_current_amd64.deb && rm google-chrome-stable_current_amd64.deb"
+            "postinstall": "[ ! -f google-chrome-stable_current_amd64.deb ] && wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; apt install -y ./google-chrome-stable_current_amd64.deb && rm google-chrome-stable_current_amd64.deb"
         },
         "slack": {
             "description": "Chat client",
