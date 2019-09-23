@@ -80,9 +80,9 @@ if [ ! -f "$(which ${TARGET_SHELL})" ];then
     sys_exit 1
 else
     [ "$(grep ${USER} /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ] && chsh -s $(which ${TARGET_SHELL}) $USER
-    [ "$(grep root /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ] && sudo chsh -s $(which ${TARGET_SHELL}) root
-    if [ "$(grep ${USER} /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ] \
-        || [ "$(grep root /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ];then
+    # [ "$(grep root /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ] && sudo chsh -s $(which ${TARGET_SHELL}) root
+    if [ "$(grep ${USER} /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ];then
+        # || [ "$(grep root /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$(which ${TARGET_SHELL})" ];then
         printf ".\e[32;1m%s\n\e[m" "NG"
         sys_exit 1
     else
