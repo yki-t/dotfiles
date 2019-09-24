@@ -148,7 +148,7 @@ packages="$(cat <<'EOM'
         },
         "nodejs": {
             "description": "node.js and yarn",
-            "preinstall": "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && echo 'deb https://dl.yarnpkg.com/debian/ stable main' | sudo tee /etc/apt/sources.list.d/yarn.list",
+            "preinstall": "apt install -y npm && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && echo 'deb https://dl.yarnpkg.com/debian/ stable main' | sudo tee /etc/apt/sources.list.d/yarn.list && apt update",
             "install": ["nodejs", "yarn"],
             "postinstall": "sudo yarn global add n && sudo n stable"
         },
