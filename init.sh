@@ -119,7 +119,7 @@ packages="$(cat <<'EOM'
     "firefox": {
         "description": "Mozilla Firefox(Latest) web browser",
         "main": [
-            "if [ ! -f FirefoxSetup.tar.bz2 ];then wget -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US'; fi"
+            "if [ ! -f FirefoxSetup.tar.bz2 ];then wget -q -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US'; fi"
             , "if [ ! -f /opt/firefox ];then mkdir -p /opt/firefox; fi"
             , "tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/"
             , "if [ -f /usr/lib/firefox-esr/firefox-esr ];then mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org; fi"
@@ -129,7 +129,7 @@ packages="$(cat <<'EOM'
     "chrome": {
         "description": "Google Chrome(Latest) web browser",
         "main": [
-            "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi"
+            "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget -q 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi"
         ],
         "apt_": [
             "./google-chrome-stable_current_amd64.deb"
@@ -141,7 +141,7 @@ packages="$(cat <<'EOM'
             "ca-certificates"
         ],
         "main": [
-            "if [ ! -f slack-desktop-4.0.2-amd64.deb ];then wget https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.2-amd64.deb; fi"
+            "if [ ! -f slack-desktop-4.0.2-amd64.deb ];then wget -q https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.2-amd64.deb; fi"
         ],
         "apt_": [
             "./slack-desktop-4.0.2-amd64.deb"
@@ -249,19 +249,20 @@ done
 # }}}
 
 printf "installing.. this may take a while\n"
-sudo apt-get update -y >/dev/null || failure "apt-get update"
-sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade'
+sudo apt-get update -y >/dev/null || failure "apt-get update1"
+sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade1'
 sudo apt-get install -y ${_apts[@]} >/dev/null || failure "apt-get install ${_apts[@]}"
 sudo aptitude install -y ${apts[@]} >/dev/null || failure "aptitude install ${apts[@]}"
 for cmd in "${mains[@]}";do
     sudo bash -c "$cmd" || failure "main command: $cmd"
 done
- sudo apt-get install -y ${apt_s[@]} >/dev/null || failure "apt-get install ${apt_s[@]}"
+sudo apt-get update -y >/dev/null || failure "apt-get update2"
+sudo apt-get install -y ${apt_s[@]} >/dev/null || failure "apt-get install ${apt_s[@]}"
 for cmd in "${afters[@]}";do
     sudo bash -c "$cmd" || failure "after command: $cmd"
 done
-sudo apt-get update -y >/dev/null || failure "apt-get update"
-sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade'
+sudo apt-get update -y >/dev/null || failure "apt-get update3"
+sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade2'
 
 msg="Initing system.."
 printf "${msg}"
