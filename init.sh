@@ -115,7 +115,9 @@ packages="$(cat <<'EOM'
             , "nvidia-settings"
             , "nvidia-xconfig"
         ],
-        "after": ["nvidia-xconfig"]
+        "after": [
+            "nvidia-xconfig"
+        ]
     },
     "firefox": {
         "description": "Mozilla Firefox(Latest) web browser",
@@ -133,7 +135,7 @@ packages="$(cat <<'EOM'
             "[ ! -f google-chrome-stable_current_amd64.deb ] && wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'"
         ],
         "apt_": [
-            "google-chrome-stable_current_amd64.deb"
+            "./google-chrome-stable_current_amd64.deb"
         ]
     },
     "slack": {
@@ -144,7 +146,9 @@ packages="$(cat <<'EOM'
         "main": [
             "[ ! -f slack-desktop-4.0.2-amd64.deb ] && wget https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.2-amd64.deb"
         ],
-        "apt_": ["slack-desktop-4.0.2-amd64.deb"]
+        "apt_": [
+            "./slack-desktop-4.0.2-amd64.deb"
+        ]
     },
     "Rust": {
         "description": "Rustlang",
@@ -180,7 +184,9 @@ packages="$(cat <<'EOM'
             "curl -sS https://packages.cloud.google.com/apt/doc/apt-key.gpg|apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -"
             , "echo 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main'|tee /etc/apt/sources.list.d/google-cloud-sdk.list"
         ],
-        "apt": ["google-cloud-sdk"]
+        "apt_": [
+            "google-cloud-sdk"
+        ]
     }
 }
 EOM
@@ -244,13 +250,13 @@ done
 sudo apt-get update -y >/dev/null || failure "apt-get update"
 sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade'
 sudo apt-get install -y ${_apts[@]} >/dev/null || failure "apt-get install ${_apts[@]}"
-sudo aptitude install -y ${apts[@]} >/dev/null || failure "apt-get install ${apts[@]}"
+sudo aptitude install -y ${apts[@]} >/dev/null || failure "aptitude install ${apts[@]}"
 for cmd in "${mains[@]}";do
-    sudo "$cmd" || failure "main command: $cmd"
+    sudo bash -c "$cmd" || failure "main command: $cmd"
 done
  sudo apt-get install -y ${apt_s[@]} >/dev/null || failure "apt-get install ${apt_s[@]}"
 for cmd in "${afters[@]}";do
-    sudo "$cmd" || failure "after command: $cmd"
+    sudo bash -c "$cmd" || failure "after command: $cmd"
 done
 sudo apt-get update -y >/dev/null || failure "apt-get update"
 sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade'
@@ -285,6 +291,7 @@ echo "Please reboot after following instructions if shown vvv"
 for man in "${mans[@]}";do
     printf ".\e[32;1m%s\n\e[m" "$man"
 done
+printf ".\e[32;1m%s\n\e[m" "system: setup grub config such as 'quiet splash nomodeset pci=nommconf'"
 
 printf ".\e[32;1m%s\n\e[m" "[ALL DONE]"
 
