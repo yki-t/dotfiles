@@ -5,6 +5,7 @@ LOST_COMMAND_AND_INSTALL=true
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
 TARGET_SHELL='/bin/zsh'
 user=${USER}
+MSG_BACK_LENGTH=100
 
 cd "/tmp"
 
@@ -24,7 +25,7 @@ EXEC() {
 
 yn() {
     # {{{
-    read -n1 -p "ok? (y/n): " yn
+    read -n1 -p " ok? (y/n): " yn
     if [[ $yn = [yY] ]]; then
       echo y
     else
@@ -92,11 +93,7 @@ packages="$(cat <<'EOM'
             , "kde-config-fcitx"
             , "mozc-utils-gui"
         ],
-        "after": [
-            "source ~/.zprofile"
-            , "im-config -n fcitx"
-        ],
-        "man": "`fcitx-configtool` and set input method"
+        "man": "`source ~/.zprofile && im-config -n fcitx && fcitx-configtool` and set input method"
     },
     "thunderbird": {
         "description": "Email client",
@@ -122,17 +119,17 @@ packages="$(cat <<'EOM'
     "firefox": {
         "description": "Mozilla Firefox(Latest) web browser",
         "main": [
-            "[ ! -f FirefoxSetup.tar.bz2 ] && wget -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US'"
-            , "[ ! -f /opt/firefox ] && mkdir -p /opt/firefox"
+            "if [ ! -f FirefoxSetup.tar.bz2 ];then wget -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US'; fi"
+            , "if [ ! -f /opt/firefox ];then mkdir -p /opt/firefox; fi"
             , "tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/"
-            , "[ -d /usr/lib/firefox-esr/firefox-esr ] && mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org"
+            , "if [ -f /usr/lib/firefox-esr/firefox-esr ];then mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org; fi"
             , "ln -snf /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr"
         ]
     },
     "chrome": {
         "description": "Google Chrome(Latest) web browser",
         "main": [
-            "[ ! -f google-chrome-stable_current_amd64.deb ] && wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'"
+            "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi"
         ],
         "apt_": [
             "./google-chrome-stable_current_amd64.deb"
@@ -144,7 +141,7 @@ packages="$(cat <<'EOM'
             "ca-certificates"
         ],
         "main": [
-            "[ ! -f slack-desktop-4.0.2-amd64.deb ] && wget https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.2-amd64.deb"
+            "if [ ! -f slack-desktop-4.0.2-amd64.deb ];then wget https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.2-amd64.deb; fi"
         ],
         "apt_": [
             "./slack-desktop-4.0.2-amd64.deb"
@@ -194,9 +191,13 @@ EOM
 # }}}
 
 # Main
+printf "is_debian: " && tput cub $MSG_BACK_LENGTH
 EXEC is_debian
+printf "is_non_root: " && tput cub $MSG_BACK_LENGTH
 EXEC is_non_root
+printf "check_base_cmds: " && tput cub $MSG_BACK_LENGTH
 EXEC check_base_cmds
+printf "change_login_shell_bash2zsh: " && tput cub $MSG_BACK_LENGTH
 EXEC change_login_shell_bash2zsh
 
 _apts=() apts=() mains=() apt_s=() afters=() mans=()
@@ -247,6 +248,7 @@ for p in $trg_packages; do
 done
 # }}}
 
+printf "installing.. this may take a while\n"
 sudo apt-get update -y >/dev/null || failure "apt-get update"
 sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade'
 sudo apt-get install -y ${_apts[@]} >/dev/null || failure "apt-get install ${_apts[@]}"
