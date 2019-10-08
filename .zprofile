@@ -6,19 +6,17 @@ autoload -U compinit
 compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
-setopt list_types              # 補完候補にファイルの種類も表示する
+setopt magic_equal_subst
+setopt list_types
 
-unsetopt no_match # wildcard など使えるように
-set -o vi # binding
+unsetopt no_match
+set -o vi
 
 # color
 autoload -Uz colors
 colors
 
-# Ctrl+Dでログアウトしてしまうことを防ぐ
 setopt IGNOREEOF
-
 
 # Prevent prompt from showing ^[[2004h
 unset zle_bracketed_paste
@@ -33,5 +31,5 @@ export XIM=fcitx
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
-[ -f "$(which fcitx-autostart)" ] && (fcitx-autostart>/dev/null 2&>1 &)
+[ -f "$(which fcitx-autostart)" ] && (fcitx-autostart&>/dev/null &)
 export PATH="$HOME/.cargo/bin:$PATH"

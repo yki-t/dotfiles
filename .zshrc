@@ -10,28 +10,29 @@ else
 $ "
 fi
 
-# General Settings
-#{{{
-# 補完
 autoload -U compinit
 compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
-setopt list_types              # 補完候補にファイルの種類も表示する
+setopt magic_equal_subst
+setopt list_types
+
+unsetopt no_match
+set -o vi
 
 # color
 autoload -Uz colors
 colors
 
-# Ctrl+Dでログアウトしてしまうことを防ぐ
 setopt IGNOREEOF
 
 # Prevent prompt from showing ^[[2004h
 unset zle_bracketed_paste
 setopt AUTO_CD
 alias c='cd'
-#}}}
+
+export GIT_EDITOR=vim
+export EDITOR=vim
 
 case ${OSTYPE} in
     darwin*)
@@ -87,29 +88,24 @@ case ${OSTYPE} in
     # {{{
     export LS_COLORS="rs=0:di=0;95:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:"
     alias ls="ls --color=auto"
-    alias ll="ls -alF --color=auto"
-    alias gls="gls --color"
+    alias ll="ls --color=auto -alhF"
     zstyle ':completion:*' list-colors "${LS_COLORS}"
     # }}}
 
     # aliases
     # {{{
-    # Record alias
-    if echo $(hostname) | fgrep -q XPS; then
-        # {{{
-        if [ ! -d ${HOME}/Music/Records ];then
-            mkdir -p ${HOME}/Music/Records
-        fi
-        alias rec='arecord -f S16_LE -r 44100 "${HOME}/Music/Records/$(date "+%Y.%m.%d;%H:%M:%S").wav"'
-    fi # }}}
-
-    # Screen capture alias
-        # {{{
-    if [ ! -d ${HOME}/Videos/Captures ];then
-        mkdir -p ${HOME}/Videos/Captures
-    fi
-    alias cap='if [ $(which recordmydesktop) -a $(which ffmpeg) ];then if [ -f _tmp ];then rm _tmp;fi;trgdir="${HOME}/Videos/Captures"&&echo ">>> select window by click"&&echo "--no-sound --no-wm-check --windowid $(xwininfo|grep "xwininfo: Window id"|sed -e"s/\(.*\)Window id: \(.*\) \(.*\)/\2/") -o${trgdir}/out.ogv"|xargs recordmydesktop>_tmp>/dev/null 2>&1&sleep 1&&echo ">>> ENTER e to end recording";while true;do;read ANS;if [ "${ANS}" = "e" ];then echo ">>> ending record&encode to mp4";unset ANS;killall recordmydesktop>/dev/null 2>&1;break;fi;done;sleep 2&&echo ">>> encoding now."&&while true;do sleep 1&&while read LINE;do if echo "$LINE" | grep -q "100%";then ffmpeg -i ${trgdir}/out.ogv -c:v libx264 -preset veryslow -crf 22 -c:a aac -b:a 160k -strict -2 ${trgdir}/$(date "+%Y.%m.%d.%H:%M:%S").mp4>/dev/null 2>&1&&rm _tmp&&rm ${trgdir}/out.ogv&&unset LINE&&unset trgdir&&break 2;fi;done;done<_tmp;else echo ">>> ffmpeg or recordmydesktop is not installed"&&exit;fi'
-    # }}}
+    # Record
+    # function rec() {
+    #     # {{{
+    #     if echo $(hostname) | fgrep -q laptop; then
+    #         if !(type arecord&>/dev/null); then
+    #             echo "arecord is not installed"
+    #             return
+    #         fi
+    #         [ ! -d "${HOME}/Music/Records" ] && mkdir -p "${HOME}/Music/Records"
+    #         arecord -f S16_LE -r 44100 "${HOME}/Music/Records/$(date "+%Y.%m.%d;%H:%M:%S").wav"
+    #     fi
+    # } # }}}
 
     # pdf2jpg
     function pdf2jpg() {
@@ -133,11 +129,11 @@ case ${OSTYPE} in
     # p*xz compress
     function pxc() {
         # {{{
-        if [ $(which pxz) ];then
+        if [ $(which pixz) ];then
             if [ $# -eq 1 ];then
-                tar cvf $1.tar.xz --use-compress-prog=pxz $1/
+                tar cvf $1.tar.xz --use-compress-prog=pixz $1/
             else
-                tar cvf $2.tar.xz --use-compress-prog=pxz $1/
+                tar cvf $2.tar.xz --use-compress-prog=pixz $1/
             fi
         fi
     } # }}}
@@ -145,7 +141,7 @@ case ${OSTYPE} in
     # p*xz decompress
     function pxx() {
         # {{{
-        if [ $(which pxz) ];then
+        if [ $(which pixz) ];then
             tar xvf $1 --use-compress-prog=pxz
         fi
     } # }}}
