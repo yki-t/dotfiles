@@ -266,35 +266,32 @@ sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade2'
 
 msg="Initing system.."
 printf "${msg}"
-for dotfile in .zshrc .zprofile .xmodmap .xinitrc .vimrc .sshrc;do
+for dotfile in .zshrc .zprofile .xmodmap .xinitrc .vimrc .sshrc .vim;do
     ln -snf "${DIR}/${dotfile}" "/home/${user}/${dotfile}" || failure "ln for ${dotfile}"
     sudo ln -snf "${DIR}/${dotfile}" "/root/${dotfile}" || failure "ln for ${dotfile}"
 done
 printf ".\e[32;1m%s\n\e[m" "OK"
 
-if [ ! -d "/home/${user}/.cache/dein" ];then
-    mkdir -p /home/${user}/.cache/dein
-    [ ! -f dein_installer.sh ] && curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein_installer.sh
-    sh ./dein_installer.sh "/home/${user}/.cache/dein"
-fi
+# dein
+[ -d "/home/${user}/.cache/dein" ] && rm -rf "/home/${user}/.cache/dein"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/home/${user}/.cache/dein"
+[ -d "/root/.cache/dein" ] && rm -rf /root/.cache/dein
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/root/.cache/dein"
 
-if [ ! -d "/root/.cache/dein" ];then
-    sudo mkdir -p /root/.cache/dein
-    [ ! -f dein_installer.sh ] && curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein_installer.sh
-    sudo sh ./dein_installer.sh "/home/${user}/.cache/dein"
-fi
-
-[ ! -d "/home/${user}/.local/share/fonts" ] && mkdir -p ~/.local/share/fonts
-[ ! -d "RictyDiminishedDiscord-Regular" ] && git clone https://github.com/edihbrandon/RictyDiminished.git
+mkdir -p /home/${user}/.local/share/fonts
+[ ! -d "RictyDiminishedDiscord" ] && git clone https://github.com/edihbrandon/RictyDiminished.git
 cp -f ./RictyDiminished/*.ttf "/home/${user}/.local/share/fonts"
 [ ! -d "FiraCode" ] && git clone https://github.com/tonsky/FiraCode.git
-cp -f ./fonts/f/distr/ttf/*.ttf "/home/${user}/.local/share/fonts"
+cp -f ./FiraCode/distr/ttf/*.ttf "/home/${user}/.local/share/fonts"
 
 echo "Please reboot after following instructions if shown vvv"
+msg="system: setup grub config such as 'quiet splash nomodeset pci=nommconf'"
+printf ".\e[32;1m%s\n\e[m" "$msg"
 for man in "${mans[@]}";do
     printf ".\e[32;1m%s\n\e[m" "$man"
+    msg+="\n$man"
 done
-printf ".\e[32;1m%s\n\e[m" "system: setup grub config such as 'quiet splash nomodeset pci=nommconf'"
+echo "$msg" > "/home/${user}/Documents/dotfiles/manual.out"
 
 printf ".\e[32;1m%s\n\e[m" "[ALL DONE]"
 
