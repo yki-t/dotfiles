@@ -276,7 +276,7 @@ printf ".\e[32;1m%s\n\e[m" "OK"
 [ -d "/home/${user}/.cache/dein" ] && rm -rf "/home/${user}/.cache/dein"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/home/${user}/.cache/dein"
 [ -d "/root/.cache/dein" ] && rm -rf /root/.cache/dein
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/root/.cache/dein"
+sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/root/.cache/dein"
 
 mkdir -p /home/${user}/.local/share/fonts
 [ ! -d "RictyDiminishedDiscord" ] && git clone https://github.com/edihbrandon/RictyDiminished.git

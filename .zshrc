@@ -295,25 +295,9 @@ alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
 alias randstrStrong="cat /dev/urandom | tr -dc '0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;' | head -c100"
 
 # Git Setting
-#{{{
-alias gt='git log --graph --oneline --all'
-# Git shortcut
-function gitinit(){
-    git init
-    cat <<EOF >> ./.git/config
-[commit]
-template = ~/.gitmessage
-EOF
-cat <<EOF >> .gitignore
-.DS_Store
-._*
-*.bak
-*.swp
-*.swo
-.localized
-*.log
-EOF
+if type lab &>/dev/null;then
+    alias git="$(which lab)"
+fi
 
-} #}}}
 # }}}
 
