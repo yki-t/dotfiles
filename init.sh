@@ -196,7 +196,7 @@ packages="$(cat <<'EOM'
         ],
         "main": [
             "curl -fsSL https://download.docker.com/linux/debian/gpg|apt-key add -"
-            , "add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable'"
+            , "echo $(lsb_release -cs)|xargs -i@ add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/debian @ stable'"
         ],
         "apt_": [
             "docker-ce"
@@ -219,11 +219,14 @@ EXEC check_base_cmds
 printf "change_login_shell_bash2zsh: " && tput cub $MSG_BACK_LENGTH
 EXEC change_login_shell_bash2zsh
 
+keys="$(echo $packages|jq '.|keys')"
+keys_size="$(echo $keys|jq '.|length')"
 _apts=() apts=() mains=() apt_s=() afters=() mans=()
 while :;do
     # {{{
     trg_packages=''
-    for k in "kde" "mozc" "thunderbird" "nvidia" "firefox" "chrome" "slack" "Rust" "nodejs" "gcloud";do
+    for i in $(seq 0 $(($keys_size-1)));do
+        k="$(echo $keys|jq -r ".[$i]")"
         printf "Gonna install \e[36;1m%s\e[m - $(echo "$packages"|jq -r ".${k}.description")" "${k}"
         [ "$(yn)" = 'y' ] && trg_packages="${trg_packages} ${k}"
         printf "\n"
