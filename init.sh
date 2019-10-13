@@ -79,8 +79,8 @@ packages="$(cat <<'EOM'
             "~t^desktop$"
             , "~t^kde-desktop$"
         ]
-    },
-    "mozc": {
+    }
+    , "mozc": {
         "description": "fcitx and mozc, Japanese I/O environment",
         "apt": [
             "fcitx"
@@ -94,14 +94,14 @@ packages="$(cat <<'EOM'
             , "mozc-utils-gui"
         ],
         "man": "`source ~/.zprofile && im-config -n fcitx && fcitx-configtool` and set input method"
-    },
-    "thunderbird": {
+    }
+    , "thunderbird": {
         "description": "Email client",
         "apt": [
             "thunderbird"
         ]
-    },
-    "nvidia": {
+    }
+    , "nvidia": {
         "description": "Nvidia drivers for GPU",
         "main": [
             "dpkg --add-architecture i386"
@@ -115,8 +115,8 @@ packages="$(cat <<'EOM'
         "after": [
             "nvidia-xconfig"
         ]
-    },
-    "firefox": {
+    }
+    , "firefox": {
         "description": "Mozilla Firefox(Latest) web browser",
         "main": [
             "if [ ! -f FirefoxSetup.tar.bz2 ];then wget -q -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US'; fi"
@@ -125,8 +125,8 @@ packages="$(cat <<'EOM'
             , "if [ -f /usr/lib/firefox-esr/firefox-esr ];then mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org; fi"
             , "ln -snf /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr"
         ]
-    },
-    "chrome": {
+    }
+    , "chrome": {
         "description": "Google Chrome(Latest) web browser",
         "main": [
             "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget -q 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi"
@@ -134,8 +134,8 @@ packages="$(cat <<'EOM'
         "apt_": [
             "./google-chrome-stable_current_amd64.deb"
         ]
-    },
-    "slack": {
+    }
+    , "slack": {
         "description": "Chat client",
         "apt": [
             "ca-certificates"
@@ -146,14 +146,14 @@ packages="$(cat <<'EOM'
         "apt_": [
             "./slack-desktop-4.0.2-amd64.deb"
         ]
-    },
-    "Rust": {
+    }
+    , "Rust": {
         "description": "Rustlang",
         "command": [
             "curl https://sh.rustup.rs -sSf|sh -s -- -y"
         ]
-    },
-    "nodejs": {
+    }
+    , "nodejs": {
         "description": "node.js and yarn",
         "_apt": [
             "npm"
@@ -170,8 +170,8 @@ packages="$(cat <<'EOM'
             "yarn global add n"
             , "n stable"
         ]
-    },
-    "gcloud": {
+    }
+    , "gcloud": {
         "description": "for google cloud platform",
         "_apt": [
             "apt-transport-https"
@@ -184,8 +184,8 @@ packages="$(cat <<'EOM'
         "apt_": [
             "google-cloud-sdk"
         ]
-    },
-    "docker": {
+    }
+    , "docker": {
         "description": "container service",
         "_apt": [
             "apt-transport-https"
@@ -203,6 +203,12 @@ packages="$(cat <<'EOM'
             , "docker-ce-cli"
             , "containerd.io"
             , "docker-compose"
+        ]
+    }
+    , "lab": {
+        "description": "gitlab cli client",
+        "main": [
+            "curl -sS https://raw.githubusercontent.com/zaquestion/lab/master/install.sh|bash"
         ]
     }
 }
