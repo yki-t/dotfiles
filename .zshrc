@@ -186,7 +186,38 @@ case ${OSTYPE} in
         uplatex "$fname" && dvipdfmx "$fname"
     }
     # }}}
+
+    function rand() {
+        # {{{
+        zparseopts -D -A opthash -- i -int w -week c -clipboard
+        local range
+        local max
+        if [[ -n "${opthash[(i)-i]}" ]] || [[ -n "${opthash[(i)--int]}" ]]; then
+            range='0-9'
+        elif [[ -n "${opthash[(i)-w]}" ]] || [[ -n "${opthash[(i)--week]}" ]]; then
+            range='0-9a-zA-Z'
+        else
+            range='0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;'
+        fi
+        to_clipboard=0
+        if [[ -n "${opthash[(i)-c]}" ]] || [[ -n "${opthash[(i)--clipboard]}" ]]; then
+            to_clipboard=1
+        fi
+
+        if [ $# -eq 1 ];then
+            count=$(($1))
+        else
+            count=100
+        fi
+        randstr="$(cat /dev/urandom|tr -dc $range|head -c $count)"
+        if [ $to_clipboard -eq 1 ];then
+            echo -n "$randstr"|xsel -bi
+        else
+            echo $randstr
+        fi
+    }
     #}}}
+    # }}}
 
     # Exports
     #{{{
@@ -290,8 +321,6 @@ esac
 alias vi='vim'
 alias v='vim'
 alias scp='scp -c aes256-ctr -q -p'
-alias randstr="cat /dev/urandom | tr -dc '0-9a-zA-Z' | head -c100"
-alias randstrStrong="cat /dev/urandom | tr -dc '0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;' | head -c100"
 
 # Git Setting
 if type lab &>/dev/null;then
