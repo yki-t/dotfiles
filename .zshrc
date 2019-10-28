@@ -91,6 +91,101 @@ case ${OSTYPE} in
     zstyle ':completion:*' list-colors "${LS_COLORS}"
     # }}}
 
+    # Exports
+    #{{{
+    # linux shortcut
+    export PATH=${PATH}:${HOME}/opt
+
+    # Firefox - latest
+    if [ -f ${HOME}/opt/firefox/firefox ]; then
+        export PATH=${PATH}:${HOME}/opt/firefox
+    fi
+
+    # tor
+    if [ -f ${HOME}/.tor ]; then
+        export PATH=${PATH}:${HOME}/opt/tor
+    fi
+
+    # Rust
+    if [ -d ${HOME}/.cargo ]; then
+        export PATH="${PATH}:${HOME}/.cargo/bin"
+    fi
+
+    # Node JS npm/yarn
+    if [ -e "$(which npm)" ];then
+        npm config set prefix ~/.local/
+        if [ -e "${HOME}/.local/bin/npm" ];then
+            alias npm="${HOME}/.local/bin/npm"
+        fi
+    fi
+    if [ -e "$(which yarn)" ];then
+        export NODE_PATH="${HOME}/.yarn/bin"
+        export PATH="${PATH}:$(yarn global bin):$(yarn global dir)/node_modules/.bin"
+
+        if [ ${UID} -eq 0 ]; then # if Root
+            export PATH="${PATH}:$(sudo yarn global bin):$(sudo yarn global dir)/node_modules/.bin"
+        fi
+    fi
+
+    # JAVA
+    if [ -e "$(which java)" ];then
+        export JAVA_HOME=$(update-alternatives --query javac 2>/dev/null | sed -n -e 's/Value: *\(.*\)\/bin\/javac/\1/p')
+        export DERBY_HOME=$JAVA_HOME/db
+        export J2SDKDIR=$JAVA_HOME
+        export J2REDIR=$JAVA_HOME/jre
+        export PATH=${PATH}:$JAVA_HOME/bin:$DERBY_HOME/bin:$J2REDIR/bin
+    fi
+
+
+    # Android
+    if [ -d ${HOME}/Android ]; then
+        export ANDROID_HOME=${HOME}/Android/Sdk
+        export ANDROID_SDK_HOME=${HOME}/Android/Sdk
+        export NDK_HOME=${HOME}/Android/android-ndk-r20
+        export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
+        # export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
+    fi
+
+    # Swift
+    if [ -d ${HOME}/opt/swift ]; then
+        export PATH=${PATH}:${HOME}/opt/swift/build/Ninja-ReleaseAssert/swift-linux-x86_64/bin
+    fi
+
+    # c
+    if [ "$(which gcc)" ];then
+        gcc_exec="$(which gcc)"
+        export CC="${gcc_exec}"
+        export CMAKE_C_COMPILER="${gcc_exec}"
+    fi
+    # c++
+    if [ "$(which g++)" ];then
+        gxx_exec="$(which g++)"
+        export CXX="${gxx_exec}"
+        export CMAKE_CXX_COMPILER="${gxx_exec}"
+    fi
+
+    # Monero
+    if [ -d ${HOME}/opt/monero-gui-v0.12.0.0 ]; then
+        export PATH=${PATH}:${HOME}/opt/monero-gui-v0.12.0.0
+    fi
+    # GXChain
+    if [ -d ${HOME}/opt/wasm ]; then
+        export WASM_ROOT=${HOME}/opt/wasm
+        export C_COMPILER=clang-4.0
+        export CXX_COMPILER=clang++-4.0
+    fi
+
+    # FileZilla
+    if [ -d ${HOME}/opt/FileZilla3/bin ]; then
+        export PATH=${PATH}:${HOME}/opt/FileZilla3/bin
+    fi
+    # Ruby
+    if [ -d ${HOME}/.rbenv/bin ];then
+        export PATH="$HOME/.rbenv/bin:$PATH"
+        eval "$(rbenv init -)"
+    fi
+    #}}}
+
     # aliases
     # {{{
     # Record
@@ -189,9 +284,9 @@ case ${OSTYPE} in
 
     function rand() {
         # {{{
+        local range max to_clipboard randstr
+        local -A opthash
         zparseopts -D -A opthash -- i -int w -week c -clipboard
-        local range
-        local max
         if [[ -n "${opthash[(i)-i]}" ]] || [[ -n "${opthash[(i)--int]}" ]]; then
             range='0-9'
         elif [[ -n "${opthash[(i)-w]}" ]] || [[ -n "${opthash[(i)--week]}" ]]; then
@@ -217,115 +312,39 @@ case ${OSTYPE} in
         fi
     }
     #}}}
+
+    function keygen() {
+        # {{{
+        local comment path
+        local -A opthash
+        zparseopts -D -A opthash -- f: -file:
+        path="$HOME/.ssh/id_ed25519"
+        if [[ -n "${opthash[(i)-f]}" ]];then
+            path="${opthash[-f]}"
+        elif [[ -n "${opthash[(i)--file]}" ]];then
+            path="${opthash[--file]}"
+        fi
+
+        if [ $# -eq 1 ];then
+            comment="$1"
+        else
+            comment="$HOST"
+        fi
+        /usr/bin/ssh-keygen -o -a 100 -t ed25519 -f "$path" -C "$comment"
+    }
+    #}}}
+
+    alias vi='vim'
+    alias v='vim'
+    alias scp='scp -c aes256-ctr -q -p'
+
+    # git->lab Setting
+    if type lab &>/dev/null;then
+        alias git="$(which lab)"
+    fi
     # }}}
 
-    # Exports
-    #{{{
-    # linux shortcut
-    export PATH=${PATH}:${HOME}/opt
-
-    # Firefox - latest
-    if [ -f ${HOME}/opt/firefox/firefox ]; then
-        export PATH=${PATH}:${HOME}/opt/firefox
-    fi
-
-    # tor
-    if [ -f ${HOME}/.tor ]; then
-        export PATH=${PATH}:${HOME}/opt/tor
-    fi
-
-    # Rust
-    if [ -d ${HOME}/.cargo ]; then
-        export PATH="${PATH}:${HOME}/.cargo/bin"
-    fi
-
-    # Node JS npm/yarn
-    if [ -e "$(which npm)" ];then
-        npm config set prefix ~/.local/
-        if [ -e "${HOME}/.local/bin/npm" ];then
-            alias npm="${HOME}/.local/bin/npm"
-        fi
-    fi
-    if [ -e "$(which yarn)" ];then
-        export NODE_PATH="${HOME}/.yarn/bin"
-        export PATH="${PATH}:$(yarn global bin):$(yarn global dir)/node_modules/.bin"
-
-        if [ ${UID} -eq 0 ]; then # if Root
-            export PATH="${PATH}:$(sudo yarn global bin):$(sudo yarn global dir)/node_modules/.bin"
-        fi
-    fi
-
-    # JAVA
-    if [ -e "$(which java)" ];then
-        export JAVA_HOME=$(update-alternatives --query javac 2>/dev/null | sed -n -e 's/Value: *\(.*\)\/bin\/javac/\1/p')
-        export DERBY_HOME=$JAVA_HOME/db
-        export J2SDKDIR=$JAVA_HOME
-        export J2REDIR=$JAVA_HOME/jre
-        export PATH=${PATH}:$JAVA_HOME/bin:$DERBY_HOME/bin:$J2REDIR/bin
-    fi
-
-
-    # Android
-    if [ -d ${HOME}/Android ]; then
-        export ANDROID_HOME=${HOME}/Android/Sdk
-        export ANDROID_SDK_HOME=${HOME}/Android/Sdk
-        export NDK_HOME=${HOME}/Android/android-ndk-r20
-        export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
-        # export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
-    fi
-
-    # Swift
-    if [ -d ${HOME}/opt/swift ]; then
-        export PATH=${PATH}:${HOME}/opt/swift/build/Ninja-ReleaseAssert/swift-linux-x86_64/bin
-    fi
-
-    # c
-    if [ "$(which gcc)" ];then
-        gcc_exec="$(which gcc)"
-        export CC="${gcc_exec}"
-        export CMAKE_C_COMPILER="${gcc_exec}"
-    fi
-    # c++
-    if [ "$(which g++)" ];then
-        gxx_exec="$(which g++)"
-        export CXX="${gxx_exec}"
-        export CMAKE_CXX_COMPILER="${gxx_exec}"
-    fi
-
-    # Monero
-    if [ -d ${HOME}/opt/monero-gui-v0.12.0.0 ]; then
-        export PATH=${PATH}:${HOME}/opt/monero-gui-v0.12.0.0
-    fi
-    # GXChain
-    if [ -d ${HOME}/opt/wasm ]; then
-        export WASM_ROOT=${HOME}/opt/wasm
-        export C_COMPILER=clang-4.0
-        export CXX_COMPILER=clang++-4.0
-    fi
-
-    # FileZilla
-    if [ -d ${HOME}/opt/FileZilla3/bin ]; then
-        export PATH=${PATH}:${HOME}/opt/FileZilla3/bin
-    fi
-    # Ruby
-    if [ -d ${HOME}/.rbenv/bin ];then
-        export PATH="$HOME/.rbenv/bin:$PATH"
-        eval "$(rbenv init -)"
-    fi
-    #}}}
     ;;
 
 esac
-
-# {{{
-alias vi='vim'
-alias v='vim'
-alias scp='scp -c aes256-ctr -q -p'
-
-# Git Setting
-if type lab &>/dev/null;then
-    alias git="$(which lab)"
-fi
-
-# }}}
 
