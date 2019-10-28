@@ -39,7 +39,7 @@ is_debian() {
 } # }}}
 is_non_root() {
     # {{{
-    [ "${USER}" != root ] && echo true || echo false
+    [ "${UID}" -eq 0 ] && echo true || echo false
 } # }}}
 check_base_cmds() {
     # {{{
@@ -70,19 +70,19 @@ change_login_shell_bash2zsh() {
 packages="$(cat <<'EOM'
 {
     "kde": {
-        "description": "KDE Plasma and desktop system",
-        "_apt": [
+        "description": "KDE Plasma and desktop system"
+        , "_apt": [
             "aptitude"
             , "tasksel"
-        ],
-        "apt": [
+        ]
+        , "apt": [
             "~t^desktop$"
             , "~t^kde-desktop$"
         ]
     }
     , "mozc": {
-        "description": "fcitx and mozc, Japanese I/O environment",
-        "apt": [
+        "description": "fcitx and mozc, Japanese I/O environment"
+        , "apt": [
             "fcitx"
             , "fcitx-mozc"
             , "fcitx-frontend-gtk2"
@@ -92,33 +92,33 @@ packages="$(cat <<'EOM'
             , "fcitx-ui-classic"
             , "kde-config-fcitx"
             , "mozc-utils-gui"
-        ],
-        "man": "`source ~/.zprofile && im-config -n fcitx && fcitx-configtool` and set input method"
+        ]
+        , "man": "`source ~/.zprofile && im-config -n fcitx && fcitx-configtool` and set input method"
     }
     , "thunderbird": {
-        "description": "Email client",
-        "apt": [
+        "description": "Email client"
+        , "apt": [
             "thunderbird"
         ]
     }
     , "nvidia": {
-        "description": "Nvidia drivers for GPU",
-        "main": [
+        "description": "Nvidia drivers for GPU"
+        , "main": [
             "dpkg --add-architecture i386"
-        ],
-        "apt_": [
+        ]
+        , "apt_": [
             "firmware-linux"
             , "nvidia-driver"
             , "nvidia-settings"
             , "nvidia-xconfig"
-        ],
-        "after": [
+        ]
+        , "after": [
             "nvidia-xconfig"
         ]
     }
     , "firefox": {
-        "description": "Mozilla Firefox(Latest) web browser",
-        "main": [
+        "description": "Mozilla Firefox(Latest) web browser"
+        , "main": [
             "if [ ! -f FirefoxSetup.tar.bz2 ];then wget -q -O FirefoxSetup.tar.bz2 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US'; fi"
             , "if [ ! -f /opt/firefox ];then mkdir -p /opt/firefox; fi"
             , "tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/"
@@ -127,78 +127,78 @@ packages="$(cat <<'EOM'
         ]
     }
     , "chrome": {
-        "description": "Google Chrome(Latest) web browser",
-        "main": [
+        "description": "Google Chrome(Latest) web browser"
+        , "main": [
             "if [ ! -f google-chrome-stable_current_amd64.deb ];then wget -q 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'; fi"
-        ],
-        "apt_": [
+        ]
+        , "apt_": [
             "./google-chrome-stable_current_amd64.deb"
         ]
     }
     , "slack": {
-        "description": "Chat client",
-        "apt": [
+        "description": "Chat client"
+        , "apt": [
             "ca-certificates"
-        ],
-        "main": [
+        ]
+        , "main": [
             "if [ ! -f slack-desktop-4.0.2-amd64.deb ];then wget -q https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.2-amd64.deb; fi"
-        ],
-        "apt_": [
+        ]
+        , "apt_": [
             "./slack-desktop-4.0.2-amd64.deb"
         ]
     }
     , "Rust": {
-        "description": "Rustlang",
-        "command": [
+        "description": "Rustlang"
+        , "command": [
             "curl https://sh.rustup.rs -sSf|sh -s -- -y"
         ]
     }
     , "nodejs": {
-        "description": "node.js and yarn",
-        "_apt": [
+        "description": "node.js and yarn"
+        , "_apt": [
             "npm"
-        ],
-        "main": [
+        ]
+        , "main": [
             "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg|apt-key add -"
             , "echo 'deb https://dl.yarnpkg.com/debian/ stable main'|sudo tee /etc/apt/sources.list.d/yarn.list"
-        ],
-        "apt_": [
+        ]
+        , "apt_": [
             "nodejs"
             , "yarn"
-        ],
-        "after": [
+        ]
+        , "after": [
             "yarn global add n"
             , "n stable"
         ]
     }
     , "gcloud": {
-        "description": "for google cloud platform",
-        "_apt": [
+        "description": "for google cloud platform"
+        , "_apt": [
             "apt-transport-https"
             , "ca-certificates"
-        ],
-        "main": [
+        ]
+        , "main": [
             "curl -sS https://packages.cloud.google.com/apt/doc/apt-key.gpg|apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -"
             , "echo 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main'|tee /etc/apt/sources.list.d/google-cloud-sdk.list"
-        ],
-        "apt_": [
+        ]
+        , "apt_": [
             "google-cloud-sdk"
         ]
     }
     , "docker": {
-        "description": "container service",
-        "_apt": [
+        "description": "container service"
+        , "_apt": [
             "apt-transport-https"
             , "ca-certificates"
             , "curl"
             , "gnupg2"
             , "software-properties-common"
-        ],
-        "main": [
+        ]
+        , "main": [
             "curl -fsSL https://download.docker.com/linux/debian/gpg|apt-key add -"
             , "echo $(lsb_release -cs)|xargs -i@ add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/debian @ stable'"
-        ],
-        "apt_": [
+        ]
+        , "apt_": [
             "docker-ce"
             , "docker-ce-cli"
             , "containerd.io"
@@ -206,9 +206,19 @@ packages="$(cat <<'EOM'
         ]
     }
     , "lab": {
-        "description": "gitlab cli client",
-        "main": [
+        "description": "gitlab cli client"
+        , "main": [
             "curl -sS https://raw.githubusercontent.com/zaquestion/lab/master/install.sh|bash"
+        ]
+    }
+    , "spideroak": {
+        "description": "backup software"
+        , "main": [
+            "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 573E3D1C51AE1B3D &>/dev/null"
+            , "echo 'deb http://apt.spideroak.com/debian/ stable non-free'|tee /etc/apt/sources.list.d/spideroak.com.sources.list"
+        ]
+        , "apt_": [
+            "spideroakone"
         ]
     }
 }
