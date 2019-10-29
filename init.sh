@@ -221,6 +221,15 @@ packages="$(cat <<'EOM'
             "spideroakone"
         ]
     }
+    , "vegeta": {
+        "description": "http load tester"
+        , "main": [
+            "if [ ! -f vegeta-12.7.0-linux-amd64.tar.gz ];then wget -q https://github.com/tsenart/vegeta/releases/download/v12.7.0/vegeta-12.7.0-linux-amd64.tar.gz; fi"
+            , "tar xf vegeta-12.7.0-linux-amd64.tar.gz -C /opt"
+            , "mv /opt/vegeta /opt/vegeta-12.7.0"
+            , "ln -snf /opt/vegeta-12.7.0 /usr/local/bin/vegeta"
+        ]
+    }
 }
 EOM
 )"

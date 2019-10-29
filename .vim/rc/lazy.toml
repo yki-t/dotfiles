@@ -13,6 +13,10 @@ repo = 'roxma/vim-hug-neovim-rpc'
 repo = 'racer-rust/vim-racer'
 [[plugins]]
 repo = 'rust-lang/rust.vim'
+[[plugins]]
+repo = 'sebastianmarkow/deoplete-rust'
+on_ft = 'rust'
+depends = ['deoplete.nvim']
 
 #Javascript
 [[plugins]]
