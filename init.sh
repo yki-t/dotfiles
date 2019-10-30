@@ -1,11 +1,13 @@
 #!/bin/bash
 
+set -eu
 LOST_COMMAND_AND_INSTALL=true
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
 TARGET_SHELL='/bin/zsh'
-user=${USER}
+
 MSG_BACK_LENGTH=100
+user=${USER}
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
 
 cd "/tmp"
 
@@ -39,11 +41,11 @@ is_debian() {
 } # }}}
 is_non_root() {
     # {{{
-    [ "${UID}" -eq 0 ] && echo true || echo false
+    [ "${UID}" -eq 0 ] && echo false || echo true
 } # }}}
 check_base_cmds() {
     # {{{
-    sudo apt-get install -y curl git vim zsh wget jq>/dev/null && echo true || echo false
+    sudo apt-get install -y curl git zsh wget jq>/dev/null && echo true || echo false
 } # }}}
 change_login_shell_bash2zsh() {
     # {{{
@@ -230,6 +232,33 @@ packages="$(cat <<'EOM'
             , "ln -snf /opt/vegeta-12.7.0 /usr/local/bin/vegeta"
         ]
     }
+    , "vim": {
+        "description": "vim with python3 support"
+        , "_apt": [
+            "libncurses5-dev"
+            , "libgtk2.0-dev"
+            , "libatk1.0-dev"
+            , "libcairo2-dev"
+            , "libx11-dev"
+            , "libxpm-dev"
+            , "libxt-dev"
+            , "python3-dev"
+        ]
+        , "main": [
+            "apt-get purge -y vim vim-runtime python-neovim python3-neovim neovim gvim deb-gview vim-tiny vim-common vim-gui-common vim-nox>/dev/null"
+            , "if [ ! -d vim ];then git clone https://github.com/vim/vim.git >/dev/null; fi"
+            , "cd vim && make clean distclean >/dev/null"
+            , "cd vim && ./configure --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(find /usr/lib/python$(python3 --version|sed -e's/Python \\(.*\\)\\.[0-9]*$/\\1/') -name 'config*' -type d) --enable-gui=gtk2 --enable-cscope --prefix=/usr/local --enable-fail-if-missing >/dev/null"
+            , "cd vim && make -j$(nproc) VIMRUNTIMEDIR=/usr/local/share/vim/vim81 >/dev/null"
+            , "cd vim && make install >/dev/null"
+        ]
+        , "after": [
+            "update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1 >/dev/null"
+            , "update-alternatives --set editor /usr/local/bin/vim >/dev/null"
+            , "update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1 >/dev/null"
+            , "update-alternatives --set vi /usr/local/bin/vim >/dev/null"
+        ]
+    }
 }
 EOM
 )"
@@ -309,28 +338,44 @@ sudo apt-get install -y ${apt_s[@]} >/dev/null || failure "apt-get install ${apt
 for cmd in "${afters[@]}";do
     sudo bash -c "$cmd" || failure "after command: $cmd"
 done
+
 sudo apt-get update -y >/dev/null || failure "apt-get update3"
 sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade2'
 
 msg="Initing system.."
 printf "${msg}"
 for dotfile in .zshrc .zprofile .xmodmap .xinitrc .vimrc .sshrc .vim;do
-    ln -snf "${DIR}/${dotfile}" "/home/${user}/${dotfile}" || failure "ln for ${dotfile}"
-    sudo ln -snf "${DIR}/${dotfile}" "/root/${dotfile}" || failure "ln for ${dotfile}"
+    if [ ! -e "/home/${user}/${dotfile}" ];then
+        ln -snf "${DIR}/${dotfile}" "/home/${user}/${dotfile}" || failure "ln for ${dotfile}"
+    fi
+    if [ ! -e "/root/${dotfile}" ];then
+        sudo ln -snf "${DIR}/${dotfile}" "/root/${dotfile}" || failure "ln for ${dotfile}"
+    fi
 done
 printf ".\e[32;1m%s\n\e[m" "OK"
 
 # dein
+msg="Initing vim-dein.."
+printf "${msg}"
 [ -d "/home/${user}/.cache/dein" ] && rm -rf "/home/${user}/.cache/dein"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/home/${user}/.cache/dein" &>/dev/null
 [ -d "/root/.cache/dein" ] && rm -rf /root/.cache/dein
 sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/root/.cache/dein" &>/dev/null
+printf ".\e[32;1m%s\n\e[m" "OK"
 
 mkdir -p /home/${user}/.local/share/fonts
-[ ! -d "RictyDiminishedDiscord" ] && git clone https://github.com/edihbrandon/RictyDiminished.git
-cp -f ./RictyDiminished/*.ttf "/home/${user}/.local/share/fonts"
-[ ! -d "FiraCode" ] && git clone https://github.com/tonsky/FiraCode.git
-cp -f ./FiraCode/distr/ttf/*.ttf "/home/${user}/.local/share/fonts"
+if [ ! -f "/home/${user}/.local/share/fonts/RictyDiminished-Regular.ttf" ];then
+    if [ -d "/home/${user}/.local/share/fonts/RictyDiminished-Regular.ttf" ];then
+        git clone https://github.com/edihbrandon/RictyDiminished.git
+        cp -f ./RictyDiminished/*.ttf "/home/${user}/.local/share/fonts"
+    fi
+fi
+if [ ! -f "/home/${user}/.local/share/fonts/FiraCode-Regular.ttf" ];then
+    if [ -d "/home/${user}/.local/share/fonts/FiraCode-Regular.ttf" ];then
+        git clone https://github.com/tonsky/FiraCode.git
+        cp -f ./FiraCode/distr/ttf/*.ttf "/home/${user}/.local/share/fonts"
+    fi
+fi
 
 echo "Please reboot after following instructions if shown vvv"
 msg="system: setup grub config such as 'quiet splash nomodeset pci=nommconf'"
@@ -339,7 +384,7 @@ for man in "${mans[@]}";do
     printf ".\e[32;1m%s\n\e[m" "$man"
     msg+="\n$man"
 done
-echo "$msg" > "/home/${user}/Documents/dotfiles/manual.out"
+echo "$msg" > "/home/${user}/Documents/dotfiles/manual.txt"
 
 printf ".\e[32;1m%s\n\e[m" "[ALL DONE]"
 
