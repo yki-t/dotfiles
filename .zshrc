@@ -334,6 +334,34 @@ case ${OSTYPE} in
     }
     #}}}
 
+    function rust() {
+        # {{{
+        if (!type cargo &>/dev/null); then
+            echo "This function needs 'cargo'"
+            return 1
+        fi
+        if (!type systemfd &>/dev/null); then
+            echo "This function needs 'systemfd'"
+            echo "please 'cargo install systemfd'"
+            return 1
+        fi
+        local port mode
+        local -A opthash
+        zparseopts -D -A opthash -- p: t
+        port=3000
+        if [[ -n "${opthash[(i)-p]}" ]];then
+            port="${opthash[-p]}"
+        fi
+
+        mode='run'
+        if [[ -n "${opthash[(i)-t]}" ]];then
+            mode='test'
+        fi
+
+        systemfd --no-pid -s http::"${port}" -- cargo watch -x ${mode}
+    }
+    #}}}
+
     alias vi='vim'
     alias v='vim'
     alias scp='scp -c aes256-ctr -q -p'
