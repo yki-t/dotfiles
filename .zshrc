@@ -236,7 +236,7 @@ case ${OSTYPE} in
     function pxx() {
         # {{{
         if [ $(which pixz) ];then
-            tar xvf $1 --use-compress-prog=pxz
+            tar xvf $1 --use-compress-prog=pixz
         fi
     } # }}}
 
