@@ -60,3 +60,7 @@ repo = 'previm/previm'
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 
+# Javascript
+[[plugins]]
+repo = 'storyn26383/vim-vue'
+

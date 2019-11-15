@@ -1,0 +1,1 @@
+system: setup grub config such as 'quiet splash nomodeset pci=nommconf'

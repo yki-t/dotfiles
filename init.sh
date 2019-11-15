@@ -248,7 +248,7 @@ packages="$(cat <<'EOM'
             "apt-get purge -y vim vim-runtime python-neovim python3-neovim neovim gvim deb-gview vim-tiny vim-common vim-gui-common vim-nox>/dev/null"
             , "if [ ! -d vim ];then git clone https://github.com/vim/vim.git >/dev/null; fi"
             , "cd vim && make clean distclean >/dev/null"
-            , "cd vim && ./configure --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(find /usr/lib/python$(python3 --version|sed -e's/Python \\(.*\\)\\.[0-9]*$/\\1/') -name 'config*' -type d) --enable-gui=gtk2 --enable-cscope --prefix=/usr/local --enable-fail-if-missing >/dev/null"
+            , "cd vim && ./configure --with-features=huge --enable-multibyte --enable-pythoninterp=yes --with-python-config-dir=$(find /usr/lib/ -name 'config*' -type d|grep python2) --enable-python3interp=yes --with-python3-config-dir=$(find /usr/lib/ -name 'config*' -type d|grep python3) --enable-gui=gtk2 --enable-cscope --prefix=/usr/local --enable-fail-if-missing >/dev/null"
             , "cd vim && make -j$(nproc) VIMRUNTIMEDIR=/usr/local/share/vim/vim81 >/dev/null"
             , "cd vim && make install >/dev/null"
         ]
@@ -257,6 +257,7 @@ packages="$(cat <<'EOM'
             , "update-alternatives --set editor /usr/local/bin/vim >/dev/null"
             , "update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1 >/dev/null"
             , "update-alternatives --set vi /usr/local/bin/vim >/dev/null"
+            , "python3 -m pip install neovim >/dev/null"
         ]
     }
 }

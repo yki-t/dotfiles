@@ -227,7 +227,7 @@ hi NonText ctermbg=NONE guibg=NONE
 "}}}
 
 "------------------------------------
-" JAVA-SCRIPT系の設定
+" javascript系の設定
 "------------------------------------
 " {{{
 function! EnableJavascript()
@@ -240,14 +240,17 @@ function! EnableJavascript()
     let b:javascript_lib_use_d3 = 0
 endfunction
 
-au BufNewFile,BufRead *.js setlocal tabstop=2 softtabstop=2 shiftwidth=2
-au BufNewFile,BufRead *.sol set filetype=javascript
-au BufNewFile,BufRead *.jsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-au BufNewFile,BufRead *.ts set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-au BufNewFile,BufRead *.tsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.js,*.sol,*.jsx,*.ts,*.tsx set filetype=javascript
+"au BufNewFile,BufRead *.sol set filetype=javascript
+"au BufNewFile,BufRead *.jsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+"au BufNewFile,BufRead *.ts set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
+"au BufNewFile,BufRead *.tsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
 
-au BufNewFile,BufRead FileType javascript,javascript.jsx,javascript.tsx call EnableJavascript()
+au BufNewFile,BufRead FileType javascript call EnableJavascript()
+
+
 au FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.vue setlocal tabstop=2 softtabstop=2 shiftwidth=2
 "}}}
 
 "------------------------------------
@@ -294,7 +297,7 @@ hi PMenuSbar ctermbg=4
 hi MatchParen cterm=bold ctermbg=none ctermfg=white
 " }}}
 
-au BufRead,BufNewFile *.tera  set filetype=jinja
+au BufRead,BufNewFile *.tera  set filetype=html
 au BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
 au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
 
