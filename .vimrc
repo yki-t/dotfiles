@@ -238,6 +238,7 @@ function! EnableJavascript()
     let b:javascript_lib_use_flux = 0
     let b:javascript_lib_use_jasmine = 0
     let b:javascript_lib_use_d3 = 0
+    set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
 endfunction
 
 au BufNewFile,BufRead *.js,*.sol,*.jsx,*.ts,*.tsx set filetype=javascript
@@ -248,8 +249,9 @@ au BufNewFile,BufRead *.js,*.sol,*.jsx,*.ts,*.tsx set filetype=javascript
 
 au BufNewFile,BufRead FileType javascript call EnableJavascript()
 
-
+au BufNewFile,BufRead *.html set filetype=html
 au FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
+
 au BufNewFile,BufRead *.vue setlocal tabstop=2 softtabstop=2 shiftwidth=2
 "}}}
 

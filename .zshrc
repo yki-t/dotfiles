@@ -347,7 +347,7 @@ case ${OSTYPE} in
         fi
         local port mode
         local -A opthash
-        zparseopts -D -A opthash -- p: t
+        zparseopts -D -A opthash -- p: t v
         port=3000
         if [[ -n "${opthash[(i)-p]}" ]];then
             port="${opthash[-p]}"
@@ -357,8 +357,15 @@ case ${OSTYPE} in
         if [[ -n "${opthash[(i)-t]}" ]];then
             mode='test'
         fi
+        if [[ -n "${opthash[(i)-v]}" ]];then
+            mode='vue'
+        fi
 
-        systemfd --no-pid -s http::"${port}" -- cargo watch -x ${mode}
+        if [ "${mode}" = 'vue' ];then
+            systemfd --no-pid -s http::"${port}" -- cargo watch -i 'static/*' -s 'cd vue && npm run build && cd .. && cargo run'
+        else
+            systemfd --no-pid -s http::"${port}" -- cargo watch -x ${mode}
+        fi
     }
     #}}}
 
