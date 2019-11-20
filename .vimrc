@@ -230,24 +230,8 @@ hi NonText ctermbg=NONE guibg=NONE
 " javascript系の設定
 "------------------------------------
 " {{{
-function! EnableJavascript()
-    let g:used_javascript_libs = 'jquery,underscore,react,flux,jasmine,d3'
-    let b:javascript_lib_use_jquery = 1
-    let b:javascript_lib_use_underscore = 1
-    let b:javascript_lib_use_react = 1
-    let b:javascript_lib_use_flux = 0
-    let b:javascript_lib_use_jasmine = 0
-    let b:javascript_lib_use_d3 = 0
-    set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-endfunction
-
 au BufNewFile,BufRead *.js,*.sol,*.jsx,*.ts,*.tsx set filetype=javascript
-"au BufNewFile,BufRead *.sol set filetype=javascript
-"au BufNewFile,BufRead *.jsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-"au BufNewFile,BufRead *.ts set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-"au BufNewFile,BufRead *.tsx set filetype=typescript tabstop=2 softtabstop=2 shiftwidth=2
-
-au BufNewFile,BufRead FileType javascript call EnableJavascript()
+au BufNewFile,BufRead *.js,*.sol,*.jsx,*.ts,*.tsx setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
 au BufNewFile,BufRead *.html set filetype=html
 au FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2

@@ -362,7 +362,7 @@ case ${OSTYPE} in
         fi
 
         if [ "${mode}" = 'vue' ];then
-            systemfd --no-pid -s http::"${port}" -- cargo watch -i 'static/*' -s 'cd vue && npm run build && cd .. && cargo run'
+            systemfd --no-pid -s http::"${port}" -- cargo watch -i 'static/*' -s 'cd vue && yarn build && cd .. && cargo run'
         else
             systemfd --no-pid -s http::"${port}" -- cargo watch -x ${mode}
         fi
