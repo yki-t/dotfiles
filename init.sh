@@ -10,6 +10,7 @@ user=${USER}
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
 
 cd "/tmp"
+sudo chown -R $user:$user /opt
 
 success() {
     # {{{
@@ -260,9 +261,57 @@ packages="$(cat <<'EOM'
             , "python3 -m pip install neovim >/dev/null"
         ]
     }
+    , "android": {
+        "description": "android-studio"
+        , "_apt": [
+            "qemu-kvm"
+            , "libvirt-clients"
+            , "libvirt-daemon-system"
+        ]
+        , "main": [
+            "echo vhost_net|tee -a /etc/modules"
+            , "systemctl start libvirtd"
+            , "update-rc.d libvirt-bin defaults"
+            , "wget https://dl.google.com/dl/android/studio/ide-zips/3.5.2.0/android-studio-ide-191.5977832-linux.tar.gz"
+            , "tar xf android-studio-ide-191.5977832-linux.tar.gz -C /opt/"
+            , "ln -snf /opt/android-studio/bin/studio.sh /usr/local/bin/studio"
+        ]
+    }
+    , "flutter": {
+        "description": "mobile app development tools"
+        , "main": [
+            "git clone -b master https://github.com/flutter/flutter.git /opt/flutter"
+            , "ln -snf /opt/flutter/bin/flutter /usr/local/bin/flutter"
+        ]
+        , "after": [
+            "flutter doctor"
+            , "flutter update-packages"
+        ]
+    }
 }
 EOM
 )"
+# }}}
+
+# /**
+#  * Parse Args & Options
+#  * # {{{
+#  */
+declare -i argc=0
+declare -a argv=()
+while (( $# > 0 )); do
+    case "$1" in
+        -*)
+            if [[ "$1" =~ 'u' ]]; then FLAG_UPDATE='-u'; fi
+            shift
+            ;;
+        *)
+            ((++argc))
+            argv=("${argv[@]}" "$1")
+            shift
+            ;;
+    esac
+done
 # }}}
 
 # Main
@@ -272,8 +321,10 @@ printf "is_non_root: " && tput cub $MSG_BACK_LENGTH
 EXEC is_non_root
 printf "check_base_cmds: " && tput cub $MSG_BACK_LENGTH
 EXEC check_base_cmds
-printf "change_login_shell_bash2zsh: " && tput cub $MSG_BACK_LENGTH
-EXEC change_login_shell_bash2zsh
+if [ ! $FLAG_UPDATE ];then
+    printf "change_login_shell_bash2zsh: " && tput cub $MSG_BACK_LENGTH
+    EXEC change_login_shell_bash2zsh
+fi
 
 keys="$(echo $packages|jq '.|keys')"
 keys_size="$(echo $keys|jq '.|length')"
@@ -339,6 +390,11 @@ sudo apt-get install -y ${apt_s[@]} >/dev/null || failure "apt-get install ${apt
 for cmd in "${afters[@]}";do
     sudo bash -c "$cmd" || failure "after command: $cmd"
 done
+
+if [ $FLAG_UPDATE ];then
+    printf "You may need to run 'apt update && apt upgrade'\n\e[32;1m%s\n\e[m" "[ALL DONE]"
+    exit
+fi
 
 sudo apt-get update -y >/dev/null || failure "apt-get update3"
 sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade2'
