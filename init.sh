@@ -2,11 +2,14 @@
 
 set -eu
 
+WIFI_ID=''
+WIFI_PASS=''
 TARGET_SHELL='/bin/zsh'
 
 MSG_BACK_LENGTH=100
 user=${USER}
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
+WLAN="$(ip link|grep 'BROADCAST'|grep 'MULTICAST'|grep -v 'NO-CARRIER'|awk '{print $2}'|sed -e's/://g')"
 BASH='/bin/bash'
 # Redirect:
 # '&>/dev/null': discard standard output and error output
@@ -32,7 +35,7 @@ export -f is_online
 rollback() {
     # {{{
     if [ "$(is_online)" != 'true' ];then
-        dhclient $WLAN
+        sudo dhclient $WLAN
     fi
 }
 export -f rollback
@@ -107,12 +110,13 @@ check_online() {
     local essid passphrase
     essid="$1"
     passphrase="$2"
-    if [ "$is_online" = 'true' ];then
+    if [ "$(is_online)" = 'true' ];then
         return 0
     else
-        wpa_passphrase "$essid" "$passphrase" > .wifi.conf
-        wpa_supplicant -c.wifi.conf -i$WLAN &
-        dhclient $WLAN
+        sudo wpa_passphrase "$essid" "$passphrase" > .wifi.conf
+        sudo wpa_supplicant -c.wifi.conf -i$WLAN &
+        sudo dhclient $WLAN
+        return -1
     fi
 }
 export -f check_online
@@ -121,20 +125,23 @@ change_login_shell_to_zsh() {
     # {{{
     if [ ! -f '/bin/zsh' ];then
         echo false
-        return
+        return -1
     fi
 
-    user="${USER}"
-    if [ "$(grep ${USER} /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$TARGET_SHELL" ];then
-        sudo chsh -s "$TARGET_SHELL" "$user" >/dev/null
-        [ $? -ne 0 ] && echo false && return
+    if [ "$(grep ${user} /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$TARGET_SHELL" ];then
+        sudo chsh -s $TARGET_SHELL $user
+        if [ $? -ne 0 ];then
+            return -2
+        fi
     fi
 
     if [ "$(grep root /etc/passwd|sed -e 's/.*:\(.*\)$/\1/')" != "$TARGET_SHELL" ];then
-        sudo chsh -s "$TARGET_SHELL" root >/dev/null
-        [ $? -ne 0 ] && echo false && return
+        sudo chsh -s $TARGET_SHELL root
+        if [ $? -ne 0 ];then
+            return -3
+        fi
     fi
-    echo true
+    return 0
 }
 export -f change_login_shell_to_zsh
 # }}}
@@ -383,11 +390,12 @@ done
 # Main
 EXEC "is_debian" "Must run on debian"
 EXEC "is_non_root" "Must run as non-root"
-EXEC "check_online"
+EXEC "check_online" "$WIFI_ID" "$WIFI_PASS"
 EXEC "sudo apt-get install -y curl git zsh wget jq"
-if [ ! $FLAG_UPDATE = '' ];then
+if [ "$FLAG_UPDATE" = '' ];then
     EXEC change_login_shell_to_zsh
 fi
+exit
 
 keys="$(echo $packages|jq '.|keys')"
 keys_size="$(echo $keys|jq '.|length')"
@@ -454,7 +462,7 @@ for cmd in "${afters[@]}";do
     EXEC "sudo $cmd"
 done
 
-if [ ! $FLAG_UPDATE = '' ];then
+if [ ! "$FLAG_UPDATE" = '' ];then
     printf "You may need to run 'apt update && apt upgrade'\n\e[32;1m%s\n\e[m" "[ALL DONE]"
     exit
 fi
