@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -eu
+# (´・ω・｀)
 
 WIFI_ID=''
 WIFI_PASS=''
