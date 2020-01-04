@@ -289,6 +289,7 @@ EOM
 #  * Parse Args & Options
 #  * # {{{
 #  */
+FLAG_UPDATE=''
 declare -i argc=0
 declare -a argv=()
 while (( $# > 0 )); do
@@ -313,7 +314,7 @@ printf "is_non_root: " && tput cub $MSG_BACK_LENGTH
 EXEC is_non_root
 printf "check_base_cmds: " && tput cub $MSG_BACK_LENGTH
 EXEC check_base_cmds
-if [ $FLAG_UPDATE != '' ];then
+if [ ! $FLAG_UPDATE = '' ];then
     printf "change_login_shell_bash2zsh: " && tput cub $MSG_BACK_LENGTH
     EXEC change_login_shell_bash2zsh
 fi
@@ -383,7 +384,7 @@ for cmd in "${afters[@]}";do
     sudo bash -c "$cmd" || failure "after command: $cmd"
 done
 
-if [ $FLAG_UPDATE != '' ];then
+if [ ! $FLAG_UPDATE = '' ];then
     printf "You may need to run 'apt update && apt upgrade'\n\e[32;1m%s\n\e[m" "[ALL DONE]"
     exit
 fi
