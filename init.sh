@@ -1,30 +1,76 @@
 #!/bin/bash
 
 set -eu
-LOST_COMMAND_AND_INSTALL=true
 
 TARGET_SHELL='/bin/zsh'
 
 MSG_BACK_LENGTH=100
 user=${USER}
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
+BASH='/bin/bash'
+# Redirect:
+# '&>/dev/null': discard standard output and error output
+# '1>/dev/null': discard standard output (the same as '>/dev/null')
+# '2>/dev/null': discard error output
+# '': do not discard any output
+REDIRECT=''
 
 cd "/tmp"
-sudo chown -R $user:$user /opt
+sudo chown -R $user:$user /opt /tmp
 
-success() {
+is_online() {
     # {{{
-    printf "${1}: \e[32;1m%s\n\e[m" "[OK]"
-} # }}}
-failure() {
+    echo -e "GET http://google.com HTTP/1.0\n\n"|nc google.com 80 &>/dev/null
+    if [ $? -eq 0 ]; then
+        echo true
+    else
+        echo false
+    fi
+}
+export -f is_online
+# }}}
+rollback() {
     # {{{
-    printf "\e[31;1m%s\n\e[m(reason: ${1})" "[ABORT]"
-    exit
-} # }}}
+    if [ "$(is_online)" != 'true' ];then
+        dhclient $WLAN
+    fi
+}
+export -f rollback
+# }}}
 EXEC() {
     # {{{
-    [ "$($1)" = 'true' ] && success "$1" || failure "$1"
-} # }}}
+    local cmd="$1"
+    local description=''
+    if [ $# -ge 2 ];then
+        description="$2"
+    fi
+    local output=''
+    local result=0
+    printf "$cmd: " && tput cub $MSG_BACK_LENGTH
+    for i in $(seq 3);do
+        result=0
+        output="$($BASH -c "$cmd $REDIRECT" 2>&1)"||result=$?
+        if [ $result = '0' ];then
+            break
+        else
+            rollback
+        fi
+    done
+    if [ $result = '0' ];then
+        printf "$cmd: \e[32;1m%s\n\e[m" "[OK]"
+    else
+        printf "$cmd: \e[31;1m%s\n\e[m" "[NG]"
+        printf "\e[31;1m%s\n\e[m" "[ABORT]"
+        if [ $# -ge 2 ];then
+            printf "SUMMARY: $2\n"
+        fi
+        printf "REASON:\n$output\n"
+        exit
+    fi
+    return $result
+}
+export -f EXEC
+# }}}
 
 yn() {
     # {{{
@@ -38,17 +84,40 @@ yn() {
 
 is_debian() {
     # {{{
-    [ -n "$(uname -a|grep 'debian')" ] && echo true || echo false
-} # }}}
+    if [ "$(uname -a|grep 'Debian')" ];then
+        return 0
+    else
+        return -1
+    fi
+}
+export -f is_debian
+# }}}
 is_non_root() {
     # {{{
-    [ "${UID}" -eq 0 ] && echo false || echo true
-} # }}}
-check_base_cmds() {
+    if [ ${UID} -ne 0 ];then
+        return 0
+    else
+        return -1
+    fi
+}
+export -f is_non_root
+# }}}
+check_online() {
     # {{{
-    sudo apt-get install -y curl git zsh wget jq>/dev/null && echo true || echo false
-} # }}}
-change_login_shell_bash2zsh() {
+    local essid passphrase
+    essid="$1"
+    passphrase="$2"
+    if [ "$is_online" = 'true' ];then
+        return 0
+    else
+        wpa_passphrase "$essid" "$passphrase" > .wifi.conf
+        wpa_supplicant -c.wifi.conf -i$WLAN &
+        dhclient $WLAN
+    fi
+}
+export -f check_online
+# }}}
+change_login_shell_to_zsh() {
     # {{{
     if [ ! -f '/bin/zsh' ];then
         echo false
@@ -66,7 +135,9 @@ change_login_shell_bash2zsh() {
         [ $? -ne 0 ] && echo false && return
     fi
     echo true
-} # }}}
+}
+export -f change_login_shell_to_zsh
+# }}}
 
 # Packages
 # {{{
@@ -81,6 +152,8 @@ packages="$(cat <<'EOM'
         , "apt": [
             "~t^desktop$"
             , "~t^kde-desktop$"
+            , "xdotool"
+            , "libinput-tools"
         ]
     }
     , "mozc": {
@@ -162,16 +235,16 @@ packages="$(cat <<'EOM'
             "npm"
         ]
         , "main": [
-            "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg|apt-key add -"
-            , "echo 'deb https://dl.yarnpkg.com/debian/ stable main'|sudo tee /etc/apt/sources.list.d/yarn.list"
+            "(curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg|apt-key add -) &>/dev/null"
+            , "(echo 'deb https://dl.yarnpkg.com/debian/ stable main'|sudo tee /etc/apt/sources.list.d/yarn.list) &>/dev/null"
         ]
         , "apt_": [
             "nodejs"
             , "yarn"
         ]
         , "after": [
-            "yarn global add n"
-            , "n stable"
+            "yarn global add n &>/dev/null"
+            , "n stable &>/dev/null"
         ]
     }
     , "gcloud": {
@@ -181,8 +254,8 @@ packages="$(cat <<'EOM'
             , "ca-certificates"
         ]
         , "main": [
-            "curl -sS https://packages.cloud.google.com/apt/doc/apt-key.gpg|apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -"
-            , "echo 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main'|tee /etc/apt/sources.list.d/google-cloud-sdk.list"
+            "(curl -sS https://packages.cloud.google.com/apt/doc/apt-key.gpg|apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -) &>/dev/null"
+            , "(echo 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main'|tee /etc/apt/sources.list.d/google-cloud-sdk.list) &>/dev/null"
         ]
         , "apt_": [
             "google-cloud-sdk"
@@ -199,7 +272,7 @@ packages="$(cat <<'EOM'
         ]
         , "main": [
             "curl -fsSL https://download.docker.com/linux/debian/gpg|apt-key add -"
-            , "echo $(lsb_release -cs)|xargs -i@ add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/debian @ stable'"
+            , "(echo $(lsb_release -cs)|xargs -i@ add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/debian @ stable') &>/dev/null"
         ]
         , "apt_": [
             "docker-ce"
@@ -211,14 +284,14 @@ packages="$(cat <<'EOM'
     , "lab": {
         "description": "gitlab cli client"
         , "main": [
-            "curl -sS https://raw.githubusercontent.com/zaquestion/lab/master/install.sh|bash"
+            "(curl -sS https://raw.githubusercontent.com/zaquestion/lab/master/install.sh|bash) &>/dev/null"
         ]
     }
     , "spideroak": {
         "description": "backup software"
         , "main": [
             "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 573E3D1C51AE1B3D &>/dev/null"
-            , "echo 'deb http://apt.spideroak.com/debian/ stable non-free'|tee /etc/apt/sources.list.d/spideroak.com.sources.list"
+            , "(echo 'deb http://apt.spideroak.com/debian/ stable non-free'|tee /etc/apt/sources.list.d/spideroak.com.sources.list) &>/dev/null"
         ]
         , "apt_": [
             "spideroakone"
@@ -239,18 +312,18 @@ packages="$(cat <<'EOM'
         ]
         , "main": [
             "apt-get purge -y vim vim-runtime python-neovim python3-neovim neovim gvim deb-gview vim-tiny vim-common vim-gui-common vim-nox>/dev/null"
-            , "if [ ! -d vim ];then git clone https://github.com/vim/vim.git >/dev/null; fi"
-            , "cd vim && make clean distclean >/dev/null"
-            , "cd vim && ./configure --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(find /usr/lib/ -name 'config*' -type d|grep python3) --enable-gui=gtk2 --enable-cscope --prefix=/usr/local --enable-fail-if-missing >/dev/null"
-            , "cd vim && make -j$(nproc) VIMRUNTIMEDIR=/usr/local/share/vim/vim81 >/dev/null"
-            , "cd vim && make install >/dev/null"
+            , "if [ ! -d vim ];then git clone https://github.com/vim/vim.git &>/dev/null; fi"
+            , "cd vim && make clean distclean &>/dev/null"
+            , "cd vim && ./configure --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(find /usr/lib/ -name 'config*' -type d|grep python3) --enable-gui=gtk2 --enable-cscope --prefix=/usr/local --enable-fail-if-missing &>/dev/null"
+            , "cd vim && make -j$(nproc) VIMRUNTIMEDIR=/usr/local/share/vim/vim81 &>/dev/null"
+            , "cd vim && make install &>/dev/null"
         ]
         , "after": [
-            "update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1 >/dev/null"
-            , "update-alternatives --set editor /usr/local/bin/vim >/dev/null"
-            , "update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1 >/dev/null"
-            , "update-alternatives --set vi /usr/local/bin/vim >/dev/null"
-            , "python3 -m pip install neovim >/dev/null"
+            "update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1 &>/dev/null"
+            , "update-alternatives --set editor /usr/local/bin/vim &>/dev/null"
+            , "update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1 &>/dev/null"
+            , "update-alternatives --set vi /usr/local/bin/vim &>/dev/null"
+            , "python3 -m pip install neovim &>/dev/null"
         ]
     }
     , "android": {
@@ -308,15 +381,12 @@ done
 # }}}
 
 # Main
-printf "is_debian: " && tput cub $MSG_BACK_LENGTH
-EXEC is_debian
-printf "is_non_root: " && tput cub $MSG_BACK_LENGTH
-EXEC is_non_root
-printf "check_base_cmds: " && tput cub $MSG_BACK_LENGTH
-EXEC check_base_cmds
+EXEC "is_debian" "Must run on debian"
+EXEC "is_non_root" "Must run as non-root"
+EXEC "check_online"
+EXEC "sudo apt-get install -y curl git zsh wget jq"
 if [ ! $FLAG_UPDATE = '' ];then
-    printf "change_login_shell_bash2zsh: " && tput cub $MSG_BACK_LENGTH
-    EXEC change_login_shell_bash2zsh
+    EXEC change_login_shell_to_zsh
 fi
 
 keys="$(echo $packages|jq '.|keys')"
@@ -370,18 +440,18 @@ for p in $trg_packages; do
 done
 # }}}
 
-printf "installing.. this may take a while\n"
-sudo apt-get update -y >/dev/null || failure "apt-get update1"
-sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade1'
-sudo apt-get install -y ${_apts[@]} >/dev/null || failure "apt-get install ${_apts[@]}"
-sudo aptitude install -y ${apts[@]} >/dev/null || failure "aptitude install ${apts[@]}"
+printf "installing packages.. this may take a while\n"
+EXEC "apt-get update -y"
+EXEC "apt-get upgrade -qq -y"
+EXEC "apt-get install -y ${_apts[@]}"
+EXEC "aptitude install -y ${apts[@]}"
 for cmd in "${mains[@]}";do
-    sudo bash -c "$cmd" || failure "main command: $cmd"
+    EXEC "sudo $cmd"
 done
-sudo apt-get update -y >/dev/null || failure "apt-get update2"
-sudo apt-get install -y ${apt_s[@]} >/dev/null || failure "apt-get install ${apt_s[@]}"
+EXEC "apt-get update -y"
+EXEC "apt-get install -y ${apt_s[@]}"
 for cmd in "${afters[@]}";do
-    sudo bash -c "$cmd" || failure "after command: $cmd"
+    EXEC "sudo $cmd"
 done
 
 if [ ! $FLAG_UPDATE = '' ];then
@@ -389,52 +459,57 @@ if [ ! $FLAG_UPDATE = '' ];then
     exit
 fi
 
-sudo apt-get update -y >/dev/null || failure "apt-get update3"
-sudo apt-get upgrade -qq -y >/dev/null || failure '@apt-get upgrade2'
+EXEC "sudo apt-get update -y"
+EXEC "sudo apt-get upgrade -qq -y"
 
-msg="Initing system.."
-printf "${msg}"
-for dotfile in .zshrc .zprofile .xmodmap .xinitrc .vimrc .sshrc .vim;do
+# dotfile-copying
+for dotfile in '.zshrc' '.zprofile' '.xmodmap' '.xinitrc' '.vimrc' '.sshrc' '.vim';do
     if [ ! -e "/home/${user}/${dotfile}" ];then
-        ln -snf "${DIR}/${dotfile}" "/home/${user}/${dotfile}" || failure "ln for ${dotfile}"
+        EXEC "ln -snf '${DIR}/${dotfile}' '/home/${user}/${dotfile}'"
     fi
     if [ ! -e "/root/${dotfile}" ];then
-        sudo ln -snf "${DIR}/${dotfile}" "/root/${dotfile}" || failure "ln for ${dotfile}"
+        EXEC "sudo ln -snf '${DIR}/${dotfile}' '/root/${dotfile}'"
     fi
 done
-printf ".\e[32;1m%s\n\e[m" "OK"
 
-# dein
-msg="Initing vim-dein.."
-printf "${msg}"
-[ -d "/home/${user}/.cache/dein" ] && rm -rf "/home/${user}/.cache/dein"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/home/${user}/.cache/dein" &>/dev/null
-[ -d "/root/.cache/dein" ] && rm -rf /root/.cache/dein
-sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)" -- "/root/.cache/dein" &>/dev/null
-printf ".\e[32;1m%s\n\e[m" "OK"
+# vim-dein
+if [ -d "/home/${user}/.cache/dein" ];then
+    rm -rf "/home/${user}/.cache/dein"
+fi
+EXEC "sh -c '$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)' -- /home/${user}/.cache/dein"
 
-mkdir -p /home/${user}/.local/share/fonts
+if [ -d "/root/.cache/dein" ];then
+    sudo rm -rf /root/.cache/dein
+fi
+EXEC "sudo sh -c '$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh)' -- /root/.cache/dein"
+
+# SWAP and Hibernate settings
+SWAP_UUID="$(sudo blkid|grep 'TYPE="swap"'|sed -e's/.*UUID="\(.*\)" TYPE="swap".*/\1/')"
+echo "RESUME=UUID=$SWAP_UUID" > /etc/initramfs-tools/conf.d/resume
+sed -i.org -e 's/^GRUB_CMDLINE_LINUX_DEFAULT=".*"/GRUB_CMDLINE_LINUX_DEFAULT="resume=UUID='"$SWAP_UUID"' quiet splash selinux=0 pci=noaer acpi=rsdt"/'
+EXEC "sudo update-grub"
+EXEC "sudo update-initramfs -u"
+
+# fonts
+EXEC "mkdir -p /home/${user}/.local/share/fonts"
 if [ ! -f "/home/${user}/.local/share/fonts/RictyDiminished-Regular.ttf" ];then
     if [ -d "/home/${user}/.local/share/fonts/RictyDiminished-Regular.ttf" ];then
-        git clone https://github.com/edihbrandon/RictyDiminished.git
-        cp -f ./RictyDiminished/*.ttf "/home/${user}/.local/share/fonts"
+        EXEC "git clone https://github.com/edihbrandon/RictyDiminished.git"
+        EXEC "cp -f ./RictyDiminished/*.ttf '/home/${user}/.local/share/fonts'"
     fi
 fi
 if [ ! -f "/home/${user}/.local/share/fonts/FiraCode-Regular.ttf" ];then
     if [ -d "/home/${user}/.local/share/fonts/FiraCode-Regular.ttf" ];then
-        git clone https://github.com/tonsky/FiraCode.git
-        cp -f ./FiraCode/distr/ttf/*.ttf "/home/${user}/.local/share/fonts"
+        EXEC "git clone https://github.com/tonsky/FiraCode.git"
+        EXEC "cp -f ./FiraCode/distr/ttf/*.ttf '/home/${user}/.local/share/fonts'"
     fi
 fi
 
-echo "Please reboot after following instructions if shown vvv"
-msg="system: setup grub config such as 'quiet splash nomodeset pci=nommconf'"
-printf ".\e[32;1m%s\n\e[m" "$msg"
-for man in "${mans[@]}";do
-    printf ".\e[32;1m%s\n\e[m" "$man"
-    msg+="\n$man"
-done
-echo "$msg" > "/home/${user}/Documents/dotfiles/manual.txt"
+# 3-finger gesture
+EXEC "sudo gpasswd -a $user input"
+EXEC "git clone http://github.com/bulletmark/libinput-gestures"
+EXEC "sudo ./libinput-gestures-setup install"
+EXEC "libinput-gestures-setup autostart"
 
 printf ".\e[32;1m%s\n\e[m" "[ALL DONE]"
 
