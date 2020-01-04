@@ -224,15 +224,6 @@ packages="$(cat <<'EOM'
             "spideroakone"
         ]
     }
-    , "vegeta": {
-        "description": "http load tester"
-        , "main": [
-            "if [ ! -f vegeta-12.7.0-linux-amd64.tar.gz ];then wget -q https://github.com/tsenart/vegeta/releases/download/v12.7.0/vegeta-12.7.0-linux-amd64.tar.gz; fi"
-            , "tar xf vegeta-12.7.0-linux-amd64.tar.gz -C /opt"
-            , "mv /opt/vegeta /opt/vegeta-12.7.0"
-            , "ln -snf /opt/vegeta-12.7.0 /usr/local/bin/vegeta"
-        ]
-    }
     , "vim": {
         "description": "vim with python3 support"
         , "_apt": [
@@ -244,12 +235,13 @@ packages="$(cat <<'EOM'
             , "libxpm-dev"
             , "libxt-dev"
             , "python3-dev"
+            , "python3-pip"
         ]
         , "main": [
             "apt-get purge -y vim vim-runtime python-neovim python3-neovim neovim gvim deb-gview vim-tiny vim-common vim-gui-common vim-nox>/dev/null"
             , "if [ ! -d vim ];then git clone https://github.com/vim/vim.git >/dev/null; fi"
             , "cd vim && make clean distclean >/dev/null"
-            , "cd vim && ./configure --with-features=huge --enable-multibyte --enable-pythoninterp=yes --with-python-config-dir=$(find /usr/lib/ -name 'config*' -type d|grep python2) --enable-python3interp=yes --with-python3-config-dir=$(find /usr/lib/ -name 'config*' -type d|grep python3) --enable-gui=gtk2 --enable-cscope --prefix=/usr/local --enable-fail-if-missing >/dev/null"
+            , "cd vim && ./configure --with-features=huge --enable-multibyte --enable-python3interp=yes --with-python3-config-dir=$(find /usr/lib/ -name 'config*' -type d|grep python3) --enable-gui=gtk2 --enable-cscope --prefix=/usr/local --enable-fail-if-missing >/dev/null"
             , "cd vim && make -j$(nproc) VIMRUNTIMEDIR=/usr/local/share/vim/vim81 >/dev/null"
             , "cd vim && make install >/dev/null"
         ]
@@ -321,7 +313,7 @@ printf "is_non_root: " && tput cub $MSG_BACK_LENGTH
 EXEC is_non_root
 printf "check_base_cmds: " && tput cub $MSG_BACK_LENGTH
 EXEC check_base_cmds
-if [ ! $FLAG_UPDATE ];then
+if [ $FLAG_UPDATE != '' ];then
     printf "change_login_shell_bash2zsh: " && tput cub $MSG_BACK_LENGTH
     EXEC change_login_shell_bash2zsh
 fi
@@ -391,7 +383,7 @@ for cmd in "${afters[@]}";do
     sudo bash -c "$cmd" || failure "after command: $cmd"
 done
 
-if [ $FLAG_UPDATE ];then
+if [ $FLAG_UPDATE != '' ];then
     printf "You may need to run 'apt update && apt upgrade'\n\e[32;1m%s\n\e[m" "[ALL DONE]"
     exit
 fi
