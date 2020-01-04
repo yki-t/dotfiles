@@ -3,8 +3,6 @@
 set -eu
 # (´・ω・｀)
 
-WIFI_ID=''
-WIFI_PASS=''
 TARGET_SHELL='/bin/zsh'
 
 MSG_BACK_LENGTH=100
@@ -106,21 +104,7 @@ is_non_root() {
 }
 export -f is_non_root
 # }}}
-check_online() {
-    # {{{
-    local essid passphrase
-    essid="$1"
-    passphrase="$2"
-    if [ "$(is_online)" = 'true' ];then
-        return 0
-    else
-        sudo wpa_passphrase "$essid" "$passphrase" > .wifi.conf
-        sudo wpa_supplicant -c.wifi.conf -i$WLAN &
-        sudo dhclient $WLAN
-        return -1
-    fi
-}
-export -f check_online
+
 # }}}
 change_login_shell_to_zsh() {
     # {{{
@@ -391,12 +375,11 @@ done
 # Main
 EXEC "is_debian" "Must run on debian"
 EXEC "is_non_root" "Must run as non-root"
-EXEC "check_online" "$WIFI_ID" "$WIFI_PASS"
 EXEC "sudo apt-get install -y curl git zsh wget jq"
-if [ "$FLAG_UPDATE" = '' ];then
-    EXEC change_login_shell_to_zsh
-fi
-exit
+# if [ "$FLAG_UPDATE" = '' ];then
+#     EXEC change_login_shell_to_zsh
+# fi
+# exit
 
 keys="$(echo $packages|jq '.|keys')"
 keys_size="$(echo $keys|jq '.|length')"
@@ -450,17 +433,18 @@ done
 # }}}
 
 printf "installing packages.. this may take a while\n"
-EXEC "apt-get update -y"
-EXEC "apt-get upgrade -qq -y"
-EXEC "apt-get install -y ${_apts[@]}"
-EXEC "aptitude install -y ${apts[@]}"
+EXEC "sudo apt-get update -y"
+EXEC "sudo apt-get upgrade -qq -y"
+EXEC "sudo apt-get install -y ${_apts[@]}"
+EXEC "sudo aptitude install -y ${apts[@]}"
 for cmd in "${mains[@]}";do
-    EXEC "sudo $cmd"
+    sudo bash -c "$cmd"
 done
-EXEC "apt-get update -y"
-EXEC "apt-get install -y ${apt_s[@]}"
+EXEC "sudo apt-get update -y"
+EXEC "sudo apt-get install -y ${apt_s[@]}"
 for cmd in "${afters[@]}";do
-    EXEC "sudo $cmd"
+    # EXEC "sudo $cmd"
+    sudo bash -c "$cmd"
 done
 
 if [ ! "$FLAG_UPDATE" = '' ];then
