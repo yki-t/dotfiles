@@ -7,6 +7,11 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
     echo "$DESCRIPTION"
     exit 0
 fi
+user=$USER
+if (( $# > 1 )) && [ "$2" != '' ];then
+    user="$2"
+fi
+
 sudo apt-get install -y curl make libncurses5-dev libgtk2.0-dev libatk1.0-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev python3-dev python3-pip
 sudo apt-get purge -y vim vim-runtime python-neovim python3-neovim neovim gvim deb-gview vim-tiny vim-common vim-gui-common vim-nox
 
@@ -36,18 +41,4 @@ sudo update-alternatives --set editor /usr/local/bin/vim
 sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
 sudo update-alternatives --set vi /usr/local/bin/vim
 python3 -m pip install neovim
-
-# vim-dein
-DEIN_INSTALLER='https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh'
-
-if [ -d "/home/${user}/.cache/dein" ];then
-    rm -rf "/home/${user}/.cache/dein"
-fi
-
-sh -c "$(curl -fsSL "$DEIN_INSTALLER")" -- "/home/${user}/.cache/dein"
-
-if [ -d "/root/.cache/dein" ];then
-    sudo rm -rf /root/.cache/dein
-fi
-sudo sh -c "$(curl -fsSL "$DEIN_INSTALLER")" -- /root/.cache/dein
 

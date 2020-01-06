@@ -9,5 +9,5 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
 fi
 
 sudo apt-get install -y aptitude tasksel
-sudo aptitude install -y ~t^desktop$ ~t^kde-desktop$ xdotool libinput-tools
+sudo aptitude install -y ~t^desktop$ ~t^kde-desktop$
 

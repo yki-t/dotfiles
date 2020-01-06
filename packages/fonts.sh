@@ -24,7 +24,7 @@ if [ ! -f "/home/${user}/.local/share/fonts/RictyDiminished-Regular.ttf" ];then
 fi
 
 if [ ! -f "/home/${user}/.local/share/fonts/FiraCode-Regular.ttf" ];then
-    if [ -d "FiraCode" ];then
+    if [ ! -d "./FiraCode" ];then
         git clone https://github.com/tonsky/FiraCode.git
     fi
     cp -f ./FiraCode/distr/ttf/*.ttf "/home/${user}/.local/share/fonts"

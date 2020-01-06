@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -u
 
 LOGIN_SHELL='/bin/zsh'
 
@@ -40,9 +40,8 @@ yn() {
     fi
 } # }}}
 
-
 # Main
-if [ "$(uname -a|grep 'Debian')" ];then
+if [ "$(uname -a|grep 'Debian')" = '' ];then
     echo "Must run on debian"
     exit
 fi

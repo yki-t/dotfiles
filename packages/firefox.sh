@@ -18,7 +18,7 @@ if [ ! -f /opt/firefox ];then
 fi
 sudo tar xjf FirefoxSetup.tar.bz2 -C /opt/firefox/
 if [ -f /usr/lib/firefox-esr/firefox-esr ];then
-    mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org
+    sudo mv /usr/lib/firefox-esr/firefox-esr /usr/lib/firefox-esr/firefox-esr.org
 fi
 sudo ln -snf /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr
 

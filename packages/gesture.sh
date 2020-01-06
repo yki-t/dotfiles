@@ -12,10 +12,14 @@ if (( $# > 1 )) && [ "$2" != '' ];then
     user="$2"
 fi
 
-sudo apt-get install -y git
+sudo apt-get install -y git xdotool libinput-tools
+
 cd /tmp
 sudo gpasswd -a $user input
-git clone http://github.com/bulletmark/libinput-gestures
+if [ ! -d libinput-gestures ];then
+    git clone http://github.com/bulletmark/libinput-gestures
+fi
+cd libinput-gestures
 sudo ./libinput-gestures-setup install
 libinput-gestures-setup autostart
 

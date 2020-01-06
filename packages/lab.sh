@@ -8,6 +8,11 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
     exit 0
 fi
 
+if [ -f "$(which lab)" ];then
+    echo 'Already Installed'
+    exit 0
+fi
+
 sudo apt-get install -y curl
 sudo bash -c 'curl -sS https://raw.githubusercontent.com/zaquestion/lab/master/install.sh|bash'
 

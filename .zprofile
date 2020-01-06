@@ -33,3 +33,4 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
 [ -f "$(which fcitx-autostart)" ] && (fcitx-autostart&>/dev/null &)
 export PATH="$HOME/.cargo/bin:$PATH"
+

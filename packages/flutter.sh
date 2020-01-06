@@ -8,6 +8,10 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
     exit 0
 fi
 
+if [ -f "$(which flutter)" ];then
+    echo 'Already Installed'
+fi
+
 sudo apt-get install -y git
 cd /tmp
 

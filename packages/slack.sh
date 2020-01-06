@@ -8,6 +8,11 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
     exit 0
 fi
 
+if [ -f "$(which slack)" ];then
+    echo 'Already Installed'
+    exit 0
+fi
+
 sudo apt-get install -y ca-certificates
 
 if [ ! -f slack-desktop-4.0.2-amd64.deb ];then
