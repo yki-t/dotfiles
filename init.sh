@@ -4,7 +4,6 @@ set -eu
 
 LOGIN_SHELL='/bin/zsh'
 
-MSG_BACK_LENGTH=100
 user=${USER}
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
 WLAN="$(ip link|grep 'BROADCAST'|grep 'MULTICAST'|grep -v 'NO-CARRIER'|awk '{print $2}'|sed -e's/://g')"
@@ -52,34 +51,34 @@ if [ ${UID} -eq 0 ];then
     exit
 fi
 sudo apt-get update -y
-sudo apt-get upgrade -qq -y
+sudo apt-get upgrade -y
 
 cd "/tmp"
 sudo chown -R $user:$user /opt /tmp
 packages="$(ls "${DIR}/packages"|grep -v '^\.*$'|grep '\.sh$'|grep -v '^template.sh$'|sed -e's/\.sh$//')"
 for p in $packages;do
     desc="$(bash "${DIR}/packages/${p}.sh" "description" "$user")"
-    printf "installing \e[36;1m%s\e[m:  ${desc}" "${p}"
+    printf "\n\e[36;1m%s\e[m:  ${desc}\n" "Installing ${p}"
     result=0
     bash "${DIR}/packages/${p}.sh" || result=$?
     if [ $result -eq 0 ];then
-        printf "\e[36;1m%s\e[m: \e[32;1m%s\n\e[m" "${p}" "[OK]"
+        printf "\e[36;1m%s\e[m: \e[32;1m%s\e[m\n" "${p}" "[OK]"
     else
         echo -e "GET http://google.com HTTP/1.0\n\n"|nc google.com 80 &>/dev/null
         if [ $? -ne 0 ]; then
             sudo dhclient $WLAN
             bash "${DIR}/packages/${p}.sh" || result=$?
             if [ $result -eq 0 ];then
-                printf "\e[36;1m%s\e[m: \e[32;1m%s\n\e[m" "${p}" "[OK]"
-		continue
-	    fi
+                printf "\e[36;1m%s\e[m: \e[32;1m%s\e[m\n" "${p}" "[OK]"
+                continue
+            fi
         fi
-        printf "\e[36;1m%s\e[m: \e[31;1m%s\n\e[m" "${p}" "[NG]"
+        printf "\e[36;1m%s\e[m: \e[31;1m%s\e[m\n" "${p}" "[NG]"
     fi
 done
 
 sudo apt-get update -y
-sudo apt-get upgrade -qq -y
+sudo apt-get upgrade -y
 
-printf ".\e[32;1m%s\n\e[m" "[ALL DONE]"
+printf "\e[32;1m%s\e[m\n" "[ALL DONE]"
 
