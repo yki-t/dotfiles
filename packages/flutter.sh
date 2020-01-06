@@ -10,6 +10,7 @@ fi
 
 if [ -f "$(which flutter)" ];then
     echo 'Already Installed'
+    exit 0
 fi
 
 sudo apt-get install -y git

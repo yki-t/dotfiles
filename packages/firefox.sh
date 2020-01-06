@@ -7,6 +7,10 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
     echo "$DESCRIPTION"
     exit 0
 fi
+if [ -e '/opt/firefox/firefox/firefox' ] && [ -e '/usr/lib/firefox-esr/firefox-esr' ];then
+    echo 'Alredy Installed'
+    exit 0
+fi
 
 sudo apt-get install -y wget
 cd /tmp

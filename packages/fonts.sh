@@ -12,6 +12,10 @@ if (( $# > 1 )) && [ "$2" != '' ];then
     user="$2"
 fi
 
+if [ -f "/home/${user}/.local/share/fonts/RictyDiminished-Regular.ttf" ] && [ -f "/home/${user}/.local/share/fonts/FiraCode-Regular.ttf"  ];then
+    echo 'Already Installed'
+    exit 0
+fi
 sudo apt-get install -y git
 
 cd /tmp
