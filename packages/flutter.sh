@@ -13,7 +13,7 @@ if [ -f "$(which flutter)" ];then
     exit 0
 fi
 
-sudo apt-get install -y git
+sudo apt-get install -y git unzip
 cd /tmp
 
 git clone -b master https://github.com/flutter/flutter.git /opt/flutter
