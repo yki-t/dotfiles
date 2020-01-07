@@ -12,7 +12,7 @@
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
+        . "$HOME/.bashrc"
     fi
 fi
 
@@ -26,15 +26,5 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-export PATH="$HOME/.cargo/bin:$PATH"
-
 export DISPLAY=localhost:0.0
 
-export XIM_PROGRAM=fcitx
-export XIM=fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-
-export DefaultIMModule=fcitx
-export DISPLAY=localhost:0.0

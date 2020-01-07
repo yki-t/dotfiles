@@ -12,7 +12,7 @@ if (( $# > 1 )) && [ "$2" != '' ];then
     user="$2"
 fi
 
-sudo apt-get install -y git xdotool libinput-tools
+sudo apt-get install -y git xdotool libinput-tools wmctrl
 
 cd /tmp
 sudo gpasswd -a $user input
@@ -21,5 +21,11 @@ if [ ! -d libinput-gestures ];then
 fi
 cd libinput-gestures
 sudo ./libinput-gestures-setup install
+
+cat <<EOM > "/home/$user/.config/libinput-gestures.conf"
+gesture swipe right	_internal ws_up
+gesture swipe left	_internal ws_down
+EOM
+
 libinput-gestures-setup autostart
 
