@@ -64,3 +64,4 @@ repo = 'thinca/vim-quickrun'
 [[plugins]]
 repo = 'storyn26383/vim-vue'
 
+

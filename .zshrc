@@ -224,11 +224,14 @@ case ${OSTYPE} in
     function pxc() {
         # {{{
         if [ $(which pixz) ];then
-            if [ $# -eq 1 ];then
-                tar cvf $1.tar.xz --use-compress-prog=pixz $1/
-            else
-                tar cvf $2.tar.xz --use-compress-prog=pixz $1/
+            local trg="$1"
+            if [ $# -eq 2 ];then
+                trg="$2"
             fi
+            while [ -e "$trg.tar.xz" ]; do
+                trg+="_"
+            done
+            tar -cf - "$1/" | pixz -9 -- > "$trg.tar.xz"
         fi
     } # }}}
 
