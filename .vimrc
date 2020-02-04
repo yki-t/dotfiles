@@ -286,6 +286,7 @@ hi MatchParen cterm=bold ctermbg=none ctermfg=white
 au BufRead,BufNewFile *.tera  set filetype=html
 au BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
 au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
+au FileType jinja set tabstop=2 softtabstop=2 shiftwidth=2
 
 noremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
