@@ -18,5 +18,6 @@ if type cargo &>/dev/null;then
   source "$HOME/.cargo/env"
 fi
 
+sudo apt install -y libclang1
 cargo install bat
 
