@@ -74,7 +74,7 @@ case ${OSTYPE} in
     export LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
     export PATH=/usr/local/bin:~/bin:$PYENV_ROOT/bin:$NPM_PATH:$NODE_PATH:${PATH}
     # pyenv auto complete
-    if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+    if type pyenv &>/dev/null;then eval "$(pyenv init -)"; fi
 
     # nodebrew
     export PATH=${HOME}/.nodebrew/current/bin:${PATH}
@@ -115,13 +115,13 @@ case ${OSTYPE} in
     fi
 
     # Node JS npm/yarn
-    if [ -e "$(which npm)" ];then
+    if type npm &>/dev/null; then
         npm config set prefix ~/.local/
         if [ -e "${HOME}/.local/bin/npm" ];then
             alias npm="${HOME}/.local/bin/npm"
         fi
     fi
-    if [ -e "$(which yarn)" ];then
+    if type yarn &>/dev/null; then
         export NODE_PATH="${HOME}/.yarn/bin"
         export PATH="${PATH}:$(yarn global bin):$(yarn global dir)/node_modules/.bin"
 
@@ -131,7 +131,7 @@ case ${OSTYPE} in
     fi
 
     # JAVA
-    if [ -e "$(which java)" ];then
+    if type java &>/dev/null; then
         export JAVA_HOME=$(update-alternatives --query javac 2>/dev/null | sed -n -e 's/Value: *\(.*\)\/bin\/javac/\1/p')
         export DERBY_HOME=$JAVA_HOME/db
         export J2SDKDIR=$JAVA_HOME
@@ -155,13 +155,13 @@ case ${OSTYPE} in
     fi
 
     # c
-    if [ "$(which gcc)" ];then
+    if type gcc &>/dev/null; then
         gcc_exec="$(which gcc)"
         export CC="${gcc_exec}"
         export CMAKE_C_COMPILER="${gcc_exec}"
     fi
     # c++
-    if [ "$(which g++)" ];then
+    if type g++ &>/dev/null; then
         gxx_exec="$(which g++)"
         export CXX="${gxx_exec}"
         export CMAKE_CXX_COMPILER="${gxx_exec}"
@@ -226,7 +226,7 @@ case ${OSTYPE} in
     # p*xz compress
     function pxc() {
         # {{{
-        if [ $(which pixz) ];then
+        if type pixz &>/dev/null; then
             local trg="$1"
             if [ $# -eq 2 ];then
                 trg="$2"
@@ -241,7 +241,7 @@ case ${OSTYPE} in
     # p*xz decompress
     function pxx() {
         # {{{
-        if [ $(which pixz) ];then
+        if type pixz &>/dev/null; then
             tar xvf $1 --use-compress-prog=pixz
         fi
     } # }}}
@@ -249,7 +249,7 @@ case ${OSTYPE} in
     # uf to png
     function uf2png() {
         # {{{
-        if [ $(which uiflow) ];then
+        if type uiflow &>/dev/null; then
             if [ $# -eq 1 ];then
                 uiflow -i "$1" -o"$1".png -f png
             elif [ $# -eq 2 ];then
