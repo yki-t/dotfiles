@@ -4,13 +4,13 @@ set -eu
 DESCRIPTION='mobile app development tools'
 
 if (( $# > 0 )) && [ "$1" = 'description' ];then
-    echo "$DESCRIPTION"
-    exit 0
+  echo "$DESCRIPTION"
+  exit 0
 fi
 
 if [ -f "$(which flutter)" ];then
-    echo 'Already Installed'
-    exit 0
+  echo 'Already Installed'
+  exit 0
 fi
 
 sudo apt-get install -y git unzip

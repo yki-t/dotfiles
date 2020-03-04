@@ -4,13 +4,13 @@ set -eu
 DESCRIPTION='node.js and yarn'
 
 if (( $# > 0 )) && [ "$1" = 'description' ];then
-    echo "$DESCRIPTION"
-    exit 0
+  echo "$DESCRIPTION"
+  exit 0
 fi
 
 if [ -f "$(which node)" ] && [ -f "$(which yarn)" ];then
-    echo 'Already Installed'
-    exit 0
+  echo 'Already Installed'
+  exit 0
 fi
 sudo apt-get install -y curl npm
 
