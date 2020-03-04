@@ -13,22 +13,24 @@ im-config -n fcitx
 # `source ~/.zprofile && fcitx-configtool
 PROFILE="$HOME/.zprofile"
 
-if [ "$(cat $PROFILE|grep '^export XIM_PROGRAM=')" = '' ];then
-  echo 'export XIM_PROGRAM=fcitx' >> $PROFILE
+if [ "$(cat "$PROFILE"|grep '^export XIM_PROGRAM=')" = '' ];then
+  echo 'export XIM_PROGRAM=fcitx' >> "$PROFILE"
 fi
-if [ "$(cat $PROFILE|grep '^export XIM=')" = '' ];then
+if [ "$(cat "$PROFILE"|grep '^export XIM=')" = '' ];then
   echo 'export XIM=fcitx' >> $PROFILE
 fi
-if [ "$(cat $PROFILE|grep '^export GTK_IM_MODULE=')" = '' ];then
-  echo 'export GTK_IM_MODULE=fcitx' >> $PROFILE
+if [ "$(cat "$PROFILE"|grep '^export GTK_IM_MODULE=')" = '' ];then
+  echo 'export GTK_IM_MODULE=fcitx' >> "$PROFILE"
 fi
-if [ "$(cat $PROFILE|grep '^export QT_IM_MODULE=')" = '' ];then
-  echo 'export QT_IM_MODULE=fcitx' >> $PROFILE
+if [ "$(cat "$PROFILE"|grep '^export QT_IM_MODULE=')" = '' ];then
+  echo 'export QT_IM_MODULE=fcitx' >> "$PROFILE"
 fi
-if [ "$(cat $PROFILE|grep '^export XMODIFIERS=')" = '' ];then
-  echo 'export XMODIFIERS="@im=fcitx"' >> $PROFILE
+if [ "$(cat "$PROFILE"|grep '^export XMODIFIERS=')" = '' ];then
+  echo 'export XMODIFIERS="@im=fcitx"' >> "$PROFILE"
 fi
-if [ "$(cat $PROFILE|grep '\[ -f "$(which fcitx-autostart)" \] && (fcitx-autostart&>/dev/null &)')"  = '' ];then
-  echo '[ -f "$(which fcitx-autostart)" ] && (fcitx-autostart&>/dev/null &)' >> $PROFILE
+
+
+if [ "$(cat "$PROFILE"|grep '')"  = 'type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)' ];then
+  echo 'type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)' >> "$PROFILE"
 fi
 

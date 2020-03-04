@@ -8,7 +8,7 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
   exit 0
 fi
 
-if [ -f "$(which studio)" ];then
+if type studio &>/dev/null;then
   echo "Already Installed"
   exit 0
 fi

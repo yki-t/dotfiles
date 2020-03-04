@@ -8,7 +8,7 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
   exit 0
 fi
 
-if [ -f "$(which docker)" ] && [ -f "$(which docker-compose)" ];then
+if type docker &>/dev/null && type docker-compose &>/dev/null;then
   echo "Already Installed"
   exit 0
 fi

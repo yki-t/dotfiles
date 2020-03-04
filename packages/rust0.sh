@@ -8,7 +8,7 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
   exit 0
 fi
 
-if [ -f "$(which cargo)" ];then
+if type cargo &>/dev/null;then
   echo 'Already Installed'
   exit 0
 fi

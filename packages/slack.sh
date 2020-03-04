@@ -8,7 +8,7 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
   exit 0
 fi
 
-if [ -f "$(which slack)" ];then
+if type slack &>/dev/null;then
   echo 'Already Installed'
   exit 0
 fi

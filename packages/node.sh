@@ -8,7 +8,7 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
   exit 0
 fi
 
-if [ -f "$(which node)" ] && [ -f "$(which yarn)" ];then
+if type node &>/dev/null && type yarn &>/dev/null;then
   echo 'Already Installed'
   exit 0
 fi

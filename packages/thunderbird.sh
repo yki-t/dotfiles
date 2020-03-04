@@ -8,7 +8,7 @@ if (( $# > 0 )) && [ "$1" = 'description' ];then
   exit 0
 fi
 
-if [ -f "$(which thunderbird)" ];then
+if type thunderbird &>/dev/null;then
   echo 'Already Installed'
   exit 0
 fi
