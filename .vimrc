@@ -185,8 +185,8 @@ augroup END
 set number
 set ambiwidth=double
 set expandtab
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set autoindent
 set smartindent
 set wrap
@@ -284,7 +284,8 @@ hi MatchParen cterm=bold ctermbg=none ctermfg=white
 " }}}
 
 au BufRead,BufNewFile *.tera  set filetype=html
-au BufNewFile,BufRead *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
+au BufRead,BufNewFile *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
+au BufRead,BufNewFile *.cl  set filetype=cpp
 au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
 au FileType jinja set tabstop=2 softtabstop=2 shiftwidth=2
 
