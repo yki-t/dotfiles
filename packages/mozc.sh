@@ -10,8 +10,7 @@ fi
 sudo apt-get install -y fcitx fcitx-mozc fcitx-frontend-gtk2 fcitx-frontend-gtk3 fcitx-frontend-qt4 fcitx-frontend-qt5 fcitx-ui-classic kde-config-fcitx mozc-utils-gui
 im-config -n fcitx
 
-# `source ~/.zprofile && fcitx-configtool
-PROFILE="$HOME/.zprofile"
+PROFILE="$HOME/.zshrc"
 
 if [ "$(cat "$PROFILE"|grep '^export XIM_PROGRAM=')" = '' ];then
   echo 'export XIM_PROGRAM=fcitx' >> "$PROFILE"

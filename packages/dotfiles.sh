@@ -14,7 +14,7 @@ fi
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")">/dev/null 2>&1&&pwd)"
 
-for dotfile in '.zshrc' '.zprofile' '.xmodmap' '.xinitrc' '.vimrc' '.sshrc' '.vim';do
+for dotfile in '.zshrc' '.xmodmap' '.xinitrc' '.vimrc' '.sshrc' '.vim';do
   if [ ! -e "/home/${user}/${dotfile}" ];then
     ln -snf "${DIR}/../${dotfile}" "/home/${user}/${dotfile}"
   fi
