@@ -185,8 +185,6 @@ augroup END
 set number
 set ambiwidth=double
 set expandtab
-set tabstop=2
-set shiftwidth=2
 set autoindent
 set smartindent
 set wrap
@@ -288,7 +286,14 @@ au BufRead,BufNewFile *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
 au BufRead,BufNewFile *.cl  set filetype=cpp
 au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
 au FileType jinja set tabstop=2 softtabstop=2 shiftwidth=2
+au BufRead,BufNewFile *.rs  set filetype=rust
+au FileType rust set tabstop=2 softtabstop=2 shiftwidth=2
 
 noremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
+
+set softtabstop=2
+set tabstop=2
+set shiftwidth=2
+
