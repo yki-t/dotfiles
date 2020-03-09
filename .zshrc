@@ -209,6 +209,21 @@ case ${OSTYPE} in
     #     fi
     # } # }}}
 
+    # LINE notify
+    function rep() {
+        # {{{
+        if [ -z "${LINE_NOTIFY_TOKEN}" ];then
+          echo "env_var 'LINE_NOTIFY_TOKEN' must be set."
+          return
+        fi
+        local message=$1
+        if [ $# -ne 1 ] || [ -z "${message}" ];then
+          echo 'usage: `rep some_message_you_want`'
+          return
+        fi
+        curl -Ss -X POST -H "Authorization: Bearer ${LINE_NOTIFY_TOKEN}" -F "message=$message" https://notify-api.line.me/api/notify
+    } # }}}
+
     # 'bat' aliased to 'cat'
     if type bat &>/dev/null;then
       # {{{
