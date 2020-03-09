@@ -395,8 +395,15 @@ case ${OSTYPE} in
         alias git="$(which lab)"
     fi
     # }}}
-
     ;;
 
 esac
+
+export XIM_PROGRAM=fcitx
+export XIM=fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+
+type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 
