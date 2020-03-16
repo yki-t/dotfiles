@@ -281,19 +281,17 @@ hi PMenuSbar ctermbg=4
 hi MatchParen cterm=bold ctermbg=none ctermfg=white
 " }}}
 
-au BufRead,BufNewFile *.tera  set filetype=html
-au BufRead,BufNewFile *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
-au BufRead,BufNewFile *.cl  set filetype=cpp
-au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
-au FileType jinja set tabstop=2 softtabstop=2 shiftwidth=2
-au BufRead,BufNewFile *.rs  set filetype=rust
-au FileType rust set tabstop=2 softtabstop=2 shiftwidth=2
+" au BufRead,BufNewFile *.tera set filetype=html
+" au BufRead,BufNewFile *.pug setlocal tabstop=2 softtabstop=2 shiftwidth=2
+" au BufRead,BufNewFile *.cl  set filetype=cpp
+" au FileType dart set tabstop=2 softtabstop=2 shiftwidth=2
+" au FileType jinja set tabstop=2 softtabstop=2 shiftwidth=2
+" au BufRead,BufNewFile *.rs  set filetype=rust
+" au FileType rust set tabstop=2 softtabstop=2 shiftwidth=2
+au BufRead,BufNewFile *.* set softtabstop=2 tabstop=2 shiftwidth=2
 
 noremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
 
-set softtabstop=2
-set tabstop=2
-set shiftwidth=2
 
