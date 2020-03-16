@@ -414,9 +414,20 @@ case ${OSTYPE} in
     }
     #}}}
 
+    function scp() {
+      # {{{
+      # alias scp='scp -c aes256-ctr -q -p'
+      if [ $# -ne 2 ];then
+        echo 'command like `scp src_item dst_item`'
+        return
+      fi
+      if type rsync &>/dev/null; then
+        rsync -r -v --progress -e ssh "$1" "$2"
+      fi
+    } # }}}
+
     alias vi='vim'
     alias v='vim'
-    alias scp='scp -c aes256-ctr -q -p'
 
     # git->lab Setting
     if type lab &>/dev/null;then
