@@ -230,6 +230,12 @@ case ${OSTYPE} in
       alias cat="bat"
     fi # }}}
 
+    # 'rg' aliased to 'grep'
+    if type rg &>/dev/null;then
+      # {{{
+      alias grep="rg"
+    fi # }}}
+
     # pdf2jpg
     function pdf2jpg() {
         # {{{
@@ -254,13 +260,16 @@ case ${OSTYPE} in
         # {{{
         if type pixz &>/dev/null; then
             local trg="$1"
-            if [ $# -eq 2 ];then
+            if [ $# -eq 1 ];then
                 trg="$2"
+            else
+                echo 'Quets must be 1 like `pxc "folder_to_compress"`'
+                return
             fi
             while [ -e "$trg.tar.xz" ]; do
                 trg+="_"
             done
-            tar -cf - "$1/" | pixz -9 -- > "$trg.tar.xz"
+            tar cf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') | pixz -9 -- > "$1.tar.xz"
         fi
     } # }}}
 
@@ -268,7 +277,11 @@ case ${OSTYPE} in
     function pxx() {
         # {{{
         if type pixz &>/dev/null; then
-            tar xvf $1 --use-compress-prog=pixz
+            if [ $# -ne 1 ];then
+                echo 'Quets must be 1 like `pxx "folder_to_decompress.tar.xz"`'
+                return
+            fi
+            tar xf $1 --use-compress-prog=pixz
         fi
     } # }}}
 
