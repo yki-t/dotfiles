@@ -416,13 +416,31 @@ case ${OSTYPE} in
 
     function scp() {
       # {{{
-      # alias scp='scp -c aes256-ctr -q -p'
       if [ $# -ne 2 ];then
         echo 'command like `scp src_item dst_item`'
         return
       fi
+
+      local -A opthash
+      local recursive=false
+      zparseopts -D -A opthash -- r:
+      if [[ -n "${opthash[(i)-r]}" ]];then
+        recursive=true
+      fi
+
       if type rsync &>/dev/null; then
-        rsync -r -v --progress -e ssh "$1" "$2"
+        if [ "$recursive" = 'true' ];then
+          rsync -r -v --progress -e ssh "$1" "$2"
+        else
+          rsync -v --progress -e ssh "$1" "$2"
+        fi
+        if [ $? -ne 0 ];then
+          if [ "$recursive" = 'true' ];then
+            /usr/bin/scp -c aes256-ctr -pqr "$1" "$2"
+          else
+            /usr/bin/scp -c aes256-ctr -pq "$1" "$2"
+          fi
+        fi
       fi
     } # }}}
 
