@@ -221,7 +221,10 @@ case ${OSTYPE} in
         echo 'usage: `rep some_message_you_want`'
         return
       fi
-      curl -Ss -X POST -H "Authorization: Bearer ${LINE_NOTIFY_TOKEN}" -F "message=$message" https://notify-api.line.me/api/notify
+      curl -Ss -X POST \
+        -H "Authorization: Bearer ${LINE_NOTIFY_TOKEN}" \
+        -F "message=$message" \
+        https://notify-api.line.me/api/notify
     } # }}}
 
     # 'bat' aliased to 'cat'

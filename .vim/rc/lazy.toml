@@ -42,13 +42,14 @@ repo = 'lambdatoast/elm.vim'
 [[plugins]]
 repo = 'octol/vim-cpp-enhanced-highlight'
 
-# jade pug
+# web template
 [[plugins]]
 repo = 'digitaltoad/vim-pug'
 [[plugins]]
 repo = 'statianzo/vim-jade'
 [[plugins]]
-repo = 'lepture/Vim-jinja'
+repo = 'Glench/Vim-Jinja2-Syntax'
+
 
 # latex
 [[plugins]]
