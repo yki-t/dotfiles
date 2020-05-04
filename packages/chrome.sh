@@ -13,7 +13,7 @@ if type google-chrome &>/dev/null;then
   exit 0
 fi
 
-sudo apt-get install -y wget
+sudo apt-get install -y wget curl
 
 cd /tmp
 if [ ! -f google-chrome-stable_current_amd64.deb ];then
