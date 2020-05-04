@@ -15,7 +15,7 @@ fi
 
 sudo apt-get install -y curl
 curl https://sh.rustup.rs -sSf|sh -s -- -y
-source $HOME/.cargo/env
+bash $HOME/.cargo/env
 sudo curl https://sh.rustup.rs -sSf|sh -s -- -y
-sudo source /root/.cargo/env
+sudo bash /root/.cargo/env
 
