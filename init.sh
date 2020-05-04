@@ -46,7 +46,7 @@ done
 
 yn() {
   # {{{
-  read -n1 -p " ok? (y/n): " yn
+  read -p " ok? (y/n): " yn
   if [[ $yn = [yY] ]]; then
     echo y
   else
