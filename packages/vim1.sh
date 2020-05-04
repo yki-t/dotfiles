@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -eu
-DESCRIPTION='vim with python3 suppoet'
+DESCRIPTION='vim with python3 support'
 
 if (( $# > 0 )) && [ "$1" = 'description' ];then
   echo "$DESCRIPTION"
@@ -41,4 +41,5 @@ sudo update-alternatives --set editor /usr/local/bin/vim
 sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
 sudo update-alternatives --set vi /usr/local/bin/vim
 python3 -m pip install neovim
+sudo python3 -m pip install neovim
 
