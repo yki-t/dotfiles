@@ -207,12 +207,7 @@ set t_Co=256
 hi Comment ctermfg=cyan
 vnoremap * "zy:let @/ = @z<CR>
 
-if OSTYPE == "Linux\n"
-    set clipboard+=unnamedplus
-else
-    set clipboard+=unnamed
-endif
-
+set clipboard=unnamedplus
 
 "w!!でsudo 保存
 cabbr w!! w !sudo tee > /dev/null %
