@@ -208,7 +208,7 @@ set t_Co=256
 hi Comment ctermfg=cyan
 vnoremap * "zy:let @/ = @z<CR>
 
-set clipboard=unnamedplus
+" set clipboard=unnamedplus
 
 "w!!でsudo 保存
 cabbr w!! w !sudo tee > /dev/null %
@@ -286,5 +286,4 @@ au BufRead,BufNewFile *.* set softtabstop=2 tabstop=2 shiftwidth=2
 noremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 noremap DU :call dein#update()<CR>
-
 
