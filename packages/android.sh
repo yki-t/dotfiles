@@ -23,9 +23,20 @@ fi
 sudo systemctl start libvirtd.service
 sudo systemctl enable libvirtd.service
 
-if [ ! -f android-studio-ide-191.5977832-linux.tar.gz ];then
-  wget https://dl.google.com/dl/android/studio/ide-zips/3.5.2.0/android-studio-ide-191.5977832-linux.tar.gz
+url="$(curl -sS "https://developer.android.com/studio" | grep 'Linux: <a href="https://redirector.gvt1.com/edgedl/android/studio/ide-zip' | sed -e's/.*href="\(.*\)".*/\1/')"
+version="$(basename "$url")"
+
+sudo chown -R $USER /opt
+
+if [ ! -f "$version" ]; then
+  wget "$url"
 fi
-tar xf android-studio-ide-191.5977832-linux.tar.gz -C /opt/
+
+if [ -d "/opt/android-studio" ]; then
+  rm -rf "/opt/android-studio"
+fi
+
+tar xf "$version" -C /opt/
+
 sudo ln -snf /opt/android-studio/bin/studio.sh /usr/local/bin/studio
 
