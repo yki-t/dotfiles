@@ -26,17 +26,15 @@ sudo systemctl enable libvirtd.service
 url="$(curl -sS "https://developer.android.com/studio" | grep 'Linux: <a href="https://redirector.gvt1.com/edgedl/android/studio/ide-zip' | sed -e's/.*href="\(.*\)".*/\1/')"
 version="$(basename "$url")"
 
-sudo chown -R $USER /opt
-
 if [ ! -f "$version" ]; then
   wget "$url"
 fi
 
 if [ -d "/opt/android-studio" ]; then
-  rm -rf "/opt/android-studio"
+  sudo rm -rf "/opt/android-studio"
 fi
 
-tar xf "$version" -C /opt/
+sudo tar xf "$version" -C /opt/
 
 sudo ln -snf /opt/android-studio/bin/studio.sh /usr/local/bin/studio
 
