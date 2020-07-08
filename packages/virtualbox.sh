@@ -11,7 +11,7 @@ fi
 wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
 echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bionic contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
 sudo apt-get update
-sudo apt-get install -y  virtualbox-6.1
+sudo apt-get install -y  virtualbox-6.1 virtualbox-guest-additions
 sudo usermod -aG vboxusers $USER
 
 # wget https://download.virtualbox.org/virtualbox/6.1.6/Oracle_VM_VirtualBox_Extension_Pack-6.1.6.vbox-extpack
