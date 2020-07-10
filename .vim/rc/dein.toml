@@ -1,4 +1,4 @@
-# 
+
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
@@ -61,7 +61,29 @@ repo = 'previm/previm'
 repo = 'thinca/vim-quickrun'
 
 # Javascript
+# JS
+# [[plugins]]
+# repo = 'yuezk/vim-js'
+# # TS
+# [[plugins]]
+# repo = 'HerringtonDarkholme/yats.vim'
+# [[plugins]]
+# repo = 'leafgarland/typescript-vim'
 [[plugins]]
-repo = 'storyn26383/vim-vue'
+repo = 'pangloss/vim-javascript'
 
+[[plugins]]
+repo = 'maxmellon/vim-jsx-pretty'
+# [[plugins]]
+# repo = 'othree/es.next.syntax.vim'
+# [[plugins]]
+# repo = 'othree/javascript-libraries-syntax.vim'
+# [[plugins]]
+# repo = 'ianks/vim-tsx'
+# [[plugins]]
+# repo = 'peitalin/vim-jsx-typescript'
+# [[plugins]]
+# repo = 'wavded/vim-stylus'
+[[plugins]]
+repo = 'Quramy/vim-js-pretty-template'
 

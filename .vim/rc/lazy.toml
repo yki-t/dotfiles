@@ -10,26 +10,6 @@ repo = 'sebastianmarkow/deoplete-rust'
 on_ft = 'rust'
 depends = ['deoplete.nvim']
 
-#Javascript
-[[plugins]]
-repo = 'pangloss/vim-javascript'
-[[plugins]]
-repo = 'peitalin/vim-jsx-typescript'
-[[plugins]]
-repo = 'leafgarland/typescript-vim'
-[[plugins]]
-repo = 'othree/yajs.vim'
-[[plugins]]
-repo = 'othree/es.next.syntax.vim'
-[[plugins]]
-repo = 'othree/javascript-libraries-syntax.vim'
-[[plugins]]
-repo = 'ianks/vim-tsx'
-[[plugins]]
-repo = 'maxmellon/vim-jsx-pretty'
-[[plugins]]
-repo = 'wavded/vim-stylus'
-
 # mql4
 [[plugins]]
 repo = 'vobornik/vim-mql4'

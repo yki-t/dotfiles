@@ -224,13 +224,14 @@ hi NonText ctermbg=NONE guibg=NONE
 " javascript系の設定
 "------------------------------------
 " {{{
-au BufNewFile,BufRead *.js,*.sol,*.jsx,*.ts,*.tsx set filetype=javascript
-au BufNewFile,BufRead *.js,*.sol,*.jsx,*.ts,*.tsx setlocal tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.js,*.sol,*.ts set filetype=javascript
+au BufNewFile,BufRead *.js,*.sol,*.ts setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
-au BufNewFile,BufRead *.html set filetype=html
+" au BufNewFile,BufRead *.html set filetype=html
 au FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
-au BufNewFile,BufRead *.vue setlocal tabstop=2 softtabstop=2 shiftwidth=2
+" au BufNewFile,BufRead *.vue setlocal tabstop=2 softtabstop=2 shiftwidth=2
+let g:vim_jsx_pretty_colorful_config = 0
 "}}}
 
 "------------------------------------
@@ -283,7 +284,8 @@ au BufRead,BufNewFile *.cl  set filetype=cpp
 au BufRead,BufNewFile *.rs  set filetype=rust
 au BufRead,BufNewFile *.* set softtabstop=2 tabstop=2 shiftwidth=2
 
-noremap vf :VimFiler -auto-cd<CR>
+nnoremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
-noremap DU :call dein#update()<CR>
+nnoremap DU :call dein#update()<CR>
+nnoremap RS :call dein#recache_runtimepath()<CR>
 
