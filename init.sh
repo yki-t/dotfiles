@@ -94,7 +94,7 @@ package_update() {
       sudo apt-get upgrade -y
       ;;
     arch)
-      sudo pacman -Syyu
+      sudo pacman -Syyu --noconfirm
       ;;
     *)
       err "Package update failed: Unknown os_type '${os_type}'"
@@ -134,7 +134,6 @@ main() {
 # Start Setting for user: '$LOGUSER'
 #######################################
 EOM
-  package_update
 
   if [ "$os_type" = 'arch' ]; then
     sudo pacman-mirrors --geoip \
