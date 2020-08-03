@@ -18,7 +18,10 @@ setopt magic_equal_subst
 setopt list_types
 
 unsetopt no_match
+
+# vi-mode
 set -o vi
+bindkey -a '^[[3~' delete-char # prevent <DEL> to be lower<->upper case
 
 # color
 autoload -Uz colors
@@ -65,7 +68,7 @@ fi
 # Exports
 #{{{
 # linux shortcut
-export PATH=${PATH}:${HOME}/opt
+export PATH=${PATH}:${HOME}/opt:${HOME}/.local/bin
 
 # Firefox - latest
 if [ -f ${HOME}/opt/firefox/firefox ]; then
