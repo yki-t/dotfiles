@@ -404,4 +404,5 @@ if type lab &>/dev/null;then
 fi
 # }}}
 
+[[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
 

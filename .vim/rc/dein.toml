@@ -62,13 +62,13 @@ repo = 'thinca/vim-quickrun'
 
 # Javascript
 # JS
-# [[plugins]]
-# repo = 'yuezk/vim-js'
-# # TS
-# [[plugins]]
-# repo = 'HerringtonDarkholme/yats.vim'
-# [[plugins]]
-# repo = 'leafgarland/typescript-vim'
+[[plugins]]
+repo = 'yuezk/vim-js'
+# TS
+[[plugins]]
+repo = 'HerringtonDarkholme/yats.vim'
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
 [[plugins]]
 repo = 'pangloss/vim-javascript'
 
