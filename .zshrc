@@ -404,5 +404,6 @@ if type lab &>/dev/null;then
 fi
 # }}}
 
-[[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
-
+if [[ -f ~/.zprofile ]] && [[ ! $(cat ~/.zprofile|grep 'type xmodmap&>/dev/null && xmodmap ~/.Xmodmap') ]]; then
+  echo '[[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap' >> ~/.zprofile
+fi
