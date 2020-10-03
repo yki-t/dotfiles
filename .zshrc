@@ -45,6 +45,8 @@ export XMODIFIERS="@im=fcitx"
 
 type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 
+export NO_UPDATE_NOTIFIER=1
+# Compile .zshrc
 if [ -f ~/.zshrc ] && [ ! -f ~/.zshrc.zwc ] || [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
   zcompile ~/.zshrc
 fi
@@ -393,6 +395,12 @@ function cnv() {
   fi
   cat "$target"|nkf > "$temp" && cat "$temp" > "$target"
 } # }}}
+
+function wget_all() {
+  # {{{
+  wget --mirror --page-requisites --span-hosts --quiet --show-progress --no-parent --convert-links --no-host-directories --adjust-extension --execute robots=off $*
+} # }}}
+
 
 alias scp='scp -c aes256-ctr -pq'
 alias vi='vim'

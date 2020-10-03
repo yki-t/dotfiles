@@ -60,7 +60,7 @@ if &term =~ "xterm"
     let &t_te .= "\e[?2004l"
     let &pastetoggle = "\e[201~"
     function! XTermPasteBegin(ret)
-        set p;ste
+        set paste
         return a:ret
     endfunction
     noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
