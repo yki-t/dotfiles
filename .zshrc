@@ -401,6 +401,10 @@ function wget_all() {
   wget --mirror --page-requisites --span-hosts --quiet --show-progress --no-parent --convert-links --no-host-directories --adjust-extension --execute robots=off $*
 } # }}}
 
+function u() {
+  # {{{
+  loginctl unlock-session $*
+} # }}}
 
 alias scp='scp -c aes256-ctr -pq'
 alias vi='vim'

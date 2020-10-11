@@ -282,10 +282,16 @@ au BufRead,BufNewFile *.tera set filetype=htmldjango
 
 au BufRead,BufNewFile *.cl  set filetype=cpp
 au BufRead,BufNewFile *.rs  set filetype=rust
+au BufRead,BufNewFile *.ts set filetype=typescriptreact
 au BufRead,BufNewFile * set softtabstop=2 tabstop=2 shiftwidth=2
 
 nnoremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 nnoremap DU :call dein#update()<CR>
 nnoremap RS :call dein#recache_runtimepath()<CR>
+
+:command -range Cz :silent :<line1>,<line2>w !xsel -i -b
+:cabbrev cz Cz
+:command -range Pz :silent :r !xsel -o -b
+:cabbrev pz Pz
 
