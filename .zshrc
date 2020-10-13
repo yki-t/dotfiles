@@ -242,7 +242,13 @@ function pxc() {
     done
     tar cf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') | pixz -9 -- > "$1.tar.xz"
   fi
-} # }}}
+}
+#compdef pxc
+_pxc() {
+  _path_files -/
+}
+compdef _pxc pxc
+# }}}
 
 # p*xz decompress
 function pxx() {
