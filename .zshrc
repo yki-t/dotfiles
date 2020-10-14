@@ -270,7 +270,8 @@ compdef _pxx pxx
 # {{{
 _rsync() {
   _path_files -f
-} compdef _rsync rsync
+}
+compdef _rsync rsync
 # }}}
 
 # uf to png
