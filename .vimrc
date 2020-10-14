@@ -290,8 +290,6 @@ nnoremap VS :VimShellInteractive zsh<CR>
 nnoremap DU :call dein#update()<CR>
 nnoremap RS :call dein#recache_runtimepath()<CR>
 
-:command -range Cz :silent :<line1>,<line2>w !xsel -i -b
-:cabbrev cz Cz
-:command -range Pz :silent :r !xsel -o -b
-:cabbrev pz Pz
+:command -range Xz :silent :<line1>,<line2>w !xsel -i -b
+:cabbrev xz Xz
 
