@@ -293,6 +293,6 @@ nnoremap RS :call dein#recache_runtimepath()<CR>
 :command -range Xz :silent :<line1>,<line2>w !xsel -i -b
 :cabbrev xz Xz
 
-nnoremap dt :pu=strftime('%Y-%m-%dTT%H:%M:%S.Z')<CR>
+nnoremap dt :pu=strftime('%Y-%m-%dTT%H:%M:%S.000Z')<CR>
 
 
