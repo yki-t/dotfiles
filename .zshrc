@@ -410,9 +410,9 @@ function u() {
 function git() {
   # {{{
   if type lab &>/dev/null && nc -w 1 google.com -z 80; then
-    lab $*
+    /usr/bin/lab $*
   else
-    git $*
+    /usr/bin/git $*
   fi
 }
 # }}}

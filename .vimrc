@@ -165,7 +165,8 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 " その他の設定
 "------------------------------------
 "{{{
-set fileencodings+=sjis
+set encoding=utf-8
+set fileencodings+=sjis,utf-8
 if has("syntax")
     syntax on
 endif
