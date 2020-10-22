@@ -22,6 +22,8 @@ DEVICE=''
 _BOOT=''
 _LVM=''
 
+# Other Settings
+# {{{
 MIRRORS="$(cat <<'EOM'
 Server = rsync://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
 Server = rsync://mirror-hk.koddos.net/archlinux/$repo/os/$arch
@@ -76,6 +78,7 @@ YAYCONFIG="$(cat <<'EOM'
 }
 EOM
 )"
+# }}}
 
 #######################################
 # Output
@@ -178,30 +181,43 @@ installPackages() {
   # kwallet-pam is suspicious locking screen and cause kernel panic when login
   arch-chroot /mnt pacman -S $GPU_DRIVERS xorg-server sddm plasma-desktop \
     plasma-nm networkmanager konsole powerdevil plasma-workspace-wallpapers \
-    plasma-pa kwallet-pam kdeplasma-addons
+    plasma-pa kwallet-pam kdeplasma-addons kde-gtk-config
   arch-chroot /mnt systemctl enable sddm NetworkManager
 }
-additionals() {
+additionals() { # {{{
   arch-chroot /mnt chown -R $USERNAME:$USERNAME /home/$USERNAME
+  # keys for loop-aes
+  for k in B0C64D14301CC6EFAEDF60E4E4B71D5EEC39C284 12D64C3ADCDA0AA427BDACDFF0733C808132F189; do
+    arch-chroot /mnt sudo -u $USERNAME gpg --keyserver hkp://ipv4.pool.sks-keyservers.net:11371 --recv-keys $k
+  done
+  # Install packages
   arch-chroot /mnt sudo -u $USERNAME yay -S curl wget \
-    dstat rsync reflector powerpill \
-    google-chrome firefox \
-    slack-desktop thunderbird zoom \
+    xsel dstat rsync reflector powerpill kwin-lowlatency \
     fcitx fcitx-im fcitx-configtool fcitx-mozc \
+    systemd-numlockontty xorg-xmodmap \
     bat exa xdotool wmctrl ripgrep pixz pv bluedevil pulseaudio-bluetooth python-pip \
+    linux-headers libnotify \
     virtualbox yakuake \
-    github-cli \
-    google-cloud-sdk \
-    nodejs-lts-erbium yarn \
+    github-cli google-cloud-sdk \
     docker docker-compose \
-    qemu libvirt android-studio \
     nginx apache mariadb \
-    vlc
+    qemu libvirt android-studio \
+    google-chrome firefox \
+    slack-desktop thunderbird zoom telegram-desktop \
+    nodejs-lts-erbium yarn \
+    vlc okular poppler-data libreoffice-still
+
   # yay config
   arch-chroot /mnt sudo -u $USERNAME bash -c "mkdir -p /home/$USERNAME/.config; echo '$YAY_CONFIG' > /home/$USERNAME/.config/yay"
+
+  # numlockontty
+  arch-chroot /mnt systemctl enable numLockOnTty.service
+
+  # Other packages
   arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type lab &>/dev/null); then yay -S lab; fi"
-  # err: java-runtime-common java-environment-common flutter
-  # Others
+  arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type flutter &>/dev/null); then yay -S flutter; fi"
+
+  # Enable services
   arch-chroot /mnt systemctl enable bluetooth.service
   arch-chroot /mnt systemctl enable docker.service
 
@@ -236,6 +252,12 @@ EOM
   arch-chroot /mnt bash -c "ln -snf /home/$USERNAME/.config/libinput-gestures.conf /etc/libinput-gestures.conf"
   arch-chroot /mnt bash -c "usermod -aG input $USERNAME"
   arch-chroot /mnt bash -c "sudo -u $USERNAME libinput-gestures-setup autostart"
+
+  # Flutter
+  arch-chroot /mnt gpasswd -a $USERNAME flutterusers
+
+  # Docker
+  arch-chroot /mnt bash -c "usermod -aG docker $USERNAME"
 
   # Mozc fcitx - IME
   local PROFILE="/mnt/home/$USERNAME/dotfiles/.zshrc"
@@ -319,7 +341,7 @@ EOM
   arch-chroot /mnt mkinitcpio -p linux
   umount /mnt/boot
   umount /mnt
-}
+} # }}}
 
 #######################################
 # Main process

@@ -91,7 +91,7 @@ if [ -d ${HOME}/Android ]; then
   export ANDROID_HOME=${HOME}/Android/Sdk
   export ANDROID_SDK_HOME=${HOME}/Android/Sdk
   export NDK_HOME=${HOME}/Android/android-ndk-r20
-  export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
+  export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
   # export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
 fi
 
@@ -177,6 +177,27 @@ function rep() {
     https://notify-api.line.me/api/notify
   } # }}}
 
+# Desktop notify
+function n() {
+  # {{{
+  if type notify-send &>/dev/null; then
+    notify-send $*
+  fi
+} # }}}
+
+function rmSync() {
+  # {{{
+  while read f; do
+    rsync -Pr "$1/$f" "$2"
+    if [ $? -ne 0 ]; then
+      rep 'rmSyncFailed'
+      break
+    else
+      rm -rf "$1/$f"
+    fi
+  done< <(/usr/bin/ls "$1")
+} # }}}
+
 # 'bat' aliased to 'cat'
 if type bat &>/dev/null;then
   # {{{
@@ -198,14 +219,14 @@ function pdf2jpg() {
     echo 'This command execute all pdf to jpg in current working directory unless specify filename'
     return
   }
-if [ $# -eq 0 ];then
-  trgs=$(find $PWD |sed -e 's/^/"/g' -e 's/$/"/g'|grep -e '\(.*\)\.pdf"$'|tr '\n' ' ')
-  for trg in ${(Q)${(z)trgs}};do
-    convert -density 300 -trim "$trg" -quality 100 "${trg%%.*}.jpg"
-  done
-else
-  convert -density 300 -trim $1 -quality 100 ${1%%.*}.jpg
-fi
+  if [ $# -eq 0 ];then
+    trgs=$(find $PWD |sed -e 's/^/"/g' -e 's/$/"/g'|grep -e '\(.*\)\.pdf"$'|tr '\n' ' ')
+    for trg in ${(Q)${(z)trgs}};do
+      convert -density 300 -trim "$trg" -quality 100 "${trg%%.*}.jpg"
+    done
+  else
+    convert -density 300 -trim $1 -quality 100 ${1%%.*}.jpg
+  fi
 } # }}}
 
 # p*xz compress
