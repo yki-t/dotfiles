@@ -84,34 +84,41 @@ EOM
 # Output
 #######################################
 err() {
+  # {{{
   echo -e "\e[31;1m[$(date +'%Y-%m-%dT%H:%M:%S')]\e[m $*" >&2
   exit 1
-}
+} # }}}
 warn() {
+  # {{{
   echo -e "\e[31;1m[$(date +'%Y-%m-%dT%H:%M:%S')]\e[m $*" >&2
-}
+} # }}}
 ok() {
+  # {{{
   echo -e "\e[32;1m[$(date +'%Y-%m-%dT%H:%M:%S')]\e[m $*" >&2
-}
+} # }}}
 info() {
+  # {{{
   echo -e "\e[37;1m[$(date +'%Y-%m-%dT%H:%M:%S')]\e[m $*" >&2
-}
+} # }}}
 breakIfNotSetAny() {
+  # {{{
   local vals=(USE_WIFI USERNAME SWAP_SIZE HOST_NAME ZONE LOCALES VOLUME_GROUP WIFI_DEV WIFI_SSID WIFI_PASS CPU_BRAND GPU_DRIVERS DEVICE _BOOT _LVM)
   isOk=true
   for v in ${vals[@]}; do
     [ -z "${!v}" ] && warn "$v must be set" && isOk=false
   done
   [ "$isOk" = "false" ] && err "Set these variable and retry."
-}
+} # }}}
 
 #######################################
 # Functions
 #######################################
 ntp() {
+  # {{{
   timedatectl set-ntp true
-}
+} # }}}
 clean() {
+  # {{{
   if [ "$(mount | grep /mnt/boot)" ]; then
     umount /mnt/boot
   fi
@@ -121,19 +128,22 @@ clean() {
   if [ "$(lsblk | grep '\[SWAP\]')" ]; then
     swapoff /dev/mapper/$VOLUME_GROUP-swap
   fi
-}
+} # }}}
 conn() {
+  # {{{
   if [ "$(pgrep wpa_supplicant)" ]; then return; fi
   if [ -z $WIFI_DEV ]; then
     WIFI_DEV=$(ip link|grep '^[0-9]'|grep -v 'lo:'|grep w|awk '{print $2}'|sed -e's~\(.*\):~\1~')
   fi
   wpa_supplicant -B -i $WIFI_DEV -c <(wpa_passphrase $WIFI_SSID $WIFI_PASS) &>/dev/null
-}
+} # }}}
 partition() {
+  # {{{
   # Delete all and create efi, lvm
   echo -e 'o\nY\nn\n\n\n512M\nEF00\nn\n\n\n\n\nw\nY\n'|gdisk $DEVICE
-}
+} # }}}
 encrypt() {
+  # {{{
   mkfs.vfat -F32 $DEVICE$_BOOT
   cryptsetup -v luksFormat $DEVICE$_LVM
   cryptsetup luksOpen $DEVICE$_LVM luks
@@ -143,24 +153,28 @@ encrypt() {
   lvcreate -l +100%FREE $VOLUME_GROUP -n root
   mkfs.ext4 /dev/mapper/$VOLUME_GROUP-root
   mkswap /dev/mapper/$VOLUME_GROUP-swap
-}
+} # }}}
 mountDevice() {
+  # {{{
   mount /dev/mapper/$VOLUME_GROUP-root /mnt
   swapon /dev/mapper/$VOLUME_GROUP-swap
   mkdir /mnt/boot
   mount $DEVICE$_BOOT /mnt/boot
-}
+} # }}}
 applyMirrors() {
+  # {{{
   cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
   echo "$MIRRORS" > /etc/pacman.d/mirrorlist
-}
+} # }}}
 installBase() {
+  # {{{
   pacstrap /mnt base base-devel linux linux-firmware
   cp /mnt/etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist.bak
   echo "$MIRRORS" > /mnt/etc/pacman.d/mirrorlist
   genfstab -pU /mnt >> /mnt/etc/fstab
-}
+} # }}}
 changeRootAndConfigure() {
+  # {{{
   arch-chroot /mnt pacman -Syyu
   arch-chroot /mnt ln -sf /usr/share/zoneinfo/$ZONE /etc/localtime
   arch-chroot /mnt hwclock --systohc
@@ -170,8 +184,9 @@ changeRootAndConfigure() {
     arch-chroot /mnt sed -i.org -e "s~^#${LOCALES[$i]}~${LOCALES[$i]}~" /etc/locale.gen
   done
   arch-chroot /mnt locale-gen
-}
+} # }}}
 installPackages() {
+  # {{{
   arch-chroot /mnt pacman -S dialog wpa_supplicant git $CPU_BRAND-ucode zsh vim otf-ipafont
   arch-chroot /mnt bash -c 'if [ ! "$(cat /etc/passwd | grep '$USERNAME')" ]; then useradd -m -G wheel -s /bin/zsh '$USERNAME' && passwd '$USERNAME'; fi'
   arch-chroot /mnt sed -i -e 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
@@ -183,8 +198,9 @@ installPackages() {
     plasma-nm networkmanager konsole powerdevil plasma-workspace-wallpapers \
     plasma-pa kwallet-pam kdeplasma-addons kde-gtk-config
   arch-chroot /mnt systemctl enable sddm NetworkManager
-}
-additionals() { # {{{
+} # }}}
+additionals() {
+  # {{{
   arch-chroot /mnt chown -R $USERNAME:$USERNAME /home/$USERNAME
   # keys for loop-aes
   for k in B0C64D14301CC6EFAEDF60E4E4B71D5EEC39C284 12D64C3ADCDA0AA427BDACDFF0733C808132F189; do
@@ -192,10 +208,11 @@ additionals() { # {{{
   done
   # Install packages
   arch-chroot /mnt sudo -u $USERNAME yay -S curl wget \
-    xsel dstat rsync reflector powerpill kwin-lowlatency \
-    fcitx fcitx-im fcitx-configtool fcitx-mozc \
+    xsel dstat rsync reflector powerpill kwin-lowlatency `# basic tools` \
+    fcitx fcitx-im fcitx-configtool fcitx-mozc `# IME` \
     systemd-numlockontty xorg-xmodmap \
-    bat exa xdotool wmctrl ripgrep pixz pv bluedevil pulseaudio-bluetooth python-pip \
+    bat exa xdotool wmctrl ripgrep pixz pv \
+    bluedevil pulseaudio-bluetooth python-pip \
     linux-headers libnotify \
     virtualbox yakuake \
     github-cli google-cloud-sdk \
@@ -204,8 +221,9 @@ additionals() { # {{{
     qemu libvirt android-studio \
     google-chrome firefox \
     slack-desktop thunderbird zoom telegram-desktop \
-    nodejs-lts-erbium yarn \
-    vlc okular poppler-data libreoffice-still
+    nodejs-lts-erbium yarn grpcurl \
+    vlc gwenview okular poppler-data libreoffice-still \
+    nkf unarchiver blender dnsutils jmtpfs exiftool imagemagick
 
   # yay config
   arch-chroot /mnt sudo -u $USERNAME bash -c "mkdir -p /home/$USERNAME/.config; echo '$YAY_CONFIG' > /home/$USERNAME/.config/yay"
@@ -215,7 +233,10 @@ additionals() { # {{{
 
   # Other packages
   arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type lab &>/dev/null); then yay -S lab; fi"
+
+  # Flutter
   arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type flutter &>/dev/null); then yay -S flutter; fi"
+  arch-chroot /mnt sudo -u $USERNAME bash -c "flutter pub global activate devtools"
 
   # Enable services
   arch-chroot /mnt systemctl enable bluetooth.service
@@ -319,8 +340,9 @@ EOM
     # arch-chroot /mnt systemctl --user enable yakuake
   fi
 
-}
+} # }}}
 finalize() {
+  # {{{
   arch-chroot /mnt bootctl --path=/boot install
   local entry="$(cat <<EOM > /mnt/boot/loader/entries/arch.conf
 title Arch Linux

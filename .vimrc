@@ -281,7 +281,7 @@ hi MatchParen cterm=bold ctermbg=none ctermfg=white
 
 au BufRead,BufNewFile *.tera set filetype=htmldjango
 
-au BufRead,BufNewFile *.cl  set filetype=cpp
+au BufRead,BufNewFile *.cl,*.mq4,*.mqh set filetype=cpp
 au BufRead,BufNewFile *.rs  set filetype=rust
 au BufRead,BufNewFile *.ts set filetype=typescriptreact
 au BufRead,BufNewFile * set softtabstop=2 tabstop=2 shiftwidth=2

@@ -87,6 +87,7 @@ repo = 'maxmellon/vim-jsx-pretty'
 [[plugins]]
 repo = 'Quramy/vim-js-pretty-template'
 
-[[plugins]] # QML
+# QML
+[[plugins]]
 repo = 'peterhoeg/vim-qml'
 
