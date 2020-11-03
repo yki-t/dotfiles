@@ -10,6 +10,7 @@ else
 $ "
 fi
 
+set -eu
 # zsh settings
 autoload -U compinit; compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -19,10 +20,11 @@ setopt list_types
 unsetopt no_match
 setopt IGNOREEOF
 setopt AUTO_CD
+local paths=''
 
 # Prevent annoying things
 unset zle_bracketed_paste # ^[[2004h
-bindkey -a '^[[3~' delete-char # <DEL> to be {lower,upper}case
+bindkey -a '^[[3${HOME}' delete-char # <DEL> to be {lower,upper}case
 # ls
 # {{{
 export LS_COLORS="rs=0:di=0;95:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:"
@@ -42,48 +44,34 @@ alias ll="ls -lag"
 
 # Exports
 #{{{
-# linux shortcut
-export PATH=${PATH}:${HOME}/opt:${HOME}/.local/bin
-
-# Firefox - latest
-if [ -f ${HOME}/opt/firefox/firefox ]; then
-  export PATH=${PATH}:${HOME}/opt/firefox
-fi
 
 # tor
-if [ -f ${HOME}/.tor ]; then
-  export PATH=${PATH}:${HOME}/opt/tor
-fi
+[ -f ${HOME}/.tor ] && paths+=":${HOME}/opt/tor"
 
 # Rust
-if [ -d ${HOME}/.cargo ]; then
-  export PATH="${PATH}:${HOME}/.cargo/bin"
-fi
+[ -d ${HOME}/.cargo ] && paths+=":${HOME}/.cargo/bin"
 
 # Node JS npm/yarn
 if type npm &>/dev/null; then
-  npm config set prefix ~/.local/
+  npm config set prefix ${HOME}/.local/
   export NO_UPDATE_NOTIFIER=1 # node.js
-  if [ -e "${HOME}/.local/bin/npm" ];then
-    alias npm="${HOME}/.local/bin/npm"
-  fi
+  [ -f "${HOME}/.local/bin/npm" ] && alias npm="${HOME}/.local/bin/npm"
 fi
 if type yarn &>/dev/null; then
   export NODE_PATH="${HOME}/.yarn/bin"
-  export PATH="${PATH}:$(yarn global bin):$(yarn global dir)/node_modules/.bin"
-
-  if [ ${UID} -eq 0 ]; then # if Root
-    export PATH="${PATH}:$(sudo yarn global bin):$(sudo yarn global dir)/node_modules/.bin"
-  fi
+  paths+="$(yarn global bin)"
+  paths+="$(yarn global dir)/node_modules/.bin"
 fi
 
 # JAVA
-if type java &>/dev/null; then
+if type java &>/dev/null && type update-alternatives &>/dev/null; then
   export JAVA_HOME=$(update-alternatives --query javac 2>/dev/null | sed -n -e 's/Value: *\(.*\)\/bin\/javac/\1/p')
   export DERBY_HOME=$JAVA_HOME/db
   export J2SDKDIR=$JAVA_HOME
   export J2REDIR=$JAVA_HOME/jre
-  export PATH=${PATH}:$JAVA_HOME/bin:$DERBY_HOME/bin:$J2REDIR/bin
+  paths+=":$JAVA_HOME/bin"
+  paths+=":$DERBY_HOME/bin"
+  paths+=":$J2REDIR/bin"
 fi
 
 # Android
@@ -91,18 +79,13 @@ if [ -d ${HOME}/Android ]; then
   export ANDROID_HOME=${HOME}/Android/Sdk
   export ANDROID_SDK_HOME=${HOME}/Android/Sdk
   export NDK_HOME=${HOME}/Android/android-ndk-r20
-  export PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin
-  # export PATH=${PATH}:${ANDROID_HOME}/build-tools/$(sdkmanager --list |grep -e build-tools/|sed -e "s|\(.*\)build-tools\/\(.*\)\/|\2|" -e "s| ||g")
+  paths+=":${ANDROID_HOME}/bin"
+  paths+=":${ANDROID_HOME}/emulator"
+  paths+=":${ANDROID_HOME}/tools"
+  paths+=":${ANDROID_HOME}/tools/bin"
 fi
 # Flutter devtool
-if [ -d "$HOME/.pub-cache/bin" ]; then
-  export PATH="$PATH":"$HOME/.pub-cache/bin"
-fi
-
-# Swift
-if [ -d ${HOME}/opt/swift ]; then
-  export PATH=${PATH}:${HOME}/opt/swift/build/Ninja-ReleaseAssert/swift-linux-x86_64/bin
-fi
+[ -d "${HOME}/.pub-cache/bin" ] && paths+=":${HOME}/.pub-cache/bin"
 
 # c
 if type gcc &>/dev/null; then
@@ -117,25 +100,9 @@ if type g++ &>/dev/null; then
   export CMAKE_CXX_COMPILER="${gxx_exec}"
 fi
 
-# Monero
-if [ -d ${HOME}/opt/monero-gui-v0.12.0.0 ]; then
-  export PATH=${PATH}:${HOME}/opt/monero-gui-v0.12.0.0
-fi
-# GXChain
-if [ -d ${HOME}/opt/wasm ]; then
-  export WASM_ROOT=${HOME}/opt/wasm
-  export C_COMPILER=clang-4.0
-  export CXX_COMPILER=clang++-4.0
-fi
-
-# FileZilla
-if [ -d ${HOME}/opt/FileZilla3/bin ]; then
-  export PATH=${PATH}:${HOME}/opt/FileZilla3/bin
-fi
-
 # Ruby
 if [ -d ${HOME}/.rbenv/bin ];then
-  export PATH="$HOME/.rbenv/bin:$PATH"
+  paths+=":${HOME}/.rbenv/bin"
   eval "$(rbenv init -)"
 fi
 
@@ -192,6 +159,7 @@ function n() {
 function rmSync() {
   # {{{
   while read f; do
+    if [ "$f" = '.' ] || [ "$f" = '..' ]; then continue; fi
     rsync -Pr "$1/$f" "$2"
     if [ $? -ne 0 ]; then
       notify-send 'rmSyncFailed'
@@ -200,7 +168,7 @@ function rmSync() {
     else
       rm -rf "$1/$f"
     fi
-  done< <(/usr/bin/ls "$1")
+  done< <(/usr/bin/ls -a "$1")
 } # }}}
 
 # 'bat' aliased to 'cat'
@@ -280,6 +248,7 @@ _rsync() {
   _path_files -f
 }
 compdef _rsync rsync
+__git_files() { _files }
 # }}}
 
 # uf to png
@@ -334,7 +303,7 @@ function rand() {
   elif [[ -n "${opthash[(i)-w]}" ]] || [[ -n "${opthash[(i)--week]}" ]]; then
     range='0-9a-zA-Z'
   else
-    range='0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;'
+    range='0-9a-zA-Z\^$/|()[]{}.,?!_=&@${HOME}%#:;'
   fi
   to_clipboard=0
   if [[ -n "${opthash[(i)-c]}" ]] || [[ -n "${opthash[(i)--clipboard]}" ]]; then
@@ -360,7 +329,7 @@ function keygen() {
   local comment path
   local -A opthash
   zparseopts -D -A opthash -- f: -file:
-  path="$HOME/.ssh/id_ed25519"
+  path="${HOME}/.ssh/id_ed25519"
   if [[ -n "${opthash[(i)-f]}" ]];then
     path="${opthash[-f]}"
   elif [[ -n "${opthash[(i)--file]}" ]];then
@@ -454,13 +423,19 @@ alias v='vim'
 export GIT_EDITOR=vim
 export EDITOR=vim
 
+# linux shortcut
+paths+=":${HOME}/opt"
+paths+=":${HOME}/.local/bin"
+
 # Compile .zshrc
-if [ -f ~/.zshrc ] && [ ! -f ~/.zshrc.zwc ] || [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
-  zcompile ~/.zshrc
+if [ -f "${HOME}/.zshrc" ] && [ ! -f "${HOME}/.zshrc.zwc" ] || [ "${HOME}/.zshrc" -nt "${HOME}/.zshrc.zwc" ]; then
+  zcompile ${HOME}/.zshrc
 fi
 
 # Xmodmap
-if [[ -f ~/.zprofile ]] && [[ ! $(cat ~/.zprofile|fgrep 'type xmodmap&>/dev/null && xmodmap ~/.Xmodmap') ]]; then
-  echo '[[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap' >> ~/.zprofile
+if [[ -f "${HOME}/.zprofile" ]] && [[ ! $(cat "${HOME}/.zprofile"|fgrep 'type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap') ]]; then
+  echo '[[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap' >> "${HOME}/.zprofile"
 fi
+
+[[ "$PATH" != *$paths* ]] && export PATH="$PATH$paths"
 
