@@ -1,16 +1,15 @@
 # Prompt
 autoload -Uz colors; colors
 if [ ${UID} -eq 0 ]; then # if Root
-  PROMPT="%{${fg[red]}%}[%n:${HOST}]
-%{${fg[yellow]}%}%/%{${reset_color}%}
+  PROMPT="${fg[red]}[%n:${HOST}] ${reset_color}@${fg[white]} %D{%Y-%m-%d %H:%M:%S}
+%{${fg_bold[yellow]}%}%~%{${reset_color}%}
 # "
 else
-  PROMPT="%{${fg[cyan]}%}[%n:${HOST}]
-%{${fg[yellow]}%}%~%{${reset_color}%}
+  PROMPT="${fg[cyan]}[%n:${HOST}] ${reset_color}@${fg[white]} %D{%Y-%m-%d %H:%M:%S}
+%{${fg_bold[yellow]}%}%~%{${reset_color}%}
 $ "
 fi
 
-set -eu
 # zsh settings
 autoload -U compinit; compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -417,7 +416,7 @@ alias scp='scp -c aes256-ctr -pq'
 # }}}
 
 # For Vimmer
-set -o vi # vi-mode
+bindkey -v
 alias vi='vim'
 alias v='vim'
 export GIT_EDITOR=vim
