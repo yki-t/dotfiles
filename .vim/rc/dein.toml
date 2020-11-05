@@ -91,3 +91,8 @@ repo = 'Quramy/vim-js-pretty-template'
 [[plugins]]
 repo = 'peterhoeg/vim-qml'
 
+# vue
+[[plugins]]
+repo = 'posva/vim-vue'
+
+
