@@ -223,7 +223,8 @@ additionals() {
     slack-desktop thunderbird zoom telegram-desktop \
     nodejs-lts-erbium yarn grpcurl \
     vlc gwenview okular poppler-data libreoffice-still \
-    nkf unarchiver blender dnsutils jmtpfs exiftool imagemagick
+    nkf unarchiver blender dnsutils jmtpfs exiftool imagemagick \
+    man
 
   # yay config
   arch-chroot /mnt sudo -u $USERNAME bash -c "mkdir -p /home/$USERNAME/.config; echo '$YAY_CONFIG' > /home/$USERNAME/.config/yay"
@@ -369,6 +370,7 @@ EOM
 # Main process
 #######################################
 main() {
+  # {{{
   breakIfNotSetAny
   info 'Setting ntp' && ntp && ok "DONE" || err "FAILED"
   info 'Connecting to the internet' && conn && ok "DONE" || err "FAILED"
@@ -383,6 +385,7 @@ main() {
   info 'Additional packages' && additionals && ok "DONE" || err "FAILED"
   info 'Finalizing' && finalize && ok "DONE" || err "FAILED"
 }
+# }}}
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   if [ $# -eq 0 ]; then
@@ -391,5 +394,4 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
     $1
   fi
 fi
-
 

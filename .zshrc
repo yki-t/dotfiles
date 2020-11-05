@@ -116,6 +116,25 @@ type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 
 # aliases
 # {{{
+# Error print to stderr
+err() {
+  # {{{
+  echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
+} # }}}
+# Require commands
+require() {
+  # {{{
+  is_ok=true
+  for cmd in $*; do
+    if ! (type $cmd &>/dev/null); then
+      err "command '$cmd' is required."
+      is_ok=false
+    fi
+  done
+  [ $is_ok != true ] && return 1
+  return 0
+} # }}}
+
 # Record
 # function rec() {
 #     # {{{
@@ -130,16 +149,13 @@ type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 # } # }}}
 
 # LINE notify
-function rep() {
+rep() {
   # {{{
-  if [ -z "${LINE_NOTIFY_TOKEN}" ];then
-    echo "env_var 'LINE_NOTIFY_TOKEN' must be set."
-    return
-  fi
+  require curl || return
+  [ ! -z "${LINE_NOTIFY_TOKEN}" ] || return $(err "env_var 'LINE_NOTIFY_TOKEN' must be set.")
   local message=$1
-  if [ $# -ne 1 ] || [ -z "${message}" ];then
-    echo 'usage: `rep some_message_you_want`'
-    return
+  if [ $# -ne 1 ] || [ -z "${message}" ]; then
+    return $(err 'usage: `rep some_message_you_want`')
   fi
   curl -Ss -X POST \
     -H "Authorization: Bearer ${LINE_NOTIFY_TOKEN}" \
@@ -148,98 +164,83 @@ function rep() {
   } # }}}
 
 # Desktop notify
-function n() {
+n() {
   # {{{
-  if type notify-send &>/dev/null; then
-    notify-send $*
-  fi
+  require notify-send || return
+  notify-send $*
 } # }}}
 
-function rmSync() {
+# rsync & rm -rf
+rmSync() {
   # {{{
+  require rsync notify-send rm ls || return
   while read f; do
     if [ "$f" = '.' ] || [ "$f" = '..' ]; then continue; fi
     rsync -Pr "$1/$f" "$2"
-    if [ $? -ne 0 ]; then
-      notify-send 'rmSyncFailed'
+    if [ $? -eq 0 ]; then
+      rm -rf "$1/$f"
+    else
+      n 'rmSyncFailed'
       rm -rf "$2/$f"
       break
-    else
-      rm -rf "$1/$f"
     fi
+    n 'rmSyncDone'
   done< <(/usr/bin/ls -a "$1")
 } # }}}
 
-# 'bat' aliased to 'cat'
-if type bat &>/dev/null;then
-  # {{{
-  alias cat="bat"
-fi # }}}
-
-# 'rg' aliased to 'grep'
-if type rg &>/dev/null;then
-  # {{{
-  alias grep="rg"
-fi # }}}
-
-# pdf2jpg
-function pdf2jpg() {
-  # {{{
-  help() {
-    echo 'DESCRIPTION: find .pdf and make jpg'
-    echo 'Usage: pdf2jpg [filename]'
-    echo 'This command execute all pdf to jpg in current working directory unless specify filename'
-    return
-  }
-  if [ $# -eq 0 ];then
-    trgs=$(find $PWD |sed -e 's/^/"/g' -e 's/$/"/g'|grep -e '\(.*\)\.pdf"$'|tr '\n' ' ')
-    for trg in ${(Q)${(z)trgs}};do
-      convert -density 300 -trim "$trg" -quality 100 "${trg%%.*}.jpg"
-    done
-  else
-    convert -density 300 -trim $1 -quality 100 ${1%%.*}.jpg
-  fi
-} # }}}
-
 # p*xz compress
-function pxc() {
+pxc() {
   # {{{
-  if type pixz &>/dev/null; then
-    local trg="$1"
-    if [ $# -eq 1 ];then
-      trg="$2"
-    else
-      echo 'Quets must be 1 like `pxc "folder_to_compress"`'
-      return
-    fi
-    while [ -e "$trg.tar.xz" ]; do
-      trg+="_"
-    done
-    tar cf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') | pixz -9 -- > "$1.tar.xz"
-  fi
+  require pixz tar pv du awk rm sed || return
+  [ $# -eq 0 ] && return $(err 'Quets must be set like `pxc "folder_to_compress/"`')
+  for f in "$@"; do
+    f=$(echo "$f"|sed 's~/$~~')
+    [ ! -e "$f" ] && continue
+    tar cf - "$f" -P \
+      | pv -s $(du -sb "$f" \
+      | awk '{print $1}') \
+      | pixz -9 -- \
+      > "$f.tar.xz"
+    [ $? -ne 0 ] && rm -rf "$f.tar.xz"
+  done
 }
-_pxc() {
-  _path_files -/
-}
-compdef _pxc pxc
 # }}}
 
 # p*xz decompress
-function pxx() {
+pxx() {
   # {{{
-  if type pixz &>/dev/null; then
-    if [ $# -ne 1 ];then
-      echo 'Quets must be 1 like `pxx "folder_to_decompress.tar.xz"`'
-      return
-    fi
-    tar xf $1 --use-compress-prog=pixz
-  fi
+  require pixz tar || return
+  [ $# -eq 0 ] && return $(err 'Quets must be set like `pxx "folder_to_decompress.tar.xz"`')
+  for f in "$@"; do
+    [ ! -e "$f" ] && continue
+    tar xf "$f" --use-compress-prog=pixz
+  done
 }
-_pxx() {
-  _path_files -g *.tar.xz
-}
-compdef _pxx pxx
 # }}}
+
+# # Encrypt disk
+# function enc() {
+#   # {{{
+#   # if !(type lsblk&>/dev/null) || !(type cryptsetup&>/dev/null); then
+#   # fi
+#   printf "Disks: $(lsblk)"
+#   echo "ok?(y/N): "
+#   if read -q; then
+#     echo hello
+#   else
+#     echo abort
+#   fi
+#   while read t; do
+#     # rsync -Pr "$1/$f" "$2"
+#     # if [ $? -ne 0 ]; then
+#     #   notify-send 'rmSyncFailed'
+#     #   rm -rf "$2/$f"
+#     #   break
+#     # else
+#     #   rm -rf "$1/$f"
+#     # fi
+#   done
+# } # }}}
 
 # Completions
 # {{{
@@ -250,49 +251,7 @@ compdef _rsync rsync
 __git_files() { _files }
 # }}}
 
-# uf to png
-function uf2png() {
-  # {{{
-  if type uiflow &>/dev/null; then
-    if [ $# -eq 1 ];then
-      uiflow -i "$1" -o"$1".png -f png
-    elif [ $# -eq 2 ];then
-      uiflow -i "$1" -o"$2".png -f png
-    else
-      echo "Inivalid Arguments count."
-    fi
-  fi
-} # }}}
-function atc() {
-  # {{{
-  if [ $# -eq 1 ];then
-    echo "compile & execute $1.cpp"
-    g++ $1.cpp -o z.out && ./z.out
-  elif [ $# -eq 2 -a $2 = 's' ];then
-    cat $1.cpp |xsel -bi
-  else
-    cat src/main.rs|xsel -bi
-  fi
-}
-# }}}
-function ptex() {
-  # {{{
-  if [ ! $(which uplatex) ] || [ ! $(which dvipdfmx) ];then
-    echo 'uplatex or dvipdfmx is not installed. Please install latex'
-    return
-  fi
-  inp=$1
-  ext="$(echo "$inp"|sed -e 's/.*\.\(.*\)/\1/')"
-  if [ "$ext" != 'tex' ];then
-    echo 'input file extension must be .tex'
-    return
-  fi
-  fname="$(echo "$inp"|rev|cut -c 5-|rev)"
-  uplatex "$fname" && dvipdfmx "$fname"
-}
-# }}}
-
-function rand() {
+rand() {
   # {{{
   local range max to_clipboard randstr
   local -A opthash
@@ -323,7 +282,7 @@ function rand() {
 }
 #}}}
 
-function keygen() {
+keygen() {
   # {{{
   local comment path
   local -A opthash
@@ -344,7 +303,7 @@ function keygen() {
 }
 #}}}
 
-function rust() {
+rust() {
   # {{{
   if (!type cargo &>/dev/null); then
     echo "This function needs 'cargo'"
@@ -379,30 +338,43 @@ function rust() {
 }
 #}}}
 
-function cnv() {
+cnv() {
   # {{{
-  for inp in $*; do
+  require cat nkf
+  for inp in "$@"; do
     local temp=$(mktemp)
     if [ ! -n "$inp" ] || [ ! -n "$temp" ]; then
-      echo "Specify argument"
-      return
+      return $(err "Specify argument")
     fi
-    cat "$inp"|nkf > "$temp" && cat "$temp" > "$inp"
+    cat "$inp"|nkf > "$temp" \
+      && cat "$temp" > "$inp"
   done
 } # }}}
 
-function wget_all() {
+wget_all() {
   # {{{
-  wget --mirror --page-requisites --span-hosts --quiet --show-progress --no-parent --convert-links --no-host-directories --adjust-extension --execute robots=off $*
+  wget \
+    --mirror \
+    --page-requisites \
+    --span-hosts \
+    --quiet \
+    --show-progress \
+    --no-parent \
+    --convert-links \
+    --no-host-directories \
+    --adjust-extension \
+    --execute robots=off \
+    "$@"
 } # }}}
 
-function u() {
+u() {
   # {{{
+  require loginctl || return
   loginctl unlock-session $*
 } # }}}
 
 # git->lab Setting
-function git() {
+git() {
   # {{{
   if type lab &>/dev/null; then
     /usr/bin/lab $*
@@ -412,7 +384,10 @@ function git() {
 }
 # }}}
 
-alias scp='scp -c aes256-ctr -pq'
+require scp && alias scp='scp -c aes256-ctr -pq'
+require bat && alias cat='bat'
+require rg && alias grep='rg'
+
 # }}}
 
 # For Vimmer
@@ -422,7 +397,7 @@ alias v='vim'
 export GIT_EDITOR=vim
 export EDITOR=vim
 
-# linux shortcut
+# Linux shortcut
 paths+=":${HOME}/opt"
 paths+=":${HOME}/.local/bin"
 
