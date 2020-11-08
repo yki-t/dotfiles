@@ -1,4 +1,5 @@
 # Prompt
+set -o pipefail
 autoload -Uz colors; colors
 if [ ${UID} -eq 0 ]; then # if Root
   PROMPT="${fg[red]}[%n:${HOST}] ${reset_color}@${fg[white]} %D{%Y-%m-%d %H:%M:%S}
@@ -114,7 +115,7 @@ export XMODIFIERS="@im=fcitx"
 type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 #}}}
 
-# aliases
+# aliases and functions
 # {{{
 # Error print to stderr
 err() {
@@ -383,6 +384,55 @@ git() {
   fi
 }
 # }}}
+
+bakup() {
+  # {{{
+  require tar pv pixz du xargs awk realpath || return
+  local args=()
+  local ignores=()
+  while (( $# > 0 )); do
+    case $1 in
+      -*)
+        if [[ "$1" =~ 'i' ]]; then
+          ignores+=("$2")
+          shift
+        fi
+        shift
+        ;;
+      *)
+        args+=("$1")
+        shift
+        ;;
+    esac
+  done
+  [ ${#args} -ne 2 ] && return $(err 'usage: `backup srcDir dstDir [-i ignoreDir1 -i ignoreDir2]`')
+  local srcDir="${args[1]}"
+  local dstDir="${args[2]}"
+
+  while read srcNode; do
+    if [ "$srcNode" = '.' ] \
+      || [ "$srcNode" = '..' ] \
+      ; then
+      continue
+    fi
+    src="$(realpath "$srcDir/$srcNode")"
+    if [[ "${ignores[@]}" =~ "${srcNode}" ]]; then
+      echo "Backup: '$src' is in ignores list. ignore"
+      continue
+    fi
+    srcSize="$(du -s "$src"|awk '{print $1}')"
+    dst="$(realpath "$dstDir/$srcNode")-$srcSize.tar.xz"
+    if [ -f "$dst" ] && [ "$(du -s "$dst"|awk '{print $1}')" -ne 0 ]; then
+      echo "Backup: '$src' is not changed. ignore"
+      continue
+    fi
+    echo "Backing up: '$src' -> '$dst'"
+    tar cf - "$src" -P \
+      | pv -s $(du -sb "$src"|awk '{print $1}') \
+      | pixz -9 -- \
+      > "$dst"
+  done< <(/usr/bin/ls -a "$srcDir")
+} # }}}
 
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
