@@ -205,6 +205,7 @@ set ignorecase
 set mouse=a
 colorscheme molokai
 set t_Co=256
+set synmaxcol=300
 
 hi Comment ctermfg=cyan
 vnoremap * "zy:let @/ = @z<CR>

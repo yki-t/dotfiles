@@ -352,17 +352,15 @@ cnv() {
   done
 } # }}}
 
-wget_all() {
+wgetAll() {
   # {{{
   wget \
     --mirror \
     --page-requisites \
-    --span-hosts \
     --quiet \
     --show-progress \
     --no-parent \
     --convert-links \
-    --no-host-directories \
     --adjust-extension \
     --execute robots=off \
     "$@"
@@ -373,17 +371,6 @@ u() {
   require loginctl || return
   loginctl unlock-session $*
 } # }}}
-
-# git->lab Setting
-git() {
-  # {{{
-  if type lab &>/dev/null; then
-    /usr/bin/lab $*
-  else
-    /usr/bin/git $*
-  fi
-}
-# }}}
 
 bakup() {
   # {{{
@@ -409,21 +396,39 @@ bakup() {
   local srcDir="${args[1]}"
   local dstDir="${args[2]}"
 
+  mkdir -p $dstDir
+
+  local isIncomplete=''
   while read srcNode; do
-    if [ "$srcNode" = '.' ] \
-      || [ "$srcNode" = '..' ] \
-      ; then
+    if [ "$srcNode" = '.' ] || [ "$srcNode" = '..' ]; then continue; fi
+    if [ "$(find /tmp -name 'bakupLog-*' 2>/dev/null)" ] && [ ! -f "/tmp/bakupLog-$srcNode" ]; then
+      isIncomplete=1
+      echo "restarting from previous operation. ignore $srcNode"
       continue
+    else
+      touch "/tmp/bakupLog-$srcNode"
     fi
     src="$(realpath "$srcDir/$srcNode")"
+
     if [[ "${ignores[@]}" =~ "${srcNode}" ]]; then
       echo "Backup: '$src' is in ignores list. ignore"
+      rm "/tmp/bakupLog-$srcNode"
+      continue
+    fi
+    if [[ ! "$src" =~ "^$srcDir" ]]; then
+      echo "Backup: '$src' is a symlink. ignore"
+      rm "/tmp/bakupLog-$srcNode"
       continue
     fi
     srcSize="$(du -s "$src"|awk '{print $1}')"
-    dst="$(realpath "$dstDir/$srcNode")-$srcSize.tar.xz"
-    if [ -f "$dst" ] && [ "$(du -s "$dst"|awk '{print $1}')" -ne 0 ]; then
+    srcHash="$(find "$src"|LC_ALL=C sort|md5sum|awk '{print $1}')"
+    dst="$(realpath "$dstDir/$srcNode")-$srcHash-$srcSize.tar.xz"
+    if [ -f "$dst" ] \
+      && [ "$(du -s "$dst"|awk '{print $1}')" -ne 0 ] \
+      && [ ! $isIncomplete ] \
+      ; then
       echo "Backup: '$src' is not changed. ignore"
+      rm "/tmp/bakupLog-$srcNode"
       continue
     fi
     echo "Backing up: '$src' -> '$dst'"
@@ -431,6 +436,8 @@ bakup() {
       | pv -s $(du -sb "$src"|awk '{print $1}') \
       | pixz -9 -- \
       > "$dst"
+    rm "/tmp/bakupLog-$srcNode"
+    isIncomplete=''
   done< <(/usr/bin/ls -a "$srcDir")
 } # }}}
 

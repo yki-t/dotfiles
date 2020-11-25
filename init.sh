@@ -187,7 +187,7 @@ changeRootAndConfigure() {
 } # }}}
 installPackages() {
   # {{{
-  arch-chroot /mnt pacman -S dialog wpa_supplicant git $CPU_BRAND-ucode zsh vim otf-ipafont
+  arch-chroot /mnt pacman -S dialog wpa_supplicant git $CPU_BRAND-ucode zsh vim
   arch-chroot /mnt bash -c 'if [ ! "$(cat /etc/passwd | grep '$USERNAME')" ]; then useradd -m -G wheel -s /bin/zsh '$USERNAME' && passwd '$USERNAME'; fi'
   arch-chroot /mnt sed -i -e 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
   arch-chroot /mnt sudo -u $USERNAME /bin/bash -c "if !(type yay &>/dev/null); then cd /tmp && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si; fi"
@@ -199,7 +199,7 @@ installPackages() {
     plasma-pa kwallet-pam kdeplasma-addons kde-gtk-config
   arch-chroot /mnt systemctl enable sddm NetworkManager
 } # }}}
-additionals() {
+installAdditionalPackages() {
   # {{{
   arch-chroot /mnt chown -R $USERNAME:$USERNAME /home/$USERNAME
   # keys for loop-aes
@@ -209,7 +209,7 @@ additionals() {
   # Install packages
   arch-chroot /mnt sudo -u $USERNAME yay -S curl wget \
     xsel dstat rsync reflector powerpill kwin-lowlatency `# basic tools` \
-    fcitx fcitx-im fcitx-configtool fcitx-mozc `# IME` \
+    fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME` \
     systemd-numlockontty xorg-xmodmap \
     bat exa xdotool wmctrl ripgrep pixz pv \
     bluedevil pulseaudio-bluetooth python-pip \
@@ -224,7 +224,7 @@ additionals() {
     nodejs-lts-erbium yarn grpcurl \
     vlc gwenview okular poppler-data libreoffice-still \
     nkf unarchiver blender dnsutils jmtpfs exiftool imagemagick \
-    man
+    man pacman-contrib
 
   # yay config
   arch-chroot /mnt sudo -u $USERNAME bash -c "mkdir -p /home/$USERNAME/.config; echo '$YAY_CONFIG' > /home/$USERNAME/.config/yay"
@@ -382,7 +382,7 @@ main() {
   info 'Installing base systems' && installBase && ok "DONE" || err "FAILED"
   info 'Chaging into root' && changeRootAndConfigure && ok "DONE" || err "FAILED"
   info 'Installing packages' && installPackages && ok "DONE" || err "FAILED"
-  info 'Additional packages' && additionals && ok "DONE" || err "FAILED"
+  info 'Installing additional packages' && installAdditionalPackages && ok "DONE" || err "FAILED"
   info 'Finalizing' && finalize && ok "DONE" || err "FAILED"
 }
 # }}}
