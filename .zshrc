@@ -441,6 +441,24 @@ bakup() {
   done< <(/usr/bin/ls -a "$srcDir")
 } # }}}
 
+combineVideos() {
+  # {{{
+  require ffmpeg || return
+  [ $# -le 3 ] && return $(err 'usage: `combineVideos srcA.mp4 srcB.mp4 out.mp4`')
+  local catFiles=("$@")
+  local outFile=${catFiles[-1]}
+  unset catFiles[-1]
+  local content=''
+  for catFile in "${catFiles[@]}"; do
+    [ -z $catFile ] && continue
+    content+="file '$(realpath "$catFile")'\n"
+  done
+  local tmp=$(mktemp)
+  echo -e $content > $tmp
+  ffmpeg -safe 0 -f concat -i "$tmp" -c:v copy -c:a copy -c:s copy -map 0:v -map 0:a -map 0:s? "$outFile"
+  # rm "$tmp"
+} # }}}
+
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
 require rg && alias grep='rg'
