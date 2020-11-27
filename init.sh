@@ -207,24 +207,25 @@ installAdditionalPackages() {
     arch-chroot /mnt sudo -u $USERNAME gpg --keyserver hkp://ipv4.pool.sks-keyservers.net:11371 --recv-keys $k
   done
   # Install packages
-  arch-chroot /mnt sudo -u $USERNAME yay -S curl wget \
-    xsel dstat rsync reflector powerpill kwin-lowlatency `# basic tools` \
-    fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME` \
-    systemd-numlockontty xorg-xmodmap \
-    bat exa xdotool wmctrl ripgrep pixz pv \
-    bluedevil pulseaudio-bluetooth python-pip \
-    linux-headers libnotify \
-    virtualbox yakuake \
-    github-cli google-cloud-sdk \
-    docker docker-compose \
-    nginx apache mariadb \
-    qemu libvirt android-studio \
-    google-chrome firefox \
-    slack-desktop thunderbird zoom telegram-desktop \
-    nodejs-lts-erbium yarn grpcurl \
-    vlc gwenview okular poppler-data libreoffice-still \
-    nkf unarchiver blender dnsutils jmtpfs exiftool imagemagick \
-    man pacman-contrib
+  arch-chroot /mnt sudo -u $USERNAME yay -S \
+    linux-headers `# system` \
+    curl wget xsel dstat rsync ripgrep pixz pv `# basic cli` \
+    dnsutils exiftool imagemagick nkf unarchiver `# additional cli` \
+    reflector powerpill pacman-contrib`# pacman extension` \
+    fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME ja,cn,kr` \
+    systemd-numlockontty xorg-xmodmap `# system settings` \
+    bat exa xdotool wmctrl `# Rust cli alternatives` \
+    kwin-lowlatency bluedevil pulseaudio-bluetooth libnotify `# KDE` \
+    virtualbox yakuake `# GUI` \
+    skypeforlinux-stable-bin slack-desktop thunderbird zoom telegram-desktop `# chat` \
+    python-pip nodejs-lts-erbium yarn grpcurl `# languages` \
+    google-chrome firefox `# browser ` \
+    docker docker-compose github-cli google-cloud-sdk `# dev` \
+    nginx apache mariadb `# web` \
+    jmtpfs qemu libvirt android-studio `# android` \
+    vlc gwenview okular poppler-data libreoffice-still blender `# GUI tools` \
+    man
+
 
   # yay config
   arch-chroot /mnt sudo -u $USERNAME bash -c "mkdir -p /home/$USERNAME/.config; echo '$YAY_CONFIG' > /home/$USERNAME/.config/yay"
