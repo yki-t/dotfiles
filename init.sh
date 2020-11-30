@@ -209,7 +209,7 @@ installAdditionalPackages() {
   # Install packages
   arch-chroot /mnt sudo -u $USERNAME yay -S \
     linux-headers `# system` \
-    curl wget xsel dstat rsync ripgrep pixz pv `# basic cli` \
+    curl wget xsel dstat rsync ripgrep pixz pv alacritty-ligature `# basic cli` \
     dnsutils exiftool imagemagick nkf unarchiver `# additional cli` \
     reflector powerpill pacman-contrib`# pacman extension` \
     fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME ja,cn,kr` \
@@ -246,7 +246,7 @@ installAdditionalPackages() {
 
   # Link dotfiles
   arch-chroot /mnt sudo -u $USERNAME bash -c "cd /home/$USERNAME && git clone https://github.com/yuki37/dotfiles.git"
-  for dotfile in '.zshrc' '.zshrc.zwc' '.Xmodmap' '.xinitrc' '.vimrc' '.sshrc' '.vim' '.gitconfig'; do
+  for dotfile in '.zshrc' '.zshrc.zwc' '.Xmodmap' '.xinitrc' '.vimrc' '.sshrc' '.vim' '.gitconfig' '.alacritty'; do
     if [ ! -e "/home/$USERNAME/$dotfile" ];then
       arch-chroot /mnt sudo -u $USERNAME ln -snf "/home/$USERNAME/dotfiles/$dotfile" "/home/$USERNAME/$dotfile"
     fi

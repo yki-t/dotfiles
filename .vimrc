@@ -1,4 +1,4 @@
-if !1 | finish | endif
+if !1|finish|endif
 
 "------------------------------------
 " OSの判定
@@ -205,7 +205,7 @@ set ignorecase
 set mouse=a
 colorscheme molokai
 set t_Co=256
-set synmaxcol=300
+set synmaxcol=255
 
 hi Comment ctermfg=cyan
 vnoremap * "zy:let @/ = @z<CR>
@@ -285,9 +285,18 @@ nnoremap VS :VimShellInteractive zsh<CR>
 nnoremap DU :call dein#update()<CR>
 nnoremap RS :call dein#recache_runtimepath()<CR>
 
+" current line content to clipboard
 :command -range Xz :silent :<line1>,<line2>w !xsel -i -b
 :cabbrev xz Xz
 
+" DateTime now
 nnoremap dt :pu=strftime('%Y-%m-%dTT%H:%M:%S.000Z')<CR>
 
+" deoplete completion color
+" hi Pmenu ctermbg=8 guibg=#606060
+" hi PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
+" hi PmenuSbar ctermbg=0 guibg=#d6d6d6
+hi Pmenu ctermfg=81 ctermbg=8 guifg=#66D9EF guibg=#606060
+hi PmenuSel ctermfg=242 ctermbg=1 guifg=#dddd00 guibg=#1f82cd
+hi PmenuSbar ctermbg=0 guibg=#d6d6d6
 
