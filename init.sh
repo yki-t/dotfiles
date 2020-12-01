@@ -209,7 +209,8 @@ installAdditionalPackages() {
   # Install packages
   arch-chroot /mnt sudo -u $USERNAME yay -S \
     linux-headers `# system` \
-    curl wget xsel dstat rsync ripgrep pixz pv alacritty-ligature `# basic cli` \
+    curl wget xsel rsync ripgrep pixz pv alacritty-ligature `# basic cli` \
+    dstat sysstat `# system stats` \
     dnsutils exiftool imagemagick nkf unarchiver `# additional cli` \
     reflector powerpill pacman-contrib`# pacman extension` \
     fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME ja,cn,kr` \

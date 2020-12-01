@@ -53,14 +53,21 @@ alias ll="ls -lag"
 
 # Node JS npm/yarn
 if type npm &>/dev/null; then
-  npm config set prefix ${HOME}/.local/
+  # npm config set prefix ${HOME}/.local/ # too slow & rarely use npm
   export NO_UPDATE_NOTIFIER=1 # node.js
   [ -f "${HOME}/.local/bin/npm" ] && alias npm="${HOME}/.local/bin/npm"
 fi
+
 if type yarn &>/dev/null; then
   export NODE_PATH="${HOME}/.yarn/bin"
-  paths+="$(yarn global bin)"
-  paths+="$(yarn global dir)/node_modules/.bin"
+  # paths+=":$(yarn global bin)" # too slow
+  # paths+=":$(yarn global dir)/node_modules/.bin" # too slow
+  paths+=":${HOME}/.local/bin"
+  if [ $UID -eq 0 ]; then
+    paths+=":/usr/local/share/.config/yarn/global/node_modules/.bin"
+  else
+    paths+=":${HOME}/.config/yarn/global/node_modules/.bin"
+  fi
 fi
 
 # JAVA
@@ -79,11 +86,12 @@ if [ -d ${HOME}/Android ]; then
   export ANDROID_HOME=${HOME}/Android/Sdk
   export ANDROID_SDK_HOME=${HOME}/Android/Sdk
   export NDK_HOME=${HOME}/Android/android-ndk-r20
-  paths+=":${ANDROID_HOME}/bin"
+  # paths+=":${ANDROID_HOME}/bin"
   paths+=":${ANDROID_HOME}/emulator"
   paths+=":${ANDROID_HOME}/tools"
   paths+=":${ANDROID_HOME}/tools/bin"
 fi
+
 # Flutter devtool
 [ -d "${HOME}/.pub-cache/bin" ] && paths+=":${HOME}/.pub-cache/bin"
 
@@ -93,6 +101,7 @@ if type gcc &>/dev/null; then
   export CC="${gcc_exec}"
   export CMAKE_C_COMPILER="${gcc_exec}"
 fi
+
 # c++
 if type g++ &>/dev/null; then
   gxx_exec="$(which g++)"
@@ -469,11 +478,11 @@ require rg && alias grep='rg'
 bindkey -v
 alias vi='vim'
 alias v='vim'
+alias ssh='TERM=xterm-256color ssh'
 export GIT_EDITOR=vim
 export EDITOR=vim
 
 # Linux shortcut
-paths+=":${HOME}/opt"
 paths+=":${HOME}/.local/bin"
 
 # Compile .zshrc
