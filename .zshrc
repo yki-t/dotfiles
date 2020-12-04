@@ -22,6 +22,7 @@ setopt IGNOREEOF
 setopt AUTO_CD
 unset zle_bracketed_paste # disable ^[[2004h
 bindkey -a '^[[3${HOME}' delete-char # <DEL> to be {lower,upper}case
+zstyle ':completion:*' list-colors "${LS_COLORS}"
 
 if type exa &>/dev/null;then
   alias ls="/usr/bin/exa --long -m --time-style iso"
@@ -372,6 +373,12 @@ combineVideos() {
   echo -e $content > $tmp
   ffmpeg -safe 0 -f concat -i "$tmp" -c:v copy -c:a copy -c:s copy -map 0:v -map 0:a -map 0:s? "$outFile"
   # rm "$tmp"
+} # }}}
+
+clearCache() {
+  # {{{
+  require sync tee || return
+  sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && swapoff -a && swapon -a
 } # }}}
 
 require scp && alias scp='scp -c aes256-ctr -pq'
