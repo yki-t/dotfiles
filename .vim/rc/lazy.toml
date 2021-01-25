@@ -24,8 +24,6 @@ repo = 'octol/vim-cpp-enhanced-highlight'
 
 # web template
 [[plugins]]
-repo = 'digitaltoad/vim-pug'
-[[plugins]]
 repo = 'statianzo/vim-jade'
 [[plugins]]
 repo = 'Glench/Vim-Jinja2-Syntax'

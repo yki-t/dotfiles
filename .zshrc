@@ -20,6 +20,7 @@ setopt list_types
 unsetopt no_match
 setopt IGNOREEOF
 setopt AUTO_CD
+setopt SH_WORD_SPLIT
 unset zle_bracketed_paste # disable ^[[2004h
 bindkey -a '^[[3${HOME}' delete-char # <DEL> to be {lower,upper}case
 zstyle ':completion:*' list-colors "${LS_COLORS}"
@@ -383,7 +384,6 @@ clearCache() {
 
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
-require rg && alias grep='rg'
 
 # }}}
 

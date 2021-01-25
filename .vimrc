@@ -2,28 +2,25 @@ if !1|finish|endif
 
 "------------------------------------
 " OSの判定
-"------------------------------------
-let OSTYPE = system('uname')
-
+"------------------------------------ let OSTYPE = system('uname')
 "------------------------------------
 " dein
 "------------------------------------
-"{{{
 "dein Scripts-----------------------------
 if &compatible
     set nocompatible               " Be iMproved
 endif
 set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.cache/dein/')
-    call dein#begin('~/.cache/dein/')
-    call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
-    let g:rc_dir    = expand('~/.vim/rc')
-    let s:toml      = g:rc_dir . '/dein.toml'
-    let s:lazy      = g:rc_dir . '/lazy.toml'
-    call dein#load_toml(s:toml,      {'lazy': 0})
-    call dein#load_toml(s:lazy,      {'lazy': 1})
-    call dein#end()
-    call dein#save_state()
+  call dein#begin('~/.cache/dein/')
+  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+  let g:rc_dir    = expand('~/.vim/rc')
+  let s:toml      = g:rc_dir . '/dein.toml'
+  let s:lazy      = g:rc_dir . '/lazy.toml'
+  call dein#load_toml(s:toml,      {'lazy': 0})
+  call dein#load_toml(s:lazy,      {'lazy': 1})
+  call dein#end()
+  call dein#save_state()
 endif
 filetype plugin indent on
 syntax enable
@@ -31,30 +28,25 @@ if dein#check_install()
     call dein#install()
 endif
 "End dein Scripts-------------------------
-" }}}
 
 "------------------------------------
 " デフォルトの人たち
 "------------------------------------
-"{{{
-set modelines=0
+set modeline
+set modelines=2
 set backspace=2
 au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
 au BufWrite /private/etc/pw.* set nowritebackup nobackup
-"}}}
 
 "------------------------------------
 " 補完の設定
 "------------------------------------
-"{{{
 let g:deoplete#enable_at_startup = 1
 set completeopt=menuone
-"}}}
 
 "------------------------------------
 " ペーストができるように
 "------------------------------------
-"{{{
 if &term =~ "xterm"
     let &t_ti .= "\e[?2004h"
     let &t_te .= "\e[?2004l"
@@ -68,12 +60,10 @@ if &term =~ "xterm"
     cnoremap <special> <Esc>[200~ <nop>
     cnoremap <special> <Esc>[201~ <nop>
 endif
-"}}}
 
 "------------------------------------
 " 基本的なキーマッピング
 "------------------------------------
-"{{{
 map <Space> <Plug>(operator-replace)
 
 nnoremap == gg=G''
@@ -103,12 +93,10 @@ vnoremap <Down> j
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q gq
-"}}}
 
 "------------------------------------
 " 画面分割(キーマッピング)
 "------------------------------------
-"{{{
 noremap vs :vs<CR>
 nnoremap s <Nop>
 nnoremap sj <C-w>j
@@ -144,12 +132,10 @@ call submode#map('bufmove', 'n', '', '>', '<C-w>>')
 call submode#map('bufmove', 'n', '', '<', '<C-w><')
 call submode#map('bufmove', 'n', '', '+', '<C-w>+')
 call submode#map('bufmove', 'n', '', '-', '<C-w>-')
-"}}}
 
 "------------------------------------
 " ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ
 "------------------------------------
-"{{{
 "if OSTYPE == "Darwin\n"
 "    set ttimeoutlen=1
 "    let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
@@ -159,12 +145,10 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 "    augroup END
 "    inoremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
 "endif
-"}}}
 
 "------------------------------------
 " その他の設定
 "------------------------------------
-"{{{
 set encoding=utf-8
 set fileencodings+=sjis,utf-8
 if has("syntax")
@@ -200,7 +184,10 @@ set whichwrap=b,s,[,],<,>
 set backspace=indent,eol,start
 set wildmenu
 
-set foldmethod=marker
+" set foldmethod=marker
+" set foldmethod=syntax
+" set foldnestmax=1
+" set foldcolumn=2
 set ignorecase
 set mouse=a
 colorscheme molokai
@@ -220,19 +207,15 @@ set noswapfile
 
 hi Normal ctermbg=NONE guibg=NONE
 hi NonText ctermbg=NONE guibg=NONE
-"}}}
 
 "------------------------------------
 " javascript系の設定
 "------------------------------------
-" {{{
 let g:vim_jsx_pretty_colorful_config = 0
-"}}}
 
 "------------------------------------
 " MD記法
 "------------------------------------
-" {{{
 au BufRead,BufNewFile *.{mkd,md} set filetype=markdown
 au! FileType markdown hi! def link markdownItalic Normal
 au FileType markdown set commentstring=<\!--\ %s\ -->
@@ -240,19 +223,15 @@ let g:vim_markdown_folding_disabled=1
 let g:previm_show_header=0
 let g:previm_open_cmd='/usr/bin/google-chrome-stable'
 nnoremap md :PrevimOpen<CR>
-" }}}
 
 "------------------------------------
 " Tex記法
 "------------------------------------
-" {{{
 au BufRead,BufNewFile *.{tex} setlocal filetype=tex tabstop=2 softtabstop=2 shiftwidth=2
-" }}}
 
 "------------------------------------
 " Plugins Settings
 "------------------------------------
-"{{{
 " VimFiler
 let g:vimfiler_as_default_explorer = 1
 
@@ -261,17 +240,13 @@ let g:vimshell_prompt = "> "
 let g:vimshell_secondary_prompt = "> "
 let g:vimshell_user_prompt = 'getcwd()'
 
-"}}}
-
 "------------------------------------
 " Highlights
 "------------------------------------
-" {{{
 hi Pmenu ctermbg=4
 hi PmenuSel ctermbg=1
 hi PMenuSbar ctermbg=4
 hi MatchParen cterm=bold ctermbg=none ctermfg=white
-" }}}
 
 au BufRead,BufNewFile *.tera set filetype=htmldjango
 

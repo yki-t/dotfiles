@@ -3,12 +3,12 @@
 repo = 'Shougo/dein.vim'
 
 # 補完
-# [[plugins]]
-# repo = 'Shougo/deoplete.nvim'
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
 [[plugins]]
 repo = 'roxma/nvim-yarp'
-# [[plugins]]
-# repo = 'roxma/vim-hug-neovim-rpc'
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
 
 [[plugins]]
 repo = 'Shougo/unite.vim'
@@ -95,4 +95,5 @@ repo = 'peterhoeg/vim-qml'
 [[plugins]]
 repo = 'posva/vim-vue'
 
-
+[[plugins]]
+repo = 'digitaltoad/vim-pug'

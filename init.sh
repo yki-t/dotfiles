@@ -211,7 +211,7 @@ installAdditionalPackages() {
     linux-headers `# system` \
     curl wget xsel rsync ripgrep pixz pv alacritty-ligature `# basic cli` \
     dstat sysstat hdparm dmidecode `# system check` \
-    dnsutils exiftool imagemagick nkf unarchiver `# additional cli` \
+    inetutils dnsutils exiftool imagemagick nkf unarchiver `# additional cli` \
     reflector powerpill pacman-contrib`# pacman extension` \
     fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME ja,cn,kr` \
     systemd-numlockontty xorg-xmodmap `# system settings` \
