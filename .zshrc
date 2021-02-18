@@ -382,6 +382,7 @@ clearCache() {
   sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && swapoff -a && swapon -a
 } # }}}
 
+
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
 

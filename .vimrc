@@ -188,6 +188,20 @@ set wildmenu
 " set foldmethod=syntax
 " set foldnestmax=1
 " set foldcolumn=2
+
+function! JSFolds()
+  let thisline = getline(v:lnum)
+  if match(thisline, '/\*\*') >= 0
+    return 'a1'
+  elseif match(thisline, '\*/') >= 0
+    return 's1'
+  else
+    return '='
+  endif
+endfunction
+autocmd FileType javascript setlocal foldmethod=expr
+autocmd FileType javascript setlocal foldexpr=JSFolds()
+
 set ignorecase
 set mouse=a
 colorscheme molokai
@@ -258,7 +272,7 @@ au BufRead,BufNewFile * set softtabstop=2 tabstop=2 shiftwidth=2
 nnoremap vf :VimFiler -auto-cd<CR>
 nnoremap VS :VimShellInteractive zsh<CR>
 nnoremap DU :call dein#update()<CR>
-nnoremap RS :call dein#recache_runtimepath()<CR>
+nnoremap RES :call dein#recache_runtimepath()<CR>
 
 " current line content to clipboard
 :command -range Xz :silent :<line1>,<line2>w !xsel -i -b

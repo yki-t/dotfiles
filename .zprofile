@@ -94,6 +94,9 @@ export XMODIFIERS="@im=fcitx"
 type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 export GIT_EDITOR=vim
 export EDITOR=vim
+
+export COMPOSE_DOCKER_CLI_BUILD=1
+export DOCKER_BUILDKIT=1
 #}}}
 
 # Linux shortcut
