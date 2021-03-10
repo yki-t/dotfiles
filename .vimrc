@@ -199,8 +199,9 @@ function! JSFolds()
     return '='
   endif
 endfunction
-autocmd FileType javascript setlocal foldmethod=expr
-autocmd FileType javascript setlocal foldexpr=JSFolds()
+au FileType javascript setlocal foldmethod=expr
+au FileType javascript setlocal foldexpr=JSFolds()
+au FileType python setlocal foldmethod=indent foldlevel=1 foldnestmax=2
 
 set ignorecase
 set mouse=a
@@ -279,7 +280,7 @@ nnoremap RES :call dein#recache_runtimepath()<CR>
 :cabbrev xz Xz
 
 " DateTime now
-nnoremap dt :pu=strftime('%Y-%m-%dTT%H:%M:%S.000Z')<CR>
+nnoremap dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
 
 " deoplete completion color
 " hi Pmenu ctermbg=8 guibg=#606060

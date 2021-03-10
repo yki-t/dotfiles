@@ -1,5 +1,3 @@
-
-
 TZ='Asia/Tokyo'; export TZ
 
 paths=''
@@ -103,13 +101,16 @@ export DOCKER_BUILDKIT=1
 paths+=":${HOME}/.local/bin"
 [[ "$PATH" != *$paths* ]] && export PATH="$PATH$paths"
 
-[[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
-[[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap
+if [ "$DISPLAY" != '' ]; then
+  [[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
+  [[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap
 
-type realpath&>/dev/null && [[ -f $(realpath ) ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
+  type realpath&>/dev/null && [[ -f $(realpath ) ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
 
-if type realpath &>/dev/null; then
-  DIR="$(cd "$(dirname "$(realpath $0)")"&>/dev/null &&pwd)" # SCRIPT_DIR on zsh
-  [ -f "$DIR/.private.sh" ] && source "$DIR/.private.sh"
+  if type realpath &>/dev/null; then
+    DIR="$(cd "$(dirname "$(realpath $0)")"&>/dev/null &&pwd)" # SCRIPT_DIR on zsh
+    [ -f "$DIR/.private.sh" ] && source "$DIR/.private.sh"
+  fi
+
 fi
 
