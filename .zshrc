@@ -405,3 +405,5 @@ if [[ -f "${HOME}/.zprofile" ]] && [[ ! $(cat "${HOME}/.zprofile"|fgrep 'type xm
   echo '[[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap' >> "${HOME}/.zprofile"
 fi
 
+export MYSQL_PWD=password
+export MYSQL='mysql -uusername -hlocalhost --protocol tcp database'
