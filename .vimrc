@@ -199,9 +199,9 @@ function! JSFolds()
     return '='
   endif
 endfunction
-au FileType javascript setlocal foldmethod=expr
-au FileType javascript setlocal foldexpr=JSFolds()
-au FileType python setlocal foldmethod=indent foldlevel=1 foldnestmax=2
+au FileType javascript setlocal foldmethod=expr foldexpr=JSFolds()
+au FileType python setlocal foldmethod=indent foldlevel=0 foldnestmax=1
+au FileType rust setlocal foldmethod=syntax foldlevel=0 foldnestmax=1
 
 set ignorecase
 set mouse=a
