@@ -158,6 +158,7 @@ endif
 " VimFilerで自動cd
 let g:vimfiler_enable_auto_cd = 1
 
+
 " Rainbow Parentheses Improved
 let g:rainbow_active = 1
 
@@ -174,9 +175,10 @@ set expandtab
 set autoindent
 set smartindent
 set wrap
-set list
-set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
-set nrformats-=octal
+set list " 不可視文字表示
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:% " 不可視文字例
+set fileformats=unix " 改行コードを強制的にLFに
+set nrformats-=octal " <C-a> <C-x> を10進数での加減算に
 set hidden
 set history=50
 set virtualedit=block
