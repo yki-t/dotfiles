@@ -33,15 +33,12 @@ fi
 alias ll="ls -lag"
 
 # aliases and functions
-# {{{
 # Error print to stderr
 err() {
-  # {{{
   echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
-} # }}}
+}
 # Require commands
 require() {
-  # {{{
   is_ok=true
   for cmd in $*; do
     if ! (type $cmd &>/dev/null); then
@@ -51,11 +48,10 @@ require() {
   done
   [ $is_ok != true ] && return 1
   return 0
-} # }}}
+}
 
 # Record
 # function rec() {
-#     # {{{
 #     if echo $(hostname) | fgrep -q laptop; then
 #         if !(type arecord&>/dev/null); then
 #             echo "arecord is not installed"
@@ -64,11 +60,10 @@ require() {
 #         [ ! -d "${HOME}/Music/Records" ] && mkdir -p "${HOME}/Music/Records"
 #         arecord -f S16_LE -r 44100 "${HOME}/Music/Records/$(date "+%Y.%m.%d;%H:%M:%S").wav"
 #     fi
-# } # }}}
+# }
 
 # LINE notify
 rep() {
-  # {{{
   require curl || return
   [ ! -z "${LINE_NOTIFY_TOKEN}" ] || return $(err "env_var 'LINE_NOTIFY_TOKEN' must be set.")
   local message=$1
@@ -79,18 +74,16 @@ rep() {
     -H "Authorization: Bearer ${LINE_NOTIFY_TOKEN}" \
     -F "message=$message" \
     https://notify-api.line.me/api/notify
-  } # }}}
+  }
 
 # Desktop notify
 n() {
-  # {{{
   require notify-send || return
   notify-send $*
-} # }}}
+}
 
 # rsync & rm -rf
 rmSync() {
-  # {{{
   require rsync notify-send rm ls || return
   while read f; do
     if [ "$f" = '.' ] || [ "$f" = '..' ]; then continue; fi
@@ -104,11 +97,10 @@ rmSync() {
     fi
     n 'rmSyncDone'
   done< <(/usr/bin/ls -a "$1")
-} # }}}
+}
 
 # p*xz compress
 pxc() {
-  # {{{
   require pixz tar pv du awk rm sed || return
   [ $# -eq 0 ] && return $(err 'Quets must be set like `pxc "folder_to_compress/"`')
   for f in "$@"; do
@@ -122,11 +114,9 @@ pxc() {
     [ $? -ne 0 ] && rm -rf "$f.tar.xz"
   done
 }
-# }}}
 
 # p*xz decompress
 pxx() {
-  # {{{
   require pixz tar || return
   [ $# -eq 0 ] && return $(err 'Quets must be set like `pxx "folder_to_decompress.tar.xz"`')
   for f in "$@"; do
@@ -134,11 +124,9 @@ pxx() {
     tar xf "$f" --use-compress-prog=pixz
   done
 }
-# }}}
 
 # # Encrypt disk
 # function enc() {
-#   # {{{
 #   # if !(type lsblk&>/dev/null) || !(type cryptsetup&>/dev/null); then
 #   # fi
 #   printf "Disks: $(lsblk)"
@@ -158,19 +146,16 @@ pxx() {
 #     #   rm -rf "$1/$f"
 #     # fi
 #   done
-# } # }}}
+# }
 
 # Completions
-# {{{
 _rsync() {
   _path_files -f
 }
 compdef _rsync rsync
 __git_files() { _files }
-# }}}
 
 rand() {
-  # {{{
   local range max to_clipboard randstr
   local -A opthash
   zparseopts -D -A opthash -- i -int w -week c -clipboard
@@ -198,10 +183,8 @@ rand() {
     echo $randstr
   fi
 }
-#}}}
 
 keygen() {
-  # {{{
   local comment path
   local -A opthash
   zparseopts -D -A opthash -- f: -file:
@@ -219,10 +202,8 @@ keygen() {
   fi
   /usr/bin/ssh-keygen -o -a 100 -t ed25519 -f "$path" -C "$comment"
 }
-#}}}
 
 rust() {
-  # {{{
   if (!type cargo &>/dev/null); then
     echo "This function needs 'cargo'"
     return 1
@@ -254,10 +235,8 @@ rust() {
     systemfd --no-pid -s http::"${port}" -- cargo watch -x ${mode}
   fi
 }
-#}}}
 
 cnv() {
-  # {{{
   require cat nkf
   for inp in "$@"; do
     local temp=$(mktemp)
@@ -267,10 +246,9 @@ cnv() {
     cat "$inp"|nkf > "$temp" \
       && mv "$temp" "$inp"
   done
-} # }}}
+}
 
 wgetAll() {
-  # {{{
   wget \
     --mirror \
     --page-requisites \
@@ -281,16 +259,14 @@ wgetAll() {
     --adjust-extension \
     --execute robots=off \
     "$@"
-} # }}}
+}
 
 u() {
-  # {{{
   require loginctl || return
   loginctl unlock-session $*
-} # }}}
+}
 
 bakup() {
-  # {{{
   require tar pv pixz du xargs awk realpath || return
   local args=()
   local ignores=()
@@ -356,12 +332,11 @@ bakup() {
     rm "/tmp/bakupLog-$srcNode"
     isIncomplete=''
   done< <(/usr/bin/ls -a "$srcDir")
-} # }}}
+}
 
 combineVideos() {
-  # {{{
   require ffmpeg || return
-  [ $# -le 3 ] && return $(err 'usage: `combineVideos srcA.mp4 srcB.mp4 out.mp4`')
+  [ $# -le 2 ] && return $(err 'usage: `combineVideos srcA.mp4 srcB.mp4 out.mp4`')
   local catFiles=("$@")
   local outFile=${catFiles[-1]}
   unset catFiles[-1]
@@ -374,19 +349,16 @@ combineVideos() {
   echo -e $content > $tmp
   ffmpeg -safe 0 -f concat -i "$tmp" -c:v copy -c:a copy -c:s copy -map 0:v -map 0:a -map 0:s? "$outFile"
   # rm "$tmp"
-} # }}}
+}
 
 clearCache() {
-  # {{{
   require sync tee || return
   sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && swapoff -a && swapon -a
-} # }}}
+}
 
 
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
-
-# }}}
 
 # For Vimmer
 bindkey -v
@@ -405,5 +377,7 @@ if [[ -f "${HOME}/.zprofile" ]] && [[ ! $(cat "${HOME}/.zprofile"|fgrep 'type xm
   echo '[[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap' >> "${HOME}/.zprofile"
 fi
 
+# local のmysql docker に簡易接続するやつ
 export MYSQL_PWD=password
 export MYSQL='mysql -uusername -hlocalhost --protocol tcp database'
+
