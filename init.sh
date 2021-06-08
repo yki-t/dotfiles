@@ -242,7 +242,7 @@ installAdditionalPackages() {
 
 
   # yay config
-  arch-chroot /mnt sudo -u $USERNAME bash -c "mkdir -p /home/$USERNAME/.config; echo '$YAY_CONFIG' > /home/$USERNAME/.config/yay"
+  arch-chroot /mnt sudo -u $USERNAME bash -c "mkdir -p /home/$USERNAME/.config/yay; echo '$YAY_CONFIG' > /home/$USERNAME/.config/yay/config.json"
 
   # numlockontty
   arch-chroot /mnt systemctl enable numLockOnTty.service
