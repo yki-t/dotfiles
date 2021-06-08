@@ -25,7 +25,6 @@ DEVICE='' # like /dev/nvme0n1 /dev/nvme0n1pN
 _BOOT='' # like p1 of /dev/nvme0n1p1
 _LVM='' # like p2 /dev/nvme0n1p2
 
-
 # Other Settings
 # {{{
 MIRRORS="$(cat <<'EOM'
@@ -204,7 +203,7 @@ installPackages() {
   arch-chroot /mnt pacman -S --noconfirm dialog wpa_supplicant git $CPU_BRAND-ucode zsh vim
   arch-chroot /mnt bash -c 'if [ ! "$(cat /etc/passwd | grep '$USERNAME')" ]; then useradd -m -G wheel -s /bin/zsh '$USERNAME' && passwd '$USERNAME'; fi'
   arch-chroot /mnt sed -i -e 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-  arch-chroot /mnt sudo -u $USERNAME /bin/bash -c "if !(type yay &>/dev/null); then cd /tmp && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si; fi"
+  arch-chroot /mnt sudo -u $USERNAME /bin/bash -c "if !(type yay &>/dev/null); then cd /tmp && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm; fi"
   arch-chroot /mnt yay -Syyu --noconfirm
   # ref) https://wiki.archlinux.org/index.php/Xorg#Installation
   # kwallet-pam is suspicious locking screen and cause kernel panic when login
