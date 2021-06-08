@@ -6,7 +6,11 @@ set -eu
 #######################################
 # User Settings - needs hardcoded
 #######################################
+# (required)
 USE_WIFI=true
+WIFI_DEV='' # (optional)
+WIFI_SSID='' # (optional)
+WIFI_PASS='' # (optional)
 USERNAME='yuki'
 SWAP_SIZE='96G'
 HOST_NAME='arch-laptop'
@@ -14,15 +18,13 @@ ZONE='Asia/Tokyo'
 LOCALES=('en_US.UTF-8 UTF-8' 'ja_JP.UTF-8 UTF-8')
 VOLUME_GROUP='vg-default'
 
-WIFI_DEV=''
-WIFI_SSID=''
-WIFI_PASS=''
 CPU_BRAND='amd' # amd or intel. for microcode
 GPU_DRIVERS='nvidia nvidia-settings nvidia-utils'
 
-DEVICE=''
-_BOOT=''
-_LVM=''
+DEVICE='' # like /dev/nvme0n1 /dev/nvme0n1pN
+_BOOT='' # like p1 of /dev/nvme0n1p1
+_LVM='' # like p2 /dev/nvme0n1p2
+
 
 # Other Settings
 # {{{
@@ -104,7 +106,7 @@ info() {
 } # }}}
 breakIfNotSetAny() {
   # {{{
-  local vals=(USE_WIFI USERNAME SWAP_SIZE HOST_NAME ZONE LOCALES VOLUME_GROUP WIFI_DEV WIFI_SSID WIFI_PASS CPU_BRAND GPU_DRIVERS DEVICE _BOOT _LVM)
+  local vals=(USE_WIFI USERNAME SWAP_SIZE HOST_NAME ZONE LOCALES VOLUME_GROUP CPU_BRAND GPU_DRIVERS DEVICE _BOOT _LVM)
   isOk=true
   for v in ${vals[@]}; do
     [ -z "${!v}" ] && warn "$v must be set" && isOk=false
@@ -133,6 +135,7 @@ clean() {
 } # }}}
 conn() {
   # {{{
+  if [ "$(ping -c 1 google.com 2>/dev/null)" ]; then return; fi
   if [ "$(pgrep wpa_supplicant)" ]; then return; fi
   if [ -z $WIFI_DEV ]; then
     WIFI_DEV=$(ip link|grep '^[0-9]'|grep -v 'lo:'|grep w|awk '{print $2}'|sed -e's~\(.*\):~\1~')
