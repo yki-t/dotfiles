@@ -29,15 +29,15 @@ _LVM='' # like p2 /dev/nvme0n1p2
 # Other Settings
 # {{{
 MIRRORS="$(cat <<'EOM'
-Server = rsync://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
-Server = rsync://mirror-hk.koddos.net/archlinux/$repo/os/$arch
-Server = rsync://mirror.xtom.com.hk/repo/archlinux/$repo/os/$arch
-Server = rsync://archlinux.cs.nctu.edu.tw/archlinux/$repo/os/$arch
-Server = rsync://ftp.tsukuba.wide.ad.jp/archlinux/$repo/os/$arch
-Server = rsync://hkg.mirror.rackspace.com/archlinux/$repo/os/$arch
+Server = https://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
+Server = https://mirror-hk.koddos.net/archlinux/$repo/os/$arch
+Server = https://mirror.xtom.com.hk/repo/archlinux/$repo/os/$arch
+Server = https://archlinux.cs.nctu.edu.tw/archlinux/$repo/os/$arch
+Server = https://ftp.tsukuba.wide.ad.jp/archlinux/$repo/os/$arch
+Server = https://hkg.mirror.rackspace.com/archlinux/$repo/os/$arch
 EOM
 )"
-YAYCONFIG="$(cat <<'EOM'
+YAY_CONFIG="$(cat <<'EOM'
 {
 	"aururl": "https://aur.archlinux.org",
 	"buildDir": "$HOME/.cache/yay",
@@ -106,12 +106,14 @@ info() {
 } # }}}
 breakIfNotSetAny() {
   # {{{
+  set +e
   local vals=(USE_WIFI USERNAME SWAP_SIZE HOST_NAME ZONE LOCALES VOLUME_GROUP CPU_BRAND GPU_DRIVERS DEVICE _BOOT _LVM)
   isOk=true
   for v in ${vals[@]}; do
     [ -z "${!v}" ] && warn "$v must be set" && isOk=false
   done
   [ "$isOk" = "false" ] && err "Set these variable and retry."
+  set -e
 } # }}}
 
 #######################################
@@ -149,6 +151,11 @@ partition() {
 } # }}}
 encrypt() {
   # {{{
+  root=$(/usr/bin/ls /dev/mapper|grep root)
+  if [ "$root" ]; then cryptsetup luksClose /dev/mapper/$root; fi
+  swap=$(/usr/bin/ls /dev/mapper|grep swap)
+  if [ "$swap" ]; then cryptsetup luksClose /dev/mapper/$swap; fi
+  if [ "$root" ] || [ "$swap" ]; then cryptsetup luksClose luks; fi
   mkfs.vfat -F32 $DEVICE$_BOOT
   cryptsetup -v luksFormat $DEVICE$_LVM
   cryptsetup luksOpen $DEVICE$_LVM luks
@@ -156,13 +163,17 @@ encrypt() {
   vgcreate $VOLUME_GROUP /dev/mapper/luks
   lvcreate -L $SWAP_SIZE $VOLUME_GROUP -n swap
   lvcreate -l +100%FREE $VOLUME_GROUP -n root
-  mkfs.ext4 /dev/mapper/$VOLUME_GROUP-root
-  mkswap /dev/mapper/$VOLUME_GROUP-swap
+  root=$(/usr/bin/ls /dev/mapper|grep root)
+  swap=$(/usr/bin/ls /dev/mapper|grep swap)
+  mkfs.ext4 /dev/mapper/$root
+  mkswap /dev/mapper/$swap
 } # }}}
 mountDevice() {
   # {{{
-  mount /dev/mapper/$VOLUME_GROUP-root /mnt
-  swapon /dev/mapper/$VOLUME_GROUP-swap
+  root=$(/usr/bin/ls /dev/mapper|grep root)
+  swap=$(/usr/bin/ls /dev/mapper|grep swap)
+  mount /dev/mapper/$root /mnt
+  swapon /dev/mapper/$swap
   mkdir /mnt/boot
   mount $DEVICE$_BOOT /mnt/boot
 } # }}}
@@ -180,7 +191,7 @@ installBase() {
 } # }}}
 changeRootAndConfigure() {
   # {{{
-  arch-chroot /mnt pacman -Syyu
+  arch-chroot /mnt pacman -Syyu --noconfirm
   arch-chroot /mnt ln -sf /usr/share/zoneinfo/$ZONE /etc/localtime
   arch-chroot /mnt hwclock --systohc
   arch-chroot /mnt echo $HOST_NAME > /etc/hostname
@@ -192,14 +203,14 @@ changeRootAndConfigure() {
 } # }}}
 installPackages() {
   # {{{
-  arch-chroot /mnt pacman -S dialog wpa_supplicant git $CPU_BRAND-ucode zsh vim
+  arch-chroot /mnt pacman -S --noconfirm dialog wpa_supplicant git $CPU_BRAND-ucode zsh vim
   arch-chroot /mnt bash -c 'if [ ! "$(cat /etc/passwd | grep '$USERNAME')" ]; then useradd -m -G wheel -s /bin/zsh '$USERNAME' && passwd '$USERNAME'; fi'
   arch-chroot /mnt sed -i -e 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
   arch-chroot /mnt sudo -u $USERNAME /bin/bash -c "if !(type yay &>/dev/null); then cd /tmp && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si; fi"
-  arch-chroot /mnt yay -Syyu
+  arch-chroot /mnt yay -Syyu --noconfirm
   # ref) https://wiki.archlinux.org/index.php/Xorg#Installation
   # kwallet-pam is suspicious locking screen and cause kernel panic when login
-  arch-chroot /mnt pacman -S $GPU_DRIVERS xorg-server sddm plasma-desktop \
+  arch-chroot /mnt pacman -S --noconfirm $GPU_DRIVERS xorg-server sddm plasma-desktop \
     plasma-nm networkmanager konsole powerdevil plasma-workspace-wallpapers \
     plasma-pa kwallet-pam kdeplasma-addons kde-gtk-config
   arch-chroot /mnt systemctl enable sddm NetworkManager
@@ -212,7 +223,7 @@ installAdditionalPackages() {
     arch-chroot /mnt sudo -u $USERNAME gpg --keyserver hkp://ipv4.pool.sks-keyservers.net:11371 --recv-keys $k
   done
   # Install packages
-  arch-chroot /mnt sudo -u $USERNAME yay -S \
+  arch-chroot /mnt sudo -u $USERNAME yay -S --noconfirm \
     linux-headers `# system` \
     curl wget xsel rsync ripgrep pixz pv alacritty-ligature `# basic cli` \
     dstat sysstat hdparm dmidecode `# system check` \
@@ -240,10 +251,10 @@ installAdditionalPackages() {
   arch-chroot /mnt systemctl enable numLockOnTty.service
 
   # Other packages
-  arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type lab &>/dev/null); then yay -S lab; fi"
+  arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type lab &>/dev/null); then yay -S --noconfirm lab; fi"
 
   # Flutter
-  arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type flutter &>/dev/null); then yay -S flutter; fi"
+  arch-chroot /mnt sudo -u $USERNAME bash -c "if !(type flutter &>/dev/null); then yay -S --noconfirm flutter; fi"
   arch-chroot /mnt sudo -u $USERNAME bash -c "flutter pub global activate devtools"
 
   # Enable services
