@@ -1,7 +1,7 @@
 #!/bin/bash
 # vim: softtabstop=2 tabstop=2 shiftwidth=2 expandtab foldmethod=marker
 
-set -eu
+set -u
 
 #######################################
 # User Settings - needs hardcoded
@@ -106,14 +106,12 @@ info() {
 } # }}}
 breakIfNotSetAny() {
   # {{{
-  set +e
   local vals=(USE_WIFI USERNAME SWAP_SIZE HOST_NAME ZONE LOCALES VOLUME_GROUP CPU_BRAND GPU_DRIVERS DEVICE _BOOT _LVM)
   isOk=true
   for v in ${vals[@]}; do
     [ -z "${!v}" ] && warn "$v must be set" && isOk=false
   done
   [ "$isOk" = "false" ] && err "Set these variable and retry."
-  set -e
 } # }}}
 
 #######################################
@@ -132,7 +130,7 @@ clean() {
     umount /mnt
   fi
   if [ "$(lsblk | grep '\[SWAP\]')" ]; then
-    swapoff /dev/mapper/$VOLUME_GROUP-swap
+    swapoff /dev/mapper/$(/usr/bin/ls /dev/mapper/|grep swap)
   fi
 } # }}}
 conn() {
