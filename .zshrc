@@ -148,11 +148,13 @@ pxx() {
 #   done
 # }
 
-# Completions
-_rsync() {
-  _path_files -f
-}
-compdef _rsync rsync
+# # Completions
+# _rsync() {
+#   _ssh
+# }
+# compdef _rsync rsync
+compdef $_comps[ssh] rsync
+
 __git_files() { _files }
 
 rand() {
@@ -174,13 +176,13 @@ rand() {
   if [ $# -eq 1 ];then
     count=$(($1))
   else
-    count=100
+    count=128
   fi
-  randstr="$(cat /dev/urandom|tr -dc $range|head -c $count)"
+  randstr="$(cat /dev/urandom|tr -dc $range|head -c $count|sed -e's|[\r\n]||g')"
   if [ $to_clipboard -eq 1 ];then
-    echo -n "$randstr"|xsel -bi
+    print "$randstr"|xsel -bi
   else
-    echo $randstr
+    print "$randstr"
   fi
 }
 
