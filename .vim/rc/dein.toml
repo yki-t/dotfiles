@@ -99,5 +99,5 @@ repo = 'posva/vim-vue'
 repo = 'digitaltoad/vim-pug'
 
 [[plugins]]
-repo = 'kylef/apiblueprint.vim'
+repo = 'zigford/vim-powershell'
 
