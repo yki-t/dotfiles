@@ -229,7 +229,7 @@ installAdditionalPackages() {
     fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME ja,cn,kr` \
     systemd-numlockontty xorg-xmodmap `# system settings` \
     bat exa xdotool wmctrl `# Rust cli alternatives` \
-    kwin-lowlatency bluedevil pulseaudio-bluetooth libnotify `# KDE` \
+    kwin-lowlatency bluedevil libnotify `# KDE` \
     virtualbox yakuake `# GUI` \
     skypeforlinux-stable-bin slack-desktop thunderbird zoom telegram-desktop `# chat` \
     python-pip nodejs-lts-erbium yarn grpcurl `# languages` \
@@ -238,6 +238,7 @@ installAdditionalPackages() {
     nginx apache mariadb `# web` \
     jmtpfs qemu libvirt android-studio `# android` \
     vlc gwenview okular poppler-data libreoffice-still blender `# GUI tools` \
+    pipewire pipewire-alsa pipewire-jack pipewire-media-session pipewire-pulse pipewire-ffmpeg pipewire-docs `# Pipewire: Bluetooth` \
     man
 
 
