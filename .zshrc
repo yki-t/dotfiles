@@ -338,26 +338,43 @@ bakup() {
 
 combineVideos() {
   require ffmpeg || return
-  [ $# -le 2 ] && return $(err 'usage: `combineVideos srcA.mp4 srcB.mp4 out.mp4`')
-  local catFiles=("$@")
-  local outFile=${catFiles[-1]}
-  unset catFiles[-1]
-  local content=''
-  for catFile in "${catFiles[@]}"; do
-    [ -z $catFile ] && continue
-    content+="file '$(realpath "$catFile")'\n"
+  [ $# -lt 2 ] && return $(err 'usage: `combineVideos srcA.mp4 srcB.mp4` makes src.mp4')
+
+  local cmd='ffmpeg' firstStr="$1" outFile='' msg=''
+  for arg in "$@"; do
+    cmd+=" -i $arg"
+    outFile=''
+    for i in $(seq 0 ${#arg}); do
+      # printf "$i:<${arg:$i:1} ${firstStr:$i:1}>"
+      if [ "${arg:$i:1}" = "${firstStr:$i:1}" ]; then
+        outFile+="${arg:$i:1}"
+      else
+        outFile+="X"
+      fi
+    done
   done
-  local tmp=$(mktemp)
-  echo -e $content > $tmp
-  ffmpeg -safe 0 -f concat -i "$tmp" -c:v copy -c:a copy -c:s copy -map 0:v -map 0:a -map 0:s? "$outFile"
-  # rm "$tmp"
+
+  msg+="[${C_PINK}combineVideos:START${C_RESET}]\n"
+  msg+="${C_CYAN}sources${C_RESET}: $@\n"
+  msg+="${C_CYAN}outfile${C_RESET}: $outFile"
+  echo -e $msg
+
+  if read -q 'ok?[y/n]'; then
+    echo ''
+    cmd+=' -filter_complex [0:v:0][0:a:0][1:v:0][1:a:0][2:v:0][2:a:0]concat=n=3:v=1:a=1[outv][outa] -map [outv] -map [outa]'
+    cmd+=" $outFile"
+    # echo "cmd: $cmd"
+    $cmd
+  else
+    echo -e "\n[${C_PINK}combineVideos:ABORT${C_RESET}]"
+    return
+  fi
 }
 
 clearCache() {
   require sync tee || return
   sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && swapoff -a && swapon -a
 }
-
 
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
@@ -379,7 +396,8 @@ if [[ -f "${HOME}/.zprofile" ]] && [[ ! $(cat "${HOME}/.zprofile"|fgrep 'type xm
   echo '[[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap' >> "${HOME}/.zprofile"
 fi
 
-# local のmysql docker に簡易接続するやつ
-export MYSQL_PWD=password
-export MYSQL='mysql -uusername -hlocalhost --protocol tcp database'
+# added by Nix installer
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+  . $HOME/.nix-profile/etc/profile.d/nix.sh;
+fi
 
