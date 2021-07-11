@@ -25,6 +25,8 @@ repo = 'Shougo/vimfiler'
 
 # Shell
 [[plugins]]
+repo = 'Shougo/vimproc'
+[[plugins]]
 repo = 'Shougo/vimshell'
 
 # 括弧

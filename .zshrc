@@ -1,7 +1,9 @@
 # Prompt
 set -o pipefail
 autoload -Uz colors; colors
-if [ ${UID} -eq 0 ]; then # if Root
+if [ "$VIMSHELL" ]; then
+  PROMPT="%{${fg_bold[yellow]}%}%~%{${reset_color}%} $ "
+elif [ ${UID} -eq 0 ]; then # if Root
   PROMPT="${fg[red]}[%n:${HOST}] ${reset_color}@${fg[white]} %D{%Y-%m-%d %H:%M:%S}
 %{${fg_bold[yellow]}%}%~%{${reset_color}%}
 # "

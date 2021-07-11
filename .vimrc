@@ -1,197 +1,160 @@
 if !1|finish|endif
 
-"------------------------------------
-" OSの判定
-"------------------------------------ let OSTYPE = system('uname')
-"------------------------------------
-" dein
-"------------------------------------
-"dein Scripts-----------------------------
+" +----------------------------------------------------------+
+" | which OS ? -> OSTYPE: {'unknown', 'unix', 'mac', 'win' } |
+" +----------------------------------------------------------+
+let OSTYPE = 'unknown'
+if has('unix') | let OSTYPE = 'unix' | en
+if has('mac') | let OSTYPE = 'mac' | en
+if has('win32') || has ('win64')
+  let OSTYPE = 'win'
+en
+
+
+" +----------------------------------------------------------+
+" | dein                                                     |
+" +----------------------------------------------------------+
 if &compatible
-    set nocompatible               " Be iMproved
-endif
-set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+  se nocp " nocompatible " Be iMproved
+en
+
+se runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.cache/dein/')
-  call dein#begin('~/.cache/dein/')
-  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+  cal dein#begin('~/.cache/dein/')
+  cal dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+  cal dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   let g:rc_dir    = expand('~/.vim/rc')
   let s:toml      = g:rc_dir . '/dein.toml'
   let s:lazy      = g:rc_dir . '/lazy.toml'
-  call dein#load_toml(s:toml,      {'lazy': 0})
-  call dein#load_toml(s:lazy,      {'lazy': 1})
-  call dein#end()
-  call dein#save_state()
-endif
+  cal dein#load_toml(s:toml, {'lazy': 0})
+  cal dein#load_toml(s:lazy, {'lazy': 1})
+  cal dein#end()
+  cal dein#save_state()
+en
 filetype plugin indent on
 syntax enable
 if dein#check_install()
-    call dein#install()
-endif
-"End dein Scripts-------------------------
+  cal dein#install()
+en
 
-"------------------------------------
-" デフォルトの人たち
-"------------------------------------
-set modeline
-set modelines=2
-set backspace=2
-au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
-au BufWrite /private/etc/pw.* set nowritebackup nobackup
 
-"------------------------------------
-" 補完の設定
-"------------------------------------
-let g:deoplete#enable_at_startup = 1
-set completeopt=menuone
-
-"------------------------------------
-" ペーストができるように
-"------------------------------------
+" +----------------------------------------------------------+
+" | Can Paste                                                |
+" +----------------------------------------------------------+
 if &term =~ "xterm"
-    let &t_ti .= "\e[?2004h"
-    let &t_te .= "\e[?2004l"
-    let &pastetoggle = "\e[201~"
-    function! XTermPasteBegin(ret)
-        set paste
-        return a:ret
-    endfunction
-    noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
-    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
-    cnoremap <special> <Esc>[200~ <nop>
-    cnoremap <special> <Esc>[201~ <nop>
-endif
-
-"------------------------------------
-" 基本的なキーマッピング
-"------------------------------------
-map <Space> <Plug>(operator-replace)
-
-nnoremap == gg=G''
-
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap * *zz
-nnoremap # #zz
-nnoremap g* g*zz
-nnoremap g# g#zz
-
-nnoremap x "_x
-
-nnoremap j gj
-vnoremap j gj
-nnoremap gj j
-vnoremap gj j
-nnoremap k gk
-vnoremap k gk
-nnoremap gk k
-vnoremap gk k
-nnoremap <Up> gk
-nnoremap <Down> j
-vnoremap <Up> gk
-vnoremap <Down> j
-
-nnoremap ZZ <Nop>
-nnoremap ZQ <Nop>
-nnoremap Q gq
-
-"------------------------------------
-" 画面分割(キーマッピング)
-"------------------------------------
-noremap vs :vs<CR>
-nnoremap s <Nop>
-nnoremap sj <C-w>j
-nnoremap sk <C-w>k
-nnoremap sl <C-w>l
-nnoremap sh <C-w>h
-nnoremap sJ <C-w>J
-nnoremap sK <C-w>K
-nnoremap sL <C-w>L
-nnoremap sH <C-w>H
-nnoremap sn gt
-nnoremap sp gT
-nnoremap sr <C-w>r
-nnoremap s= <C-w>=
-nnoremap sw <C-w>w
-nnoremap so <C-w>_<C-w>|
-nnoremap sO <C-w>=
-nnoremap sN :<C-u>bn<CR>
-nnoremap sP :<C-u>bp<CR>
-nnoremap st :<C-u>tabnew<CR>
-nnoremap sT :<C-u>Unite tab<CR>
-nnoremap ss :<C-u>sp<CR>
-nnoremap sv :<C-u>vs<CR>
-nnoremap sq :<C-u>q<CR>
-nnoremap sQ :<C-u>bd<CR>
-nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
-nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
-call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
-call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
-call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
-call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
-call submode#map('bufmove', 'n', '', '>', '<C-w>>')
-call submode#map('bufmove', 'n', '', '<', '<C-w><')
-call submode#map('bufmove', 'n', '', '+', '<C-w>+')
-call submode#map('bufmove', 'n', '', '-', '<C-w>-')
-
-"------------------------------------
-" ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ
-"------------------------------------
-"if OSTYPE == "Darwin\n"
-"    set ttimeoutlen=1
-"    let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
-"    augroup MyIMEGroup
-"        autocmd!
-"        autocmd InsertLeave * :call system(g:imeoff)
-"    augroup END
-"    inoremap <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
-"endif
-
-"------------------------------------
-" その他の設定
-"------------------------------------
-set encoding=utf-8
-set fileencodings+=sjis,utf-8
-if has("syntax")
-    syntax on
-endif
-
-" VimFilerで自動cd
-let g:vimfiler_enable_auto_cd = 1
+  let &t_ti .= "\e[?2004h"
+  let &t_te .= "\e[?2004l"
+  let &pastetoggle = "\e[201~"
+  func! XTermPasteBegin(ret)
+    set paste
+    return a:ret
+  endf
+  no <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+  ino <special> <expr> <Esc>[200~ XTermPasteBegin("")
+  cno <special> <Esc>[200~ <nop>
+  cno <special> <Esc>[201~ <nop>
+en
 
 
-" Rainbow Parentheses Improved
-let g:rainbow_active = 1
+" +----------------------------------------------------------+
+" | Key Mappings                                             |
+" +----------------------------------------------------------+
+"      mode: |Norm|Ins|Cmd|Vis|Sel|Opr|Term|Lang|
+" command    +----+---+---+---+---+---+----+----+
+" [nore]map  |yes | - | - |yes|yes|yes| -  | -  |
+" n[nore]map |yes | - | - | - | - | - | -  | -  |
+" [nore]map! | -  |yes|yes| - | - | - | -  | -  |
+" i[nore]map | -  |yes| - | - | - | - | -  | -  |
+" c[nore]map | -  | - |yes| - | - | - | -  | -  |
+" v[nore]map | -  | - | - |yes|yes| - | -  | -  |
+" x[nore]map | -  | - | - |yes| - | - | -  | -  |
+" s[nore]map | -  | - | - | - |yes| - | -  | -  |
+" o[nore]map | -  | - | - | - | - |yes| -  | -  |
+" t[nore]map | -  | - | - | - | - | - |yes | -  |
+" l[nore]map | -  |yes|yes| - | - | - | -  |yes |
 
-" 改行時の自動コメント化を無効に
-augroup auto_comment_off
+" nn: n[nore]map: normalmode-no-remap
+nn == gg=G''
+nn n nzz
+nn N Nzz
+nn * *zz
+nn # #zz
+nn g* g*zz
+nn g# g#zz
+nn x "_x
+nn ZZ <Nop>
+nn ZQ <Nop>
+nn Q gq
+
+" no: [nore]map: no-remap
+no <Space> <Plug>(operator-replace)
+no j gj
+no gj j
+no k gk
+no gk k
+no <Up> gk
+no <Down> j
+no vs :vs<CR>
+
+" " separate window
+nn s <Nop>
+nn sj <C-w>j
+nn sk <C-w>k
+nn sl <C-w>l
+nn sh <C-w>h
+nn sJ <C-w>J
+nn sK <C-w>K
+nn sL <C-w>L
+nn sH <C-w>H
+nn sn gt
+nn sp gT
+nn sr <C-w>r
+nn s= <C-w>=
+nn sw <C-w>w
+nn so <C-w>_<C-w>|
+nn sO <C-w>=
+nn sN :<C-u>bn<CR>
+nn sP :<C-u>bp<CR>
+nn st :<C-u>tabnew<CR>
+nn sT :<C-u>Unite tab<CR>
+nn ss :<C-u>sp<CR>
+nn sv :<C-u>vs<CR>
+nn sq :<C-u>q<CR>
+nn sQ :<C-u>bd<CR>
+nn sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
+nn sB :<C-u>Unite buffer -buffer-name=file<CR>
+
+cal submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+cal submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+cal submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+cal submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+cal submode#map('bufmove', 'n', '', '>', '<C-w>>')
+cal submode#map('bufmove', 'n', '', '<', '<C-w><')
+cal submode#map('bufmove', 'n', '', '+', '<C-w>+')
+cal submode#map('bufmove', 'n', '', '-', '<C-w>-')
+
+
+" +----------------------------------------------------------+
+" | ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ   |
+" +----------------------------------------------------------+
+if OSTYPE == "mac"
+  se ttimeoutlen = 1
+  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
+  aug MyIMEGroup " aug: augroup
     au!
-    au BufEnter * setlocal formatoptions-=r
-    au BufEnter * setlocal formatoptions-=o
-augroup END
+    au InsertLeave * :call system(g:imeoff)
+  aug END
+  ino <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
+en
 
-set number
-set ambiwidth=double
-set expandtab
-set autoindent
-set smartindent
-set wrap
-set list " 不可視文字表示
-set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:% " 不可視文字例
-set fileformats=unix " 改行コードを強制的にLFに
-set nrformats-=octal " <C-a> <C-x> を10進数での加減算に
-set hidden
-set history=50
-set virtualedit=block
-set whichwrap=b,s,[,],<,>
-set backspace=indent,eol,start
-set wildmenu
 
-" set foldmethod=marker
-" set foldmethod=syntax
-" set foldnestmax=1
-" set foldcolumn=2
-
-function! JSFolds()
+" +----------------------------------------------------------+
+" | Language Configs: set, setlocalの違い                    |
+" | //secret-garden.hatenablog.com/entry/2017/12/14/175143   |
+" +----------------------------------------------------------+
+" Javascript
+func! JSFolds()
+  echo "JSFolds called"
   let thisline = getline(v:lnum)
   if match(thisline, '/\*\*') >= 0
     return 'a1'
@@ -199,96 +162,136 @@ function! JSFolds()
     return 's1'
   else
     return '='
-  endif
-endfunction
-au FileType javascript,typescript setlocal foldmethod=expr foldexpr=JSFolds()
-au FileType python setlocal foldmethod=indent foldlevel=0 foldnestmax=1
-au FileType rust setlocal foldmethod=indent foldlevel=0 foldnestmax=2
+  en
+endf
 
-set ignorecase
-set mouse=a
-colorscheme molokai
-set t_Co=256
-set synmaxcol=256
+au BufRead,BufNewFile *.js   setl ft=typescriptreact fdm=expr fde=JSFolds()
+au BufRead,BufNewFile *.ts   setl ft=typescriptreact fdm=expr fde=JSFolds()
+au BufRead,BufNewFile *.jsx  setl ft=typescriptreact fdm=expr fde=JSFolds()
+au BufRead,BufNewFile *.tsx  setl ft=typescriptreact fdm=expr fde=JSFolds()
+au BufRead,BufNewFile *.sol  setl ft=typescriptreact fdm=expr fde=JSFolds()
 
-hi Comment ctermfg=cyan
-vnoremap * "zy:let @/ = @z<CR>
+" Tex
+au BufRead,BufNewFile *.tex  setl ts=4 sts=4 sw=4
 
-" set clipboard=unnamedplus
+" Python
+au FileType python           setl fdm=indent fdl=0 fdn=2
 
-"w!!でsudo 保存
-cabbr w!! w !sudo tee > /dev/null %
-" swp 生成先を変更
-"set directory=~/.vim/tmp
-set noswapfile
+" Html
+au BufRead,BufNewFile *.html setl ft=htmldjango
+au BufRead,BufNewFile *.tera setl ft=htmldjango
 
-hi Normal ctermbg=NONE guibg=NONE
-hi NonText ctermbg=NONE guibg=NONE
+" Cpp like lang
+au BufRead,BufNewFile *.cl   setl ft=cpp
+au BufRead,BufNewFile *.mq4  setl ft=cpp
+au BufRead,BufNewFile *.mqh  setl ft=cpp
 
-"------------------------------------
-" javascript系の設定
-"------------------------------------
-let g:vim_jsx_pretty_colorful_config = 0
+" Rust
+au FileType rust             setl fdm=indent fdl=0 fdn=2
 
-"------------------------------------
-" MD記法
-"------------------------------------
-au BufRead,BufNewFile *.{mkd,md} set filetype=markdown
-au! FileType markdown hi! def link markdownItalic Normal
-au FileType markdown set commentstring=<\!--\ %s\ -->
-let g:vim_markdown_folding_disabled=1
-let g:previm_show_header=0
-let g:previm_open_cmd='/usr/bin/google-chrome-stable'
-nnoremap md :PrevimOpen<CR>
+" Markdown
+au FileType markdown         setl fdm=syntax fdl=0 fdn=2 sts=4 ts=4 sw=4
 
-"------------------------------------
-" Tex記法
-"------------------------------------
-au BufRead,BufNewFile *.{tex} setlocal filetype=tex tabstop=2 softtabstop=2 shiftwidth=2
 
-"------------------------------------
-" Plugins Settings
-"------------------------------------
+" +----------------------------------------------------------+
+" | Plugins Configs                                          |
+" +----------------------------------------------------------+
+" dein vim
+nn DU :call dein#update()<CR>
+nn RES :call dein#recache_runtimepath()<CR>
+
 " VimFiler
 let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_enable_auto_cd = 1 " 自動cd
+nn vf :VimFiler -auto-cd<CR>
 
 " VimShell
-let g:vimshell_prompt = "> "
-let g:vimshell_secondary_prompt = "> "
+let g:vimshell_split_command = 'split'
 let g:vimshell_user_prompt = 'getcwd()'
+nn VS :VimShellInteractive zsh<CR>
 
-"------------------------------------
-" Highlights
-"------------------------------------
-hi Pmenu ctermbg=4
-hi PmenuSel ctermbg=1
-hi PMenuSbar ctermbg=4
-hi MatchParen cterm=bold ctermbg=none ctermfg=white
+" Rainbow Parentheses Improved
+let g:rainbow_active = 1
 
-au BufRead,BufNewFile *.tera set filetype=htmldjango
+" deoplete
+let g:deoplete#enable_at_startup = 1
 
-au BufRead,BufNewFile *.cl,*.mq4,*.mqh set filetype=cpp
-au BufRead,BufNewFile *.ts,*.js,*.sol,*.ts,*.tsx,*.jsx set filetype=typescriptreact
-au BufRead,BufNewFile * set softtabstop=2 tabstop=2 shiftwidth=2
-au BufRead,BufNewFile *.rs  set filetype=rust
+" jsx color
+let g:vim_jsx_pretty_colorful_config = 0
 
-nnoremap vf :VimFiler -auto-cd<CR>
-nnoremap VS :VimShellInteractive zsh<CR>
-nnoremap DU :call dein#update()<CR>
-nnoremap RES :call dein#recache_runtimepath()<CR>
+" markdown preview
+let g:vim_markdown_folding_disabled=1
+let g:previm_show_header=0
+" let g:previm_open_cmd='/usr/bin/google-chrome-stable'
+nn md :PrevimOpen<CR>
 
-" current line content to clipboard
+
+" +----------------------------------------------------------+
+" | Set Configs                                              |
+" +----------------------------------------------------------+
+se ml " modeline
+se mls=2 " modelines
+se bs=indent,eol,start " backspace: backspace can delete `indent`, `eol`, `before start position`
+se cot=menuone " completeopt: Option for completion
+se enc=utf-8 " encoding: File encoding se fencs+=sjis,utf-8 " fileencodings
+if has("syntax") | syntax on | endif
+" Disable auto comment when new line
+aug auto_comment_off
+  au!
+  au BufEnter * setl fo-=r " formatoptions
+  au BufEnter * setl fo-=o
+aug END
+
+se nu " number
+se ambw=double " ambiwidth
+se et " expandtab
+se ai " autoindent
+se si " smartindent
+se wrap
+se list " Show invisible chars
+se lcs=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:% " listchars: Show invisible chars as this
+se ffs=unix " fileformats: Force newline char LF
+se nf-=octal " nrformats: disable octal {in/de}crement when <C-a> <C-x>
+se hid " hidden
+se history=50
+se ve=all " virtualedit
+se ww=b,s,[,],<,>,~ " whichwrap
+se wmnu " wildmenu
+
+se ignorecase
+se mouse=a
+
+color monokai " colorscheme
+se t_Co=256
+se smc=256 " synmaxcol
+
+" sudo save with 'w!!'
+cabbr w!! w !sudo tee > /dev/null %
+
+" swp create to /tmp/vimswp
+if OSTYPE == "unix" || OSTYPE == "mac"
+  silent !mkdir -p /tmp/vimswp
+  se dir=/tmp/vimswp " directory
+else
+  se noswapfile " noswapfile
+en
+
+" Current line content to clipboard
 :command -range Xz :silent :<line1>,<line2>w !xsel -i -b
 :cabbrev xz Xz
 
 " DateTime now
-nnoremap dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
+nn dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
 
-" deoplete completion color
-" hi Pmenu ctermbg=8 guibg=#606060
-" hi PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
-" hi PmenuSbar ctermbg=0 guibg=#d6d6d6
-hi Pmenu ctermfg=81 ctermbg=8 guifg=#66D9EF guibg=#606060
-hi PmenuSel ctermfg=242 ctermbg=1 guifg=#dddd00 guibg=#1f82cd
-hi PmenuSbar ctermbg=0 guibg=#d6d6d6
+" +----------------------------------------------------------+
+" | Highlights                                               |
+" +----------------------------------------------------------+
+hi Pmenu      ctermfg=81 ctermbg=8 guifg=#66D9EF guibg=#606060
+hi PmenuSel   ctermfg=242 ctermbg=1 guifg=#dddd00 guibg=#1f82cd
+hi PmenuSbar  ctermbg=0 guibg=#d6d6d6
+hi MatchParen cterm=bold ctermbg=none ctermfg=white
+hi Normal     ctermbg=NONE guibg=NONE
+hi NonText    ctermbg=NONE guibg=NONE
+hi Comment    ctermfg=cyan
+vn * "zy:let @/ = @z<CR>
 
