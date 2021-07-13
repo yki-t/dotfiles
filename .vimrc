@@ -21,19 +21,18 @@ en
 se runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.cache/dein/')
   cal dein#begin('~/.cache/dein/')
-  cal dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
   cal dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   let g:rc_dir    = expand('~/.vim/rc')
-  let s:toml      = g:rc_dir . '/dein.toml'
-  let s:lazy      = g:rc_dir . '/lazy.toml'
-  cal dein#load_toml(s:toml, {'lazy': 0})
-  cal dein#load_toml(s:lazy, {'lazy': 1})
+  cal dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+  cal dein#load_toml(g:rc_dir . '/dein.toml', {'lazy': 0})
+  " cal dein#load_toml(g:rc_dir . '/lazy.toml', {'lazy': 1})
   cal dein#end()
   cal dein#save_state()
 en
 filetype plugin indent on
 syntax enable
 if dein#check_install()
+  cal dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
   cal dein#install()
 en
 
@@ -195,12 +194,12 @@ au FileType markdown         setl sts=4 ts=4 sw=4 fdm=syntax fdl=0 fdn=2
 
 " Shell
 au FileType sh               setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+au FileType zsh              setl ft=sh
 
 " Vim
 au FileType vim              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " Other Files
-au VimEnter * nested if @% == '' && s:GetBufByte() == 0 | se ft=sh | endif
 func! s:GetBufByte()
   let byte = line2byte(line('$') + 1)
   if byte == -1
@@ -209,7 +208,8 @@ func! s:GetBufByte()
     return byte - 1
   en
 endf
-au BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) !~ '^#!.*' | set filetype=sh | endif
+au VimEnter * nested if @% == '' && s:GetBufByte() == 0 | se ft=sh | en
+au BufRead,BufNewFile * nested if @% !~ '\.' | se ft=sh | en
 
 
 " +----------------------------------------------------------+

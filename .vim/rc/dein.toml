@@ -1,7 +1,4 @@
 
-[[plugins]]
-repo = 'Shougo/dein.vim'
-
 # 補完
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
@@ -34,6 +31,7 @@ repo = 'Shougo/vimshell'
 repo = 'tpope/vim-surround'
 [[plugins]]
 repo = 'luochen1990/rainbow'
+
 # csv
 [[plugins]]
 repo = 'mechatroner/rainbow_csv'
@@ -65,14 +63,14 @@ repo = 'thinca/vim-quickrun'
 # Javascript
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
-[[plugins]]
-repo = 'peitalin/vim-jsx-typescript'
 
 # QML
 [[plugins]]
 repo = 'peterhoeg/vim-qml'
 
 # vue
+[[plugins]]
+repo = 'peitalin/vim-jsx-typescript'
 [[plugins]]
 repo = 'posva/vim-vue'
 
@@ -81,4 +79,45 @@ repo = 'digitaltoad/vim-pug'
 
 [[plugins]]
 repo = 'zigford/vim-powershell'
+
+ # Rust lang
+[[plugins]]
+repo = 'racer-rust/vim-racer'
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+[[plugins]]
+repo = 'sebastianmarkow/deoplete-rust'
+on_ft = 'rust'
+depends = ['deoplete.nvim']
+
+# mql4
+[[plugins]]
+repo = 'vobornik/vim-mql4'
+
+# elm
+[[plugins]]
+repo = 'lambdatoast/elm.vim'
+
+# C++
+[[plugins]]
+repo = 'octol/vim-cpp-enhanced-highlight'
+
+# web template
+[[plugins]]
+repo = 'statianzo/vim-jade'
+[[plugins]]
+repo = 'Glench/Vim-Jinja2-Syntax'
+
+# latex
+[[plugins]]
+repo = 'lervag/vimtex'
+
+# Flutter
+[[plugins]]
+repo = 'dart-lang/dart-vim-plugin'
+on_ft = ['dart']
+
+# toml
+[[plugins]]
+repo = 'cespare/vim-toml'
 

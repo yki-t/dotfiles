@@ -340,9 +340,9 @@ bakup() {
 
 combineVideos() {
   require ffmpeg || return
-  [ $# -lt 2 ] && return $(err 'usage: `combineVideos srcA.mp4 srcB.mp4` makes src.mp4')
+  local argCnt=$# cmd='ffmpeg' firstStr="$1" outFile='' avs='' msg=''
+  [ $argCnt -lt 2 ] && return $(err 'usage: `combineVideos srcA.mp4 srcB.mp4` makes src.mp4')
 
-  local cmd='ffmpeg' firstStr="$1" outFile='' msg=''
   for arg in "$@"; do
     cmd+=" -i $arg"
     outFile=''
@@ -356,17 +356,21 @@ combineVideos() {
     done
   done
 
+  avs=$(for i in $(seq 0 $((argCnt-1))); do printf "[${i}:v:0][${i}:a:0]"; done)
+  cmd+=" -filter_complex ${avs}concat=n=$argCnt:v=1:a=1[outv][outa] -map [outv] -map [outa]"
+  cmd+=" $outFile"
+
   msg+="[${C_PINK}combineVideos:START${C_RESET}]\n"
   msg+="${C_CYAN}sources${C_RESET}: $@\n"
-  msg+="${C_CYAN}outfile${C_RESET}: $outFile"
+  msg+="${C_CYAN}outfile${C_RESET}: $outFile\n"
+  msg+="${C_CYAN}command${C_RESET}: $cmd"
   echo -e $msg
 
   if read -q 'ok?[y/n]'; then
     echo ''
-    cmd+=' -filter_complex [0:v:0][0:a:0][1:v:0][1:a:0][2:v:0][2:a:0]concat=n=3:v=1:a=1[outv][outa] -map [outv] -map [outa]'
-    cmd+=" $outFile"
     # echo "cmd: $cmd"
     $cmd
+    echo -e "\n[${C_PINK}combineVideos:DONE${C_RESET}]"
   else
     echo -e "\n[${C_PINK}combineVideos:ABORT${C_RESET}]"
     return
