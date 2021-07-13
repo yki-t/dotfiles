@@ -150,11 +150,10 @@ en
 
 " +----------------------------------------------------------+
 " | Language Configs: set, setlocalの違い                    |
-" | //secret-garden.hatenablog.com/entry/2017/12/14/175143   |
+" | https://secret-garden.hatenablog.com/entry/2017/12/14/175143 |
 " +----------------------------------------------------------+
 " Javascript
 func! JSFolds()
-  echo "JSFolds called"
   let thisline = getline(v:lnum)
   if match(thisline, '/\*\*') >= 0
     return 'a1'
@@ -165,11 +164,13 @@ func! JSFolds()
   en
 endf
 
+" ft: filetype, fdm: foldMethod, fde: foldExpression
 au BufRead,BufNewFile *.js   setl ft=typescriptreact fdm=expr fde=JSFolds()
 au BufRead,BufNewFile *.ts   setl ft=typescriptreact fdm=expr fde=JSFolds()
 au BufRead,BufNewFile *.jsx  setl ft=typescriptreact fdm=expr fde=JSFolds()
-au BufRead,BufNewFile *.tsx  setl ft=typescriptreact fdm=expr fde=JSFolds()
 au BufRead,BufNewFile *.sol  setl ft=typescriptreact fdm=expr fde=JSFolds()
+
+au FileType typescriptreact  setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " Tex
 au BufRead,BufNewFile *.tex  setl ts=4 sts=4 sw=4
@@ -190,7 +191,25 @@ au BufRead,BufNewFile *.mqh  setl ft=cpp
 au FileType rust             setl fdm=indent fdl=0 fdn=2
 
 " Markdown
-au FileType markdown         setl fdm=syntax fdl=0 fdn=2 sts=4 ts=4 sw=4
+au FileType markdown         setl sts=4 ts=4 sw=4 fdm=syntax fdl=0 fdn=2
+
+" Shell
+au FileType sh               setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+
+" Vim
+au FileType vim              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+
+" Other Files
+au VimEnter * nested if @% == '' && s:GetBufByte() == 0 | se ft=sh | endif
+func! s:GetBufByte()
+  let byte = line2byte(line('$') + 1)
+  if byte == -1
+    return 0
+  else
+    return byte - 1
+  en
+endf
+au BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) !~ '^#!.*' | set filetype=sh | endif
 
 
 " +----------------------------------------------------------+
@@ -282,6 +301,7 @@ en
 
 " DateTime now
 nn dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
+
 
 " +----------------------------------------------------------+
 " | Highlights                                               |
