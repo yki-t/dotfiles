@@ -111,7 +111,7 @@ export C_RESET='\033[0m' # Reset
 
 # local のmysql docker に簡易接続するやつ
 export MYSQL_PWD=password
-export MYSQL='mysql -uusername -hlocalhost --protocol tcp database'
+export MYSQL='mysql -uusername -hlocalhost --protocol tcp database -A '
 
 # Linux shortcut
 paths+=":${HOME}/.local/bin"

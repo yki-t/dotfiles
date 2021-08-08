@@ -199,6 +199,10 @@ au FileType zsh              setl ft=sh
 " Vim
 au FileType vim              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
+" Jinja
+au BufRead,BufNewFile *.liquid setl ft=jinja
+au FileType jinja            setl sts=4 ts=4 sw=4
+
 " Other Files
 func! s:GetBufByte()
   let byte = line2byte(line('$') + 1)
