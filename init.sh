@@ -189,6 +189,7 @@ installBase() {
 changeRootAndConfigure() {
   # {{{
   arch-chroot /mnt pacman -Syyu --noconfirm
+  # clock, hostname, locale
   arch-chroot /mnt ln -sf /usr/share/zoneinfo/$ZONE /etc/localtime
   arch-chroot /mnt hwclock --systohc
   arch-chroot /mnt echo $HOST_NAME > /etc/hostname
@@ -197,6 +198,10 @@ changeRootAndConfigure() {
     arch-chroot /mnt sed -i.org -e "s~^#${LOCALES[$i]}~${LOCALES[$i]}~" /etc/locale.gen
   done
   arch-chroot /mnt locale-gen
+  # allow multilib
+  arch-chroot sed -ie 's|#\[multilib\]|[multilib]\nInclude = /etc/pacman.d/mirrorlist|' /etc/pacman.conf
+
+  arch-chroot /mnt pacman -Syy --noconfirm
 } # }}}
 installPackages() {
   # {{{
@@ -225,7 +230,7 @@ installAdditionalPackages() {
     curl wget xsel rsync ripgrep pixz pv alacritty-ligature `# basic cli` \
     dstat sysstat hdparm dmidecode `# system check` \
     inetutils dnsutils exiftool imagemagick nkf unarchiver `# additional cli` \
-    reflector powerpill pacman-contrib`# pacman extension` \
+    reflector powerpill pacman-contrib `# pacman extension` \
     fcitx fcitx-im fcitx-configtool fcitx-mozc otf-ipafont noto-fonts-sc noto-fonts-tc adobe-source-han-sans-kr-fonts `# IME ja,cn,kr` \
     systemd-numlockontty xorg-xmodmap `# system settings` \
     bat exa xdotool wmctrl `# Rust cli alternatives` \
@@ -235,7 +240,8 @@ installAdditionalPackages() {
     python-pip nodejs-lts-erbium yarn grpcurl `# languages` \
     google-chrome firefox `# browser ` \
     docker docker-compose github-cli google-cloud-sdk `# dev` \
-    nginx apache mariadb `# web` \
+    nginx apache mariadb `# web dev` \
+    wine winetricks `# Windows emulator. dep) multilib` \
     jmtpfs qemu libvirt android-studio `# android` \
     vlc gwenview okular poppler-data libreoffice-still blender `# GUI tools` \
     pipewire pipewire-alsa pipewire-jack pipewire-media-session pipewire-pulse pipewire-ffmpeg pipewire-docs `# Pipewire: Bluetooth` \
