@@ -244,7 +244,7 @@ installAdditionalPackages() {
     wine winetricks `# Windows emulator. dep) multilib` \
     jmtpfs qemu libvirt android-studio `# android` \
     vlc gwenview okular poppler-data libreoffice-still blender `# GUI tools` \
-    pipewire pipewire-alsa pipewire-jack pipewire-media-session pipewire-pulse pipewire-ffmpeg pipewire-docs `# Pipewire: Bluetooth` \
+    pipewire pipewire-alsa pipewire-jack pipewire-media-session pipewire-pulse pipewire-ffmpeg pipewire-docs bluez-git `# Pipewire: Bluetooth` \
     man
 
 
