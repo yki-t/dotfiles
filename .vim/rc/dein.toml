@@ -121,3 +121,7 @@ on_ft = ['dart']
 [[plugins]]
 repo = 'cespare/vim-toml'
 
+# golang
+[[plugins]]
+repo = 'fatih/vim-go'
+

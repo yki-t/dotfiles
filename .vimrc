@@ -1,4 +1,4 @@
-if !1|finish|endif
+if !1|finish|en
 
 " +----------------------------------------------------------+
 " | which OS ? -> OSTYPE: {'unknown', 'unix', 'mac', 'win' } |
@@ -164,10 +164,12 @@ func! JSFolds()
 endf
 
 " ft: filetype, fdm: foldMethod, fde: foldExpression
-au BufRead,BufNewFile *.js   setl ft=typescriptreact fdm=expr fde=JSFolds()
-au BufRead,BufNewFile *.ts   setl ft=typescriptreact fdm=expr fde=JSFolds()
-au BufRead,BufNewFile *.jsx  setl ft=typescriptreact fdm=expr fde=JSFolds()
-au BufRead,BufNewFile *.sol  setl ft=typescriptreact fdm=expr fde=JSFolds()
+" au BufRead,BufNewFile *.json setl ft=typescriptreact fdm=expr fde=JSFolds()
+au BufRead,BufNewFile *.json setl ft=typescriptreact
+au BufRead,BufNewFile *.js   setl ft=typescriptreact
+au BufRead,BufNewFile *.ts   setl ft=typescriptreact
+au BufRead,BufNewFile *.jsx  setl ft=typescriptreact
+au BufRead,BufNewFile *.sol  setl ft=typescriptreact
 
 au FileType typescriptreact  setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
@@ -198,6 +200,19 @@ au FileType zsh              setl ft=sh
 
 " Vim
 au FileType vim              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+
+" Vue
+au FileType vue              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+au FileType vue              setl noexpandtab " tmp
+
+" SQL
+au FileType sql              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+
+" Golang
+au FileType go               setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+
+" PHP
+au FileType php              setl sts=4 ts=4 sw=4 fdm=syntax fdl=0 fdn=2
 
 " Jinja
 au BufRead,BufNewFile *.liquid setl ft=jinja
@@ -272,7 +287,7 @@ se ai " autoindent
 se si " smartindent
 se wrap
 se list " Show invisible chars
-se lcs=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:% " listchars: Show invisible chars as this
+se lcs=tab:>-,trail:-,eol:↲,extends:»,precedes:«,nbsp:% " listchars: Show invisible chars as this
 se ffs=unix " fileformats: Force newline char LF
 se nf-=octal " nrformats: disable octal {in/de}crement when <C-a> <C-x>
 se hid " hidden

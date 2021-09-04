@@ -90,6 +90,13 @@ if type exa &>/dev/null;then
   export EXA_COLORS="${exaGen}${exaMov}${exaImg}"
 fi
 
+# History
+export HISTFILE=${HOME}/.zsh_history
+export HISTSIZE=1000
+export SAVEHIST=100000
+setopt hist_ignore_dups
+setopt EXTENDED_HISTORY
+
 # Mozc & fcitx - IME
 export XIM_PROGRAM=fcitx
 export XIM=fcitx
@@ -111,7 +118,10 @@ export C_RESET='\033[0m' # Reset
 
 # local のmysql docker に簡易接続するやつ
 export MYSQL_PWD=password
-export MYSQL='mysql -uusername -hlocalhost --protocol tcp database -A '
+export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A '
+
+# Accounts
+export GITHUB_USER='yuki37'
 
 # Linux shortcut
 paths+=":${HOME}/.local/bin"

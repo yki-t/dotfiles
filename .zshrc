@@ -168,7 +168,7 @@ rand() {
   elif [[ -n "${opthash[(i)-w]}" ]] || [[ -n "${opthash[(i)--week]}" ]]; then
     range='0-9a-zA-Z'
   else
-    range='0-9a-zA-Z\^$/|()[]{}.,?!_=&@${HOME}%#:;'
+    range='0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;'
   fi
   to_clipboard=0
   if [[ -n "${opthash[(i)-c]}" ]] || [[ -n "${opthash[(i)--clipboard]}" ]]; then
@@ -180,7 +180,7 @@ rand() {
   else
     count=128
   fi
-  randstr="$(cat /dev/urandom|tr -dc $range|head -c $count|sed -e's|[\r\n]||g')"
+  randstr="$(cat /dev/urandom | tr -dc $range | head -c $count | sed -e's|[\r\n]||g')"
   if [ $to_clipboard -eq 1 ];then
     print "$randstr"|xsel -bi
   else
