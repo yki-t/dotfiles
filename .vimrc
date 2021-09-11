@@ -218,6 +218,9 @@ au FileType php              setl sts=4 ts=4 sw=4 fdm=syntax fdl=0 fdn=2
 au BufRead,BufNewFile *.liquid setl ft=jinja
 au FileType jinja            setl sts=4 ts=4 sw=4
 
+" Pug
+au FileType jinja            setl sts=2 ts=2 sw=2
+
 " Other Files
 func! s:GetBufByte()
   let byte = line2byte(line('$') + 1)
@@ -287,7 +290,7 @@ se ai " autoindent
 se si " smartindent
 se wrap
 se list " Show invisible chars
-se lcs=tab:>-,trail:-,eol:↲,extends:»,precedes:«,nbsp:% " listchars: Show invisible chars as this
+se lcs=tab:░░,trail:-,nbsp:↲,eol:↲,extends:»,precedes:« " listchars: Show invisible chars as this
 se ffs=unix " fileformats: Force newline char LF
 se nf-=octal " nrformats: disable octal {in/de}crement when <C-a> <C-x>
 se hid " hidden
