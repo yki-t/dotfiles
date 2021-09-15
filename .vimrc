@@ -184,9 +184,11 @@ au BufRead,BufNewFile *.html setl ft=htmldjango
 au BufRead,BufNewFile *.tera setl ft=htmldjango
 
 " Cpp like lang
+au BufRead,BufNewFile *.c    setl ft=cpp
 au BufRead,BufNewFile *.cl   setl ft=cpp
 au BufRead,BufNewFile *.mq4  setl ft=cpp
 au BufRead,BufNewFile *.mqh  setl ft=cpp
+au FileType cpp              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " Rust
 au FileType rust             setl fdm=indent fdl=0 fdn=2
