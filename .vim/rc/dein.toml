@@ -125,3 +125,8 @@ repo = 'cespare/vim-toml'
 [[plugins]]
 repo = 'fatih/vim-go'
 
+# solidity
+[[plugins]]
+repo = 'tomlion/vim-solidity'
+
+

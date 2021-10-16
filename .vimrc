@@ -169,7 +169,6 @@ au BufRead,BufNewFile *.json setl ft=typescriptreact
 au BufRead,BufNewFile *.js   setl ft=typescriptreact
 au BufRead,BufNewFile *.ts   setl ft=typescriptreact
 au BufRead,BufNewFile *.jsx  setl ft=typescriptreact
-au BufRead,BufNewFile *.sol  setl ft=typescriptreact
 
 au FileType typescriptreact  setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
@@ -306,7 +305,7 @@ se mouse=a
 
 color monokai " colorscheme
 se t_Co=256
-se smc=256 " synmaxcol
+se smc=512 " synmaxcol
 
 " sudo save with 'w!!'
 cabbr w!! w !sudo tee > /dev/null %
@@ -318,6 +317,7 @@ if OSTYPE == "unix" || OSTYPE == "mac"
 else
   se noswapfile " noswapfile
 en
+se noswapfile " noswapfile
 
 " Current line content to clipboard
 :command -range Xz :silent :<line1>,<line2>w !xsel -i -b
