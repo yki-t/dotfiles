@@ -8,7 +8,7 @@ elif [ ${UID} -eq 0 ]; then # if Root
 %{${fg_bold[yellow]}%}%~%{${reset_color}%}
 # "
 else
-  PROMPT="${fg[cyan]}[%n:${HOST}] ${reset_color}@${fg[white]} %D{%Y-%m-%d %H:%M:%S}
+  PROMPT="${fg[green]}[%n:${HOST}] ${reset_color}@${fg[white]} %D{%Y-%m-%d %H:%M:%S}
 %{${fg_bold[yellow]}%}%~%{${reset_color}%}
 $ "
 fi
@@ -406,4 +406,6 @@ fi
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh;
 fi
+
+export PATH=${PATH}:$HOME/gsutil
 
