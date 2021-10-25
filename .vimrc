@@ -204,7 +204,7 @@ au FileType vim              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " Vue
 au FileType vue              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
-au FileType vue              setl noexpandtab " tmp
+"au FileType vue              setl noexpandtab " tmp
 
 " SQL
 au FileType sql              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
@@ -313,7 +313,7 @@ cabbr w!! w !sudo tee > /dev/null %
 " swp create to /tmp/vimswp
 if OSTYPE == "unix" || OSTYPE == "mac"
   silent !mkdir -p /tmp/vimswp
-  se dir=/tmp/vimswp " directory
+  " se dir=/tmp/vimswp " directory
 else
   se noswapfile " noswapfile
 en
@@ -325,6 +325,42 @@ se noswapfile " noswapfile
 
 " DateTime now
 nn dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
+
+" Shell Bootstrap
+func! s:ShellDefault()
+  let s:shell_default =<< trim END
+    #!/bin/bash
+    DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"&>/dev/null &&pwd)" # SCRIPT_DIR
+    err() {
+      echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
+    }
+    ok=1
+    require() {
+      is_ok=true
+      for cmd in $*; do
+        if ! type $cmd&>/dev/null; then
+          err "command '$cmd' is required."
+          is_ok=false
+        fi
+      done
+      if [ $is_ok != true ]; then
+        # when use `source` command
+        if [ "$(sed -e 's/\x0/ /g' /proc/$$/cmdline)" = "$SHELL " ]; then
+          echo "exit"
+          ok=''
+          return
+        else
+          exit 1
+        fi
+      fi
+    }
+    # [ $ok ] && require REQUIRED_COMMAND1 REQUIRED_COMMAND2
+
+  END
+  return s:shell_default
+endf
+:command Nsh :pu=s:ShellDefault()
+:cabbrev nsh Nsh
 
 
 " +----------------------------------------------------------+
