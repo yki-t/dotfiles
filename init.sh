@@ -236,6 +236,7 @@ installAdditionalPackages() {
     bat exa xdotool wmctrl `# Rust cli alternatives` \
     kwin-lowlatency bluedevil libnotify `# KDE` \
     virtualbox yakuake `# GUI` \
+    libuvc `# USB video driver for webcam` \
     skypeforlinux-stable-bin slack-desktop thunderbird zoom telegram-desktop `# chat` \
     python-pip nodejs-lts-erbium yarn grpcurl `# languages` \
     google-chrome firefox `# browser ` \

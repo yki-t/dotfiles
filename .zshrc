@@ -377,6 +377,25 @@ combineVideos() {
   fi
 }
 
+
+removeBom() {
+  require ffmpeg || return
+  local argCnt=$#
+  [ $argCnt -ne 1 ] && return $(err 'usage: `remBom utf16_with_bom_file`')
+  sed -i '1s/^\xEF\xBB\xBF//' $*
+}
+
+s2c() { # snake_case to camelCase
+  local argCnt=$#
+  [ $argCnt -ne 0 ] && return $(err 'usage: `echo snake_case | s2c`')
+  awk -F '_' '{ printf $1; for(i=2; i<=NF; i++) {printf toupper(substr($i,1,1)) substr($i,2)}} END {print ""}'
+}
+
+c2s() { # camelCase to snake_case
+  local argCnt=$#
+  [ $argCnt -ne 0 ] && return $(err 'usage: `echo camelCase | c2s`')
+  sed -E 's/(.)([A-Z])/\1_\2/g' | tr '[A-Z]' '[a-z]'
+}
 clearCache() {
   require sync tee || return
   sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && swapoff -a && swapon -a
