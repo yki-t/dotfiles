@@ -134,20 +134,6 @@ cal submode#map('bufmove', 'n', '', '-', '<C-w>-')
 
 
 " +----------------------------------------------------------+
-" | ノーマルモード移行時に自動で英数IMEに切り替え→Macのみ   |
-" +----------------------------------------------------------+
-if OSTYPE == "mac"
-  se ttimeoutlen = 1
-  let g:imeoff = 'osascript -e "tell application \"System Events\" to key code 102"'
-  aug MyIMEGroup " aug: augroup
-    au!
-    au InsertLeave * :call system(g:imeoff)
-  aug END
-  ino <silent> <ESC> <ESC>:call system(g:imeoff)<CR>
-en
-
-
-" +----------------------------------------------------------+
 " | Language Configs: set, setlocalの違い                    |
 " | https://secret-garden.hatenablog.com/entry/2017/12/14/175143 |
 " +----------------------------------------------------------+
