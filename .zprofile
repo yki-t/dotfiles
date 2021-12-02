@@ -140,3 +140,9 @@ if [ "$DISPLAY" != '' ]; then
 
 fi
 
+# macOS settings
+if [ "$(uname)" = 'Darwin' ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  export LC_CTYPE=C
+fi
+
