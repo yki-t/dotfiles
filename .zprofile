@@ -124,9 +124,6 @@ export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A '
 export GITHUB_USER='yuki37'
 
 # Linux shortcut
-paths+=":${HOME}/.local/bin"
-[[ "$PATH" != *$paths* ]] && export PATH="$PATH$paths"
-
 if [ "$DISPLAY" != '' ]; then
   [[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
   [[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap
@@ -141,8 +138,20 @@ if [ "$DISPLAY" != '' ]; then
 fi
 
 # macOS settings
-if [ "$(uname)" = 'Darwin' ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+if [ $(uname) = 'Darwin' ]; then
   export LC_CTYPE=C
+  # Homebrew
+  if [ -f /usr/local/bin/brew ]; then
+    eval $(/usr/local/bin/brew shellenv) # for intel cpu
+  fi
+  if [ -f /opt/homebrew/bin/brew ] && [[ "$(uname -a)" = *ARM64* ]]; then
+    eval $(/opt/homebrew/bin/brew shellenv) # for apple silicon (m1) cpu
+  fi
+  # for VS Code's `code` command
+  paths+=":/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
+
+# Join Path
+paths+=":${HOME}/.local/bin"
+[[ "$PATH" != *$paths* ]] && export PATH="$PATH$paths"
 

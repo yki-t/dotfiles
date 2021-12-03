@@ -27,12 +27,17 @@ unset zle_bracketed_paste # disable ^[[2004h
 bindkey -a '^[[3${HOME}' delete-char # <DEL> to be {lower,upper}case
 zstyle ':completion:*' list-colors "${LS_COLORS}"
 
-if type exa &>/dev/null;then
-  alias ls="/usr/bin/exa --long -m --time-style iso"
-else
-  alias ls="/usr/bin/ls --color=auto"
+
+local LS=ls
+if [ ! "$(which ls|grep aliased)" ]; then
+  LS=$(which ls)
 fi
-alias ll="ls -lag"
+
+if type exa &>/dev/null;then
+  alias ls="$(which exa) --long -m --time-style iso"
+else
+  alias ls="$LS --color=auto"
+fi
 
 # aliases and functions
 # Error print to stderr
@@ -50,6 +55,14 @@ require() {
   done
   [ $is_ok != true ] && return 1
   return 0
+}
+
+CMD_COPY() {
+  if [ $(uname) = 'Darwin' ]; then
+    pbcopy
+  else
+    xsel -bi
+  fi
 }
 
 # Record
@@ -98,7 +111,7 @@ rmSync() {
       break
     fi
     n 'rmSyncDone'
-  done< <(/usr/bin/ls -a "$1")
+  done< <($LS -a "$1")
 }
 
 # p*xz compress
@@ -108,11 +121,17 @@ pxc() {
   for f in "$@"; do
     f=$(echo "$f"|sed 's~/$~~')
     [ ! -e "$f" ] && continue
-    tar cf - "$f" -P \
-      | pv -s $(du -sb "$f" \
-      | awk '{print $1}') \
-      | pixz -9 -- \
-      > "$f.tar.xz"
+    if [ $(uname) = 'Darwin' ]; then
+      tar -Pcf - "$f" \
+        | pv -s $(($(du -sk "$f" | awk '{print $1}') * 1024)) \
+        | pixz -9 -- \
+        > "$f.tar.xz"
+    else
+      tar cf - "$f" -P \
+        | pv -s $(du -sb "$f" | awk '{print $1}') \
+        | pixz -9 -- \
+        > "$f.tar.xz"
+    fi
     [ $? -ne 0 ] && rm -rf "$f.tar.xz"
   done
 }
@@ -123,7 +142,7 @@ pxx() {
   [ $# -eq 0 ] && return $(err 'Quets must be set like `pxx "folder_to_decompress.tar.xz"`')
   for f in "$@"; do
     [ ! -e "$f" ] && continue
-    tar xf "$f" --use-compress-prog=pixz
+    tar --use-compress-program 'pixz -d' -x -f "$f"
   done
 }
 
@@ -182,7 +201,7 @@ rand() {
   fi
   randstr="$(cat /dev/urandom | tr -dc $range | head -c $count | sed -e's|[\r\n]||g')"
   if [ $to_clipboard -eq 1 ];then
-    print "$randstr"|xsel -bi
+    print "$randstr"|$CMD_COPY
   else
     print "$randstr"
   fi
@@ -335,7 +354,7 @@ bakup() {
       > "$dst"
     rm "/tmp/bakupLog-$srcNode"
     isIncomplete=''
-  done< <(/usr/bin/ls -a "$srcDir")
+  done< <($LS -a "$srcDir")
 }
 
 combineVideos() {
@@ -424,6 +443,11 @@ fi
 # added by Nix installer
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh;
+fi
+
+# OS settings
+if [ $(uname) = 'Darwin' ]; then
+  alias vim='/opt/homebrew/bin/vim'
 fi
 
 export PATH=${PATH}:$HOME/gsutil
