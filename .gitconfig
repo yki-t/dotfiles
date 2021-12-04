@@ -1,7 +1,0 @@
-[user]
-	email = yuki.tsujii.37@gmail.com
-	name = yuki
-[pull]
-	rebase = true
-[alias]
-	tree = log --graph --decorate --all --pretty=oneline --abbrev-commit --format=\"%x09%C(yellow)%h%Creset <%C(green bold)%an%Creset%d> %s\"

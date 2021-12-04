@@ -2,6 +2,21 @@ TZ='Asia/Tokyo'; export TZ
 
 paths=''
 # Exports
+
+# macOS settings
+if [ $(uname) = 'Darwin' ]; then
+  export LC_CTYPE='ja_JP.UTF-8'
+  # Homebrew
+  if [ -f /usr/local/bin/brew ]; then
+    eval $(/usr/local/bin/brew shellenv) # for intel cpu
+  fi
+  if [ -f /opt/homebrew/bin/brew ] && [[ "$(uname -a)" = *ARM64* ]]; then
+    eval $(/opt/homebrew/bin/brew shellenv) # for apple silicon (m1) cpu
+  fi
+  # for VS Code's `code` command
+  paths+=":/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
+
 # tor
 [ -f ${HOME}/.tor ] && paths+=":${HOME}/opt/tor"
 
@@ -135,20 +150,6 @@ if [ "$DISPLAY" != '' ]; then
     [ -f "$DIR/.private.sh" ] && source "$DIR/.private.sh"
   fi
 
-fi
-
-# macOS settings
-if [ $(uname) = 'Darwin' ]; then
-  export LC_CTYPE=C
-  # Homebrew
-  if [ -f /usr/local/bin/brew ]; then
-    eval $(/usr/local/bin/brew shellenv) # for intel cpu
-  fi
-  if [ -f /opt/homebrew/bin/brew ] && [[ "$(uname -a)" = *ARM64* ]]; then
-    eval $(/opt/homebrew/bin/brew shellenv) # for apple silicon (m1) cpu
-  fi
-  # for VS Code's `code` command
-  paths+=":/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
 
 # Join Path
