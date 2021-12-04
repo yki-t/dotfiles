@@ -199,7 +199,7 @@ au FileType sql              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 au FileType go               setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " PHP
-au FileType php              setl sts=4 ts=4 sw=4 fdm=syntax fdl=0 fdn=2
+au FileType php              setl sts=4 ts=4 sw=4 fdm=indent fdl=0 fdn=2
 
 " Jinja
 au BufRead,BufNewFile *.liquid setl ft=jinja
