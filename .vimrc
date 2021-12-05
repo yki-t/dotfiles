@@ -306,7 +306,11 @@ en
 se noswapfile " noswapfile
 
 " Current line content to clipboard
-:command -range Xz :silent :<line1>,<line2>w !xsel -i -b
+if OSTYPE == "mac"
+  :command -range Xz :silent :<line1>,<line2>w !pbcopy
+else
+  :command -range Xz :silent :<line1>,<line2>w !xsel -i -b
+en
 :cabbrev xz Xz
 
 " DateTime now
