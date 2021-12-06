@@ -199,7 +199,7 @@ rand() {
   else
     count=128
   fi
-  randstr="$(cat /dev/urandom | tr -dc $range | head -c $count | sed -e's|[\r\n]||g')"
+  randstr="$(cat /dev/urandom | LC_CTYPE=C tr -dc $range | head -c $count | sed -e's|[\r\n]||g')"
   if [ $to_clipboard -eq 1 ];then
     print "$randstr"|$CMD_COPY
   else
