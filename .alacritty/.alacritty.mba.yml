@@ -750,7 +750,7 @@ key_bindings:
   - { key: Back,            action:  ReceiveChar } # Prevent unexpected delete inputing words. ref) https://github.com/alacritty/alacritty/issues/1606
 
   - { key: A,               mods: Command,            chars: "\x01" }
-  - { key: B,               mods: Command,            chars: "\x03" }
+  - { key: B,               mods: Command,            chars: "\x02" }
   - { key: C,               mods: Command,            chars: "\x03" }
   - { key: D,               mods: Command,            chars: "\x04" }
   - { key: E,               mods: Command,            chars: "\x05" }

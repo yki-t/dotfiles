@@ -203,6 +203,7 @@ au FileType php              setl sts=4 ts=4 sw=4 fdm=indent fdl=0 fdn=2
 
 " Jinja
 au BufRead,BufNewFile *.liquid setl ft=jinja
+au BufRead,BufNewFile *.liquid setl noexpandtab
 au FileType jinja            setl sts=4 ts=4 sw=4
 
 " Pug
