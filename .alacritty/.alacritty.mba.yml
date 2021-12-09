@@ -747,7 +747,10 @@ key_bindings:
   # (macOS only)
   - { key: N,               mods: Command|Shift,       action: SpawnNewInstance }
 
-  - { key: Back,            action:  ReceiveChar } # Prevent unexpected delete inputing words. ref) https://github.com/alacritty/alacritty/issues/1606
+  # Prevent unexpected delete inputing words. ref) https://github.com/alacritty/alacritty/issues/1606
+  - { key: Back,            action:  ReceiveChar }
+  - { key: Up,              action:  ReceiveChar }
+  - { key: Down,            action:  ReceiveChar }
 
   - { key: A,               mods: Command,            chars: "\x01" }
   - { key: B,               mods: Command,            chars: "\x02" }
