@@ -133,7 +133,7 @@ export C_RESET='\033[0m' # Reset
 
 # local のmysql docker に簡易接続するやつ
 export MYSQL_PWD=password
-export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A '
+export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A database '
 
 # Accounts
 export GITHUB_USER='yuki37'
