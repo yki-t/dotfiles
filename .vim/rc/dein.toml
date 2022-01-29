@@ -1,7 +1,7 @@
 
 # 補完
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
+# [[plugins]]
+# repo = 'Shougo/deoplete.nvim'
 [[plugins]]
 repo = 'roxma/nvim-yarp'
 [[plugins]]
@@ -129,4 +129,7 @@ repo = 'fatih/vim-go'
 [[plugins]]
 repo = 'tomlion/vim-solidity'
 
+# plantuml
+[[plugins]]
+repo = 'weirongxu/plantuml-previewer.vim'
 

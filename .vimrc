@@ -3,6 +3,7 @@ if !1|finish|en
 " +----------------------------------------------------------+
 " | which OS ? -> OSTYPE: {'unknown', 'unix', 'mac', 'win' } |
 " +----------------------------------------------------------+
+
 let OSTYPE = 'unknown'
 if has('unix') | let OSTYPE = 'unix' | en
 if has('mac') | let OSTYPE = 'mac' | en
@@ -10,6 +11,9 @@ if has('win32') || has ('win64')
   let OSTYPE = 'win'
 en
 
+" if has('mac')
+"   let g:python3_host_prog = '/opt/homebrew/bin/python3'
+" en
 
 " +----------------------------------------------------------+
 " | dein                                                     |
@@ -35,7 +39,6 @@ if dein#check_install()
   cal dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
   cal dein#install()
 en
-
 
 " +----------------------------------------------------------+
 " | Can Paste                                                |
@@ -167,6 +170,7 @@ au FileType python           setl fdm=indent fdl=0 fdn=2
 " Html
 au BufRead,BufNewFile *.html setl ft=htmldjango
 au BufRead,BufNewFile *.tera setl ft=htmldjango
+au FileType htmldjango       setl sts=2 ts=2 sw=2 noexpandtab
 
 " Cpp like lang
 au BufRead,BufNewFile *.c    setl ft=cpp
@@ -179,7 +183,7 @@ au FileType cpp              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 au FileType rust             setl fdm=indent fdl=0 fdn=2
 
 " Markdown
-au FileType markdown         setl sts=4 ts=4 sw=4 fdm=syntax fdl=0 fdn=2
+au FileType markdown         setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " Shell
 au FileType sh               setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
@@ -251,9 +255,13 @@ let g:vim_jsx_pretty_colorful_config = 0
 " markdown preview
 let g:vim_markdown_folding_disabled=1
 let g:previm_show_header=0
-" let g:previm_open_cmd='/usr/bin/google-chrome-stable'
+" if OSTYPE == "mac"
+"   let g:previm_open_cmd='open -a Vivaldi'
+" elseif OSTYPE == "unix"
+"   let g:previm_open_cmd='/usr/bin/google-chrome-stable'
+" endif
+let g:previm_open_cmd='open -a Vivaldi'
 nn md :PrevimOpen<CR>
-
 
 " +----------------------------------------------------------+
 " | Set Configs                                              |
