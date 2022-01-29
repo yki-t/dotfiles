@@ -33,6 +33,11 @@ window:
     columns: 96
     lines: 52
 
+  # Window opacity as a floating point number from `0.0` to `1.0`.
+  # The value `0.0` is completely transparent and `1.0` is opaque.
+  opacity: 0.85
+
+#selection:
   # Window position (changes require restart)
   #
   # Specified in number of pixels.
@@ -329,13 +334,6 @@ draw_bold_text_with_bright_colors: true
   #
   #command: None
 
-# Background opacity
-#
-# Window opacity as a floating point number from `0.0` to `1.0`.
-# The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.85
-
-#selection:
   # This string contains all characters that are used as separators for
   # "semantic words" in Alacritty.
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
