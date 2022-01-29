@@ -87,6 +87,14 @@ if [ -d ${HOME}/.rbenv/bin ];then
   eval "$(rbenv init -)"
 fi
 
+# Python
+if [ $(uname) = 'Darwin' ]; then
+  local pyver="$(/bin/ls -rv "$HOME/Library/Python/" | head -n 1)"
+  if [ -d "$HOME/Library/Python/${pyver}/bin" ]; then
+    paths+=":$HOME/Library/Python/${pyver}/bin"
+  fi
+fi
+
 # ls
 ls_colors=''
 ls_colors+='rs=0:di=0;95:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;'
@@ -121,6 +129,8 @@ export XMODIFIERS="@im=fcitx"
 type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 export GIT_EDITOR=vim
 export EDITOR=vim
+export XDG_CONFIG_HOME="${HOME}/.config"
+
 
 # Docker parallel build
 export COMPOSE_DOCKER_CLI_BUILD=1
@@ -134,6 +144,34 @@ export C_RESET='\033[0m' # Reset
 # local のmysql docker に簡易接続するやつ
 export MYSQL_PWD=password
 export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A '
+
+# docker のcloud spanner emulator に簡易接続するやつ
+_SPANNER () {
+  local q='' t='' h=''
+  while getopts "e:th" opt; do
+    case $opt in
+      e) q=$OPTARG;;
+      t) t=1;;
+      h) h=1;;
+    esac
+  done
+  echo $q
+  cmd=(docker exec -it $(docker ps --filter 'name=spanner-cli' --format '{{.Names}}') spanner-cli -p project -i instance -d database)
+  if [ "$h" ]; then
+    cmd+=('-h')
+    "${cmd[@]}"
+    return;
+  fi
+  if [ "$t" ]; then
+    cmd+=('-t')
+  fi
+  if [ "$q" ]; then
+    cmd+=(-e "$q")
+  fi
+  echo "${cmd[@]}"
+  "${cmd[@]}"
+}
+export SPANNER="_SPANNER"
 
 # Accounts
 export GITHUB_USER='yuki37'
