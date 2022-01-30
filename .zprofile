@@ -174,7 +174,7 @@ _SPANNER () {
 export SPANNER="_SPANNER"
 
 # Accounts
-export GITHUB_USER='yuki37'
+export GITHUB_USER='yki-t'
 
 # Linux shortcut
 if [ "$DISPLAY" != '' ]; then
