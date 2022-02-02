@@ -746,7 +746,9 @@ key_bindings:
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
 
   # (macOS only)
-  - { key: N,               mods: Command|Shift,       action: SpawnNewInstance }
+  # - { key: N,               mods: Command|Shift,       action: SpawnNewInstance }
+    # - { key: N, mods: Alt, action: NewInstanceSameDir }
+  - { key: N,               mods: Command|Shift,       command: { program: "osascript", args: ["/usr/local/opt/new_alacritty_with_cwd.scpt"] } }
 
   # Prevent unexpected delete inputing words. ref) https://github.com/alacritty/alacritty/issues/1606
   - { key: Back,            action:  ReceiveChar }
