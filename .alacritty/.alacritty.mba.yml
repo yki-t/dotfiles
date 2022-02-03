@@ -31,7 +31,7 @@ window:
   # fall back to the window manager's recommended size.
   opacity: 0.85
   dimensions:
-    columns: 84
+    columns: 126
     lines: 48
 
   # Window position (changes require restart)
