@@ -440,6 +440,12 @@ if [[ -f "${HOME}/.zprofile" ]] && [[ ! $(cat "${HOME}/.zprofile"|fgrep 'type xm
   echo '[[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap' >> "${HOME}/.zprofile"
 fi
 
+if type xinput &>/dev/null; then
+  while read id; do
+    xinput set-prop $id $(xinput list-props $id | grep 'libinput Accel Speed (' | head -n 1 | sed -e 's|.*(\([0-9]*\)).*|\1|') 1.0
+  done< <(xinput | grep 'Magic Trackpad' | sed -e 's|.*id=\([0-9]*\).*|\1|')
+fi
+
 # added by Nix installer
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh;
