@@ -284,6 +284,19 @@ wgetAll() {
     "$@"
 }
 
+wgetOne() {
+  wget \
+    --quiet \
+    --show-progress \
+    --no-parent \
+    --page-requisites \
+    --convert-links \
+    --adjust-extension \
+    --execute robots=off \
+    --level 2 \
+    "$@"
+}
+
 u() {
   require loginctl || return
   loginctl unlock-session $*
