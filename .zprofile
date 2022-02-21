@@ -30,6 +30,15 @@ if type npm &>/dev/null; then
   [ -f "${HOME}/.local/bin/npm" ] && alias npm="${HOME}/.local/bin/npm"
 fi
 
+# PHP
+if type composer &>/dev/null; then
+  if [ $(uname) = 'Darwin' ]; then
+    [ -f "${HOME}/.composer/vendor/bin" ] && alias npm="${HOME}/.composer/vendor/bin"
+  else
+    [ -f "${HOME}/.config/composer/vendor/bin" ] && alias npm="${HOME}/.config/composer/vendor/bin"
+  fi
+fi
+
 if type yarn &>/dev/null; then
   export NODE_PATH="${HOME}/.yarn/bin"
   # paths+=":$(yarn global bin)" # too slow
