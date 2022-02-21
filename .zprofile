@@ -32,11 +32,7 @@ fi
 
 # PHP
 if type composer &>/dev/null; then
-  if [ $(uname) = 'Darwin' ]; then
-    [ -f "${HOME}/.composer/vendor/bin" ] && alias npm="${HOME}/.composer/vendor/bin"
-  else
-    [ -f "${HOME}/.config/composer/vendor/bin" ] && alias npm="${HOME}/.config/composer/vendor/bin"
-  fi
+  [ -f "${HOME}/.config/composer/vendor/bin" ] && alias npm="${HOME}/.config/composer/vendor/bin"
 fi
 
 if type yarn &>/dev/null; then
