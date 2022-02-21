@@ -32,7 +32,7 @@ fi
 
 # PHP
 if type composer &>/dev/null; then
-  [ -f "${HOME}/.config/composer/vendor/bin" ] && alias npm="${HOME}/.config/composer/vendor/bin"
+  [ -d "${HOME}/.config/composer/vendor/bin" ] && paths+=":${HOME}/.config/composer/vendor/bin"
 fi
 
 if type yarn &>/dev/null; then
