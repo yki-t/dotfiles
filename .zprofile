@@ -181,6 +181,9 @@ export SPANNER="_SPANNER"
 # Accounts
 export GITHUB_USER='yki-t'
 
+# disable nuxt's telemetry 'Are you interested in participating?'
+export NUXT_TELEMETRY_DISABLED=1
+
 # Linux shortcut
 if [ "$DISPLAY" != '' ]; then
   [[ -f ~/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
