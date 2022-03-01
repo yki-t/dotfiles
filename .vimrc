@@ -363,6 +363,15 @@ endf
 :command Nsh :pu=s:ShellDefault()
 :cabbrev nsh Nsh
 
+" Letsencrypt
+func! s:Letsencrypt()
+  let s:letsencrypt =<< trim END
+    sudo certbot certonly -d DOMAIN --agree-tos -m EMAIL --standalone
+    # 00 03 03 * * systemctl stop nginx; certbot renew && systemctl restart nginx
+  END
+  return s:letsencrypt
+endf
+:command Le :pu=s:Letsencrypt()
 
 " +----------------------------------------------------------+
 " | Highlights                                               |
