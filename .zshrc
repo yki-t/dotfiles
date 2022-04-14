@@ -180,15 +180,30 @@ __git_files() { _files }
 
 rand() {
   local range max to_clipboard randstr
+  local number small large symbol
   local -A opthash
-  zparseopts -D -A opthash -- i -int w -week c -clipboard
-  if [[ -n "${opthash[(i)-i]}" ]] || [[ -n "${opthash[(i)--int]}" ]]; then
-    range='0-9'
-  elif [[ -n "${opthash[(i)-w]}" ]] || [[ -n "${opthash[(i)--week]}" ]]; then
-    range='0-9a-zA-Z'
+  zparseopts -D -A opthash -- i -int w -week c -clipboard e -easy
+
+  if [[ -n "${opthash[(i)-e]}" ]] || [[ -n "${opthash[(i)--easy]}" ]]; then
+    number='23456789'
+    small='abcdefghijkmnpqrstuvwxyz'
+    large='ABCDEFGHJKLMNPQRSTUVWXYZ'
+    symbol='!#$%&()*+-/<=>?@[]{}'
   else
-    range='0-9a-zA-Z\^$/|()[]{}.,?!_=&@~%#:;'
+    number='0123456789'
+    small='abcdefghijklmnopqrstuvwxyz'
+    large='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    symbol='!#$%&()*+,-./:;<=>?@[]^_{|}~'
   fi
+
+  if [[ -n "${opthash[(i)-i]}" ]] || [[ -n "${opthash[(i)--int]}" ]]; then
+    range="$number"
+  elif [[ -n "${opthash[(i)-w]}" ]] || [[ -n "${opthash[(i)--week]}" ]]; then
+    range="$number$small$large"
+  else
+    range="$number$small$large$symbol"
+  fi
+
   to_clipboard=0
   if [[ -n "${opthash[(i)-c]}" ]] || [[ -n "${opthash[(i)--clipboard]}" ]]; then
     to_clipboard=1
