@@ -30,6 +30,11 @@ if type npm &>/dev/null; then
   [ -f "${HOME}/.local/bin/npm" ] && alias npm="${HOME}/.local/bin/npm"
 fi
 
+# PHP
+if type composer &>/dev/null; then
+  [ -d "${HOME}/.config/composer/vendor/bin" ] && paths+=":${HOME}/.config/composer/vendor/bin"
+fi
+
 if type yarn &>/dev/null; then
   export NODE_PATH="${HOME}/.yarn/bin"
   # paths+=":$(yarn global bin)" # too slow
@@ -175,6 +180,9 @@ export SPANNER="_SPANNER"
 
 # Accounts
 export GITHUB_USER='yki-t'
+
+# disable nuxt's telemetry 'Are you interested in participating?'
+export NUXT_TELEMETRY_DISABLED=1
 
 # Linux shortcut
 if [ "$DISPLAY" != '' ]; then
