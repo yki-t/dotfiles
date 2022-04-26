@@ -297,6 +297,7 @@ se wmnu " wildmenu
 
 se ignorecase
 se mouse=a
+se nofixeol
 
 color monokai " colorscheme
 se t_Co=256
