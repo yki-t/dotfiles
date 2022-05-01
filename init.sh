@@ -25,6 +25,8 @@ DEVICE='' # like /dev/nvme0n1 /dev/nvme0n1pN
 _BOOT='' # like p1 of /dev/nvme0n1p1
 _LVM='' # like p2 /dev/nvme0n1p2
 
+LS="$(which ls)"
+
 # Other Settings
 # {{{
 MIRRORS="$(cat <<'EOM'
@@ -129,7 +131,7 @@ clean() {
     umount /mnt
   fi
   if [ "$(lsblk | grep '\[SWAP\]')" ]; then
-    swapoff /dev/mapper/$(/usr/bin/ls /dev/mapper/|grep swap)
+    swapoff /dev/mapper/$($LS /dev/mapper/|grep swap)
   fi
 } # }}}
 conn() {
@@ -148,9 +150,9 @@ partition() {
 } # }}}
 encrypt() {
   # {{{
-  root=$(/usr/bin/ls /dev/mapper|grep root)
+  root=$($LS /dev/mapper|grep root)
   if [ "$root" ]; then cryptsetup luksClose /dev/mapper/$root; fi
-  swap=$(/usr/bin/ls /dev/mapper|grep swap)
+  swap=$($LS /dev/mapper|grep swap)
   if [ "$swap" ]; then cryptsetup luksClose /dev/mapper/$swap; fi
   if [ "$root" ] || [ "$swap" ]; then cryptsetup luksClose luks; fi
   mkfs.vfat -F32 $DEVICE$_BOOT
@@ -160,15 +162,15 @@ encrypt() {
   vgcreate $VOLUME_GROUP /dev/mapper/luks
   lvcreate -L $SWAP_SIZE $VOLUME_GROUP -n swap
   lvcreate -l +100%FREE $VOLUME_GROUP -n root
-  root=$(/usr/bin/ls /dev/mapper|grep root)
-  swap=$(/usr/bin/ls /dev/mapper|grep swap)
+  root=$($LS /dev/mapper|grep root)
+  swap=$($LS /dev/mapper|grep swap)
   mkfs.ext4 /dev/mapper/$root
   mkswap /dev/mapper/$swap
 } # }}}
 mountDevice() {
   # {{{
-  root=$(/usr/bin/ls /dev/mapper|grep root)
-  swap=$(/usr/bin/ls /dev/mapper|grep swap)
+  root=$($LS /dev/mapper|grep root)
+  swap=$($LS /dev/mapper|grep swap)
   mount /dev/mapper/$root /mnt
   swapon /dev/mapper/$swap
   mkdir /mnt/boot
@@ -373,7 +375,7 @@ title Arch Linux
 linux /vmlinuz-linux
 initrd /$CPU_BRAND-ucode.img
 initrd /initramfs-linux.img
-options cryptdevice=UUID=$(blkid $DEVICE$_LVM|sed -e's/.* UUID="\(.*\)" TYPE.*/\1/'):lvm:allow-discards resume=/dev/mapper/$(/usr/bin/ls /dev/mapper|grep swap) root=/dev/mapper/$(/usr/bin/ls /dev/mapper|grep root) rw quiet
+options cryptdevice=UUID=$(blkid $DEVICE$_LVM|sed -e's/.* UUID="\(.*\)" TYPE.*/\1/'):lvm:allow-discards resume=/dev/mapper/$($LS /dev/mapper|grep swap) root=/dev/mapper/$(/usr/bin/ls /dev/mapper|grep root) rw quiet
 EOM
 )"
   local entry="$(cat <<EOM > /mnt/boot/loader/loader.conf
