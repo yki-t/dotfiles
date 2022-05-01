@@ -375,7 +375,7 @@ title Arch Linux
 linux /vmlinuz-linux
 initrd /$CPU_BRAND-ucode.img
 initrd /initramfs-linux.img
-options cryptdevice=UUID=$(blkid $DEVICE$_LVM|sed -e's/.* UUID="\(.*\)" TYPE.*/\1/'):lvm:allow-discards resume=/dev/mapper/$($LS /dev/mapper|grep swap) root=/dev/mapper/$(/usr/bin/ls /dev/mapper|grep root) rw quiet
+options cryptdevice=UUID=$(blkid $DEVICE$_LVM|sed -e's/.* UUID="\(.*\)" TYPE.*/\1/'):lvm:allow-discards resume=/dev/mapper/$($LS /dev/mapper|grep swap) root=/dev/mapper/$($LS /dev/mapper|grep root) rw quiet
 EOM
 )"
   local entry="$(cat <<EOM > /mnt/boot/loader/loader.conf
