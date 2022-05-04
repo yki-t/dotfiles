@@ -334,7 +334,7 @@ func! s:ShellDefault()
     #!/bin/bash
     DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"&>/dev/null &&pwd)" # SCRIPT_DIR
     err() {
-      echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
+      echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $@" >&2
     }
     ok=1
     require() {
