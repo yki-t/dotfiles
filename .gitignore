@@ -1,3 +1,4 @@
 .private.sh
 .alacritty.yml
 .gitconfig
+.php-cs-fixer.cache

@@ -67,7 +67,7 @@ CMD_COPY() {
 
 # Record
 # function rec() {
-#     if echo $(hostname) | fgrep -q laptop; then
+#     if echo $(hostname) | grep -F -q laptop; then
 #         if !(type arecord&>/dev/null); then
 #             echo "arecord is not installed"
 #             return
@@ -311,7 +311,32 @@ wgetOne() {
     --level 2 \
     "$@"
 }
-
+wgetOneDesktop() {
+  wget \
+    --quiet \
+    --show-progress \
+    --no-parent \
+    --page-requisites \
+    --convert-links \
+    --adjust-extension \
+    --execute robots=off \
+    --level 2 \
+    --user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
+    "$@"
+}
+wgetOneMobile() {
+  wget \
+    --quiet \
+    --show-progress \
+    --no-parent \
+    --page-requisites \
+    --convert-links \
+    --adjust-extension \
+    --execute robots=off \
+    --level 2 \
+    --user-agent='Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Mobile Safari/537.36' \
+    "$@"
+}
 u() {
   require loginctl || return
   loginctl unlock-session $*
@@ -464,7 +489,7 @@ if [ -f "${HOME}/.zshrc" ] && [ ! -f "${HOME}/.zshrc.zwc" ] || [ "${HOME}/.zshrc
 fi
 
 # Xmodmap
-if [[ -f "${HOME}/.zprofile" ]] && [[ ! $(cat "${HOME}/.zprofile"|fgrep 'type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap') ]]; then
+if [[ -f "${HOME}/.zprofile" ]] && [[ ! $(cat "${HOME}/.zprofile"|grep -F 'type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap') ]]; then
   echo '[[ -f ${HOME}/.Xmodmap ]] && type xmodmap&>/dev/null && xmodmap ${HOME}/.Xmodmap' >> "${HOME}/.zprofile"
 fi
 

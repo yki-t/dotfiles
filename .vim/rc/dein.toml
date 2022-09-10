@@ -133,3 +133,7 @@ repo = 'tomlion/vim-solidity'
 [[plugins]]
 repo = 'weirongxu/plantuml-previewer.vim'
 
+# php linter
+[[plugins]]
+repo = 'stephpy/vim-php-cs-fixer'
+
