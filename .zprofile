@@ -150,6 +150,8 @@ export C_RESET='\033[0m' # Reset
 export MYSQL_PWD=password
 export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A database '
 export MYSQLDUMP='mysqldump -uusername -hlocalhost --protocol tcp --no-tablespaces database '
+# export PAGER=''
+export PSQL="psql -U root "
 
 # docker のcloud spanner emulator に簡易接続するやつ
 _SPANNER () {
