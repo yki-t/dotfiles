@@ -1,0 +1,53 @@
+{
+  "jedi": {
+    "enable": true,
+    "startupMessage": false,
+  },
+  "diagnostic-languageserver.filetypes": {
+    "vim": "vint",
+    "email": "languagetool",
+    "markdown": [
+      "write-good",
+      "markdownlint"
+    ],
+    "sh": "shellcheck",
+    "elixir": [
+      "mix_credo",
+      "mix_credo_compile"
+    ],
+    "eelixir": [
+      "mix_credo",
+      "mix_credo_compile"
+    ],
+    "php": [
+      "phpls",
+      "psalm"
+    ],
+    "yaml": [
+      "yamllint"
+    ],
+    "cmake": [
+      "cmake-lint",
+      "cmakelint"
+    ],
+    "systemd": "systemd-analyze",
+  },
+  "coc.preferences.formatOnSaveFiletypes": [
+    ""
+  ],
+  "languageserver": {
+    "intelephense": {
+      "command": "intelephense",
+      "args": [
+        "--stdio"
+      ],
+      "filetypes": [
+        "php"
+      ],
+      "initializationOptions": {
+        "storagePath": "/tmp/intelephense"
+      }
+    }
+  },
+  "cSpell.enabled": false
+}

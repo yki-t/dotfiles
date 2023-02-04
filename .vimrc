@@ -154,7 +154,7 @@ endf
 
 " ft: filetype, fdm: foldMethod, fde: foldExpression
 " au BufRead,BufNewFile *.json setl ft=typescriptreact fdm=expr fde=JSFolds()
-au BufRead,BufNewFile *.json setl ft=typescriptreact
+au BufRead,BufNewFile *.json setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 au BufRead,BufNewFile *.js   setl ft=typescriptreact
 au BufRead,BufNewFile *.ts   setl ft=typescriptreact
 au BufRead,BufNewFile *.jsx  setl ft=typescriptreact
@@ -171,7 +171,7 @@ au FileType python           setl fdm=indent fdl=0 fdn=2
 au BufRead,BufNewFile *.html setl ft=htmldjango
 au BufRead,BufNewFile *.tera setl ft=htmldjango
 au BufRead,BufNewFile *.ejs  setl ft=htmldjango
-au BufRead,BufNewFile *.hbs setl ft=htmldjango
+au BufRead,BufNewFile *.hbs  setl ft=htmldjango
 au FileType htmldjango       setl sts=2 ts=2 sw=2 noexpandtab
 
 " Cpp like lang
@@ -196,7 +196,6 @@ au FileType vim              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " Vue
 au FileType vue              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
-"au FileType vue              setl noexpandtab " tmp
 
 " SQL
 au FileType sql              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
@@ -205,7 +204,8 @@ au FileType sql              setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 au FileType go               setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 
 " PHP
-au FileType php              setl sts=4 ts=4 sw=4 fdm=indent fdl=0 fdn=2
+au FileType php              setl sts=4 ts=4 sw=4 fdm=indent
+" au FileType php              setl sts=4 ts=4 sw=4 fdm=indent fdl=0 fdn=2
 
 " Jinja
 au BufRead,BufNewFile *.liquid setl ft=jinja
@@ -265,17 +265,17 @@ let g:previm_show_header=0
 let g:previm_open_cmd='open -a Vivaldi'
 nn md :PrevimOpen<CR>
 
-" php-cs-fixer
-let g:php_cs_fixer_path = "~/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
-let g:php_cs_fixer_level = "symfony"                   " options: --level (default:symfony)
-let g:php_cs_fixer_config = "default"                  " options: --config
-let g:php_cs_fixer_rules = "@PSR2"          " options: --rules (default:@PSR2)
-let g:php_cs_fixer_php_path = "php"               " Path to PHP
-let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
-let g:php_cs_fixer_dry_run = 0                    " Call command with dry-run option
-let g:php_cs_fixer_verbose = 0                    " Return the output of command if 1, else an inline information.
-nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
-nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
+" " php-cs-fixer
+" let g:php_cs_fixer_path = "~/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
+" let g:php_cs_fixer_level = "symfony"                   " options: --level (default:symfony)
+" let g:php_cs_fixer_config = "default"                  " options: --config
+" let g:php_cs_fixer_rules = "@PSR2"          " options: --rules (default:@PSR2)
+" let g:php_cs_fixer_php_path = "php"               " Path to PHP
+" let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
+" let g:php_cs_fixer_dry_run = 0                    " Call command with dry-run option
+" let g:php_cs_fixer_verbose = 0                    " Return the output of command if 1, else an inline information.
+" nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
+" nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
 
 " +----------------------------------------------------------+
 " | Set Configs                                              |
@@ -398,3 +398,40 @@ hi NonText    ctermbg=NONE guibg=NONE
 hi Comment    ctermfg=cyan
 vn * "zy:let @/ = @z<CR>
 
+augroup DebugHighlight
+  au!
+  autocmd WinEnter,BufRead,BufNew,Syntax * :silent! call matchadd('Todo', '\(NOTE\)')
+augroup END
+
+
+" utf-8 byte sequence
+set encoding=utf-8
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
+" delays and poor user experience
+set updatetime=300
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved
+set signcolumn=yes
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+  \ coc#pum#visible() ? coc#pum#next(1) :
+  \ CheckBackspace() ? "\<Tab>" :
+  \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+let g:coc_global_extensions = [
+  \  'coc-webview',
+  \  'coc-markdown-preview-enhanced',
+  \  'coc-jedi',
+  \  'coc-sql',
+  \  'coc-phpls',
+  \]
