@@ -60,8 +60,8 @@ fi
 
 # Android
 if [ -d ${HOME}/Android ]; then
-  export ANDROID_HOME=${HOME}/Android/Sdk
-  export ANDROID_SDK_HOME=${HOME}/Android/Sdk
+  # export ANDROID_HOME=${HOME}/Android/Sdk
+  # export ANDROID_SDK_HOME=${HOME}/Android/Sdk
   export NDK_HOME=${HOME}/Android/android-ndk-r20
   # paths+=":${ANDROID_HOME}/bin"
   paths+=":${ANDROID_HOME}/emulator"
