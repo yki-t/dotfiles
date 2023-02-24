@@ -368,8 +368,21 @@ func! s:ShellDefault()
         fi
       fi
     }
-    # [ $ok ] && require REQUIRED_COMMAND1 REQUIRED_COMMAND2
+    where() {
+      cmd=$(which $1)
+      if [ "$(echo "$cmd" | grep aliased)" ]; then
+        where $(echo "$cmd" | sed -e 's|.*aliased to \(.*\)|\1|')
+        echo "$cmd"
+      else
+        echo "$cmd"
+      fi
+    }
+    # [ $ok ] && require REQUIRED_COMMAND1
 
+    LS=$(where ls)
+    CAT=$(where cat)
+    GREP=$(where grep)
+    RSYNC=$(where rsync)
   END
   return s:shell_default
 endf
@@ -435,3 +448,4 @@ let g:coc_global_extensions = [
   \  'coc-sql',
   \  'coc-phpls',
   \]
+
