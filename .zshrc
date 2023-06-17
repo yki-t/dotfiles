@@ -484,7 +484,7 @@ alias ssh='TERM=xterm-256color ssh'
 type dstat &>/dev/null && alias dstat="dstat -tlafm --tcp"
 
 # Compile .zshrc
-if [ -f "${HOME}/.zshrc" ] && [ ! -f "${HOME}/.zshrc.zwc" ] || [ "${HOME}/.zshrc" -nt "${HOME}/.zshrc.zwc" ]; then
+if [ -f "${HOME}/.zshrc" ] && ( [ ! -f "${HOME}/.zshrc.zwc" ] || [ "${HOME}/.zshrc" -nt "${HOME}/.zshrc.zwc" ] ); then
   zcompile ${HOME}/.zshrc
 fi
 
