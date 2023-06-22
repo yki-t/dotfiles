@@ -87,9 +87,8 @@ if type g++ &>/dev/null; then
 fi
 
 # Ruby
-if [ -d ${HOME}/.rbenv/bin ];then
+if [ -d ${HOME}/.rbenv/bin ]; then
   paths+=":${HOME}/.rbenv/bin"
-  eval "$(rbenv init -)"
 fi
 
 # Python
@@ -151,7 +150,8 @@ export MYSQL_PWD=password
 export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A database '
 export MYSQLDUMP='mysqldump -uusername -hlocalhost --protocol tcp --no-tablespaces database '
 # export PAGER=''
-export PSQL="psql -U root "
+export PGPASSWORD=password
+export PSQL="psql -U username -h localhost database"
 
 # docker のcloud spanner emulator に簡易接続するやつ
 _SPANNER () {

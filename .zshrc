@@ -476,6 +476,16 @@ clearCache() {
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
 
+# Ruby
+if [ -d ${HOME}/.rbenv/bin ]; then
+  eval "$(rbenv init -)"
+fi
+
+# nvm
+if [ -f /usr/share/nvm/init-nvm.sh ]; then
+  source /usr/share/nvm/init-nvm.sh
+fi
+
 # For Vimmer
 bindkey -v
 alias vi='vim'
@@ -516,3 +526,6 @@ if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/
 
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"

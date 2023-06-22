@@ -310,7 +310,7 @@ se ww=b,s,[,],<,>,~ " whichwrap
 se wmnu " wildmenu
 
 se ignorecase
-se mouse=a
+" se mouse=a
 se nofixeol
 
 color monokai " colorscheme
