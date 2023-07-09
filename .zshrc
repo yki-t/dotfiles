@@ -477,7 +477,7 @@ require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
 
 # Ruby
-if [ -d ${HOME}/.rbenv/bin ]; then
+if [ -d ${HOME}/.rbenv ]; then
   eval "$(rbenv init -)"
 fi
 
@@ -528,4 +528,4 @@ if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+# export PATH="$PATH:$HOME/.rvm/bin"

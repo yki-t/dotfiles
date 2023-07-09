@@ -147,8 +147,8 @@ export C_RESET='\033[0m' # Reset
 
 # local のmysql docker に簡易接続するやつ
 export MYSQL_PWD=password
-export MYSQL='mysql -uusername -hlocalhost --protocol tcp -A database '
-export MYSQLDUMP='mysqldump -uusername -hlocalhost --protocol tcp --no-tablespaces database '
+export MYSQL='mariadb -uusername -hlocalhost --protocol tcp --binary-as-hex -A database '
+export MYSQLDUMP='mariadb-dump -uusername -hlocalhost --protocol tcp --no-tablespaces database '
 # export PAGER=''
 export PGPASSWORD=password
 export PSQL="psql -U username -h localhost database"
