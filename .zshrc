@@ -473,6 +473,33 @@ clearCache() {
   sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && swapoff -a && swapon -a
 }
 
+dl() {
+  require yt-dlp ffmpeg || return
+  before=(); while read f; do before+=("$f"); done< <($LS)
+  yt-dlp -ci -f 'bestaudio[ext=m4a]' $*
+  after=(); while read f; do after+=("$f"); done< <($LS)
+  new_file=''
+  for a in "${after[@]}"; do
+    has_new=1
+    for b in "${before[@]}"; do
+      if [ "$b" = "$a" ]; then
+        has_new=
+        break
+      fi
+    done
+    if [ "$has_new" ]; then
+      new_file="$a"
+      break
+    fi
+  done
+  echo $new_file
+  if [ "$new_file" ]; then
+    wav="$(echo "$new_file" | sed -e 's|\([^\.]*\)\.\(.*\)|\1.wav|')"
+    echo $wav
+    ffmpeg -i "$new_file" "$wav"
+  fi
+}
+
 require scp && alias scp='scp -c aes256-ctr -pq'
 require bat && alias cat='bat'
 
