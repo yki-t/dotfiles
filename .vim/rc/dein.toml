@@ -131,6 +131,10 @@ repo = 'tomlion/vim-solidity'
 [[plugins]]
 repo = 'weirongxu/plantuml-previewer.vim'
 
+# plantuml
+[[plugins]]
+repo = 'slim-template/vim-slim'
+
 # php linter
 # [[plugins]]
 # repo = 'stephpy/vim-php-cs-fixer'

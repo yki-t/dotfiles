@@ -316,6 +316,7 @@ se nofixeol
 color monokai " colorscheme
 se t_Co=256
 se smc=512 " synmaxcol
+" se smc=9999 " synmaxcol
 
 " sudo save with 'w!!'
 cabbr w!! w !sudo tee > /dev/null %
