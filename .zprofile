@@ -152,6 +152,7 @@ export MYSQLDUMP='mariadb-dump -uusername -hlocalhost --protocol tcp --no-tables
 # export PAGER=''
 export PGPASSWORD=password
 export PSQL="psql -P pager=off -U username -h localhost database"
+export SQL="sqlite3 -table -header"
 
 # docker のcloud spanner emulator に簡易接続するやつ
 _SPANNER () {
