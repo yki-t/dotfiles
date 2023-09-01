@@ -167,12 +167,18 @@ au BufRead,BufNewFile *.tex  setl ts=4 sts=4 sw=4
 " Python
 au FileType python           setl fdm=indent fdl=0 fdn=2
 
+" Perl
+au FileType perl             setl sts=4 ts=4 sw=4 fdm=indent fdl=0 fdn=2
+
 " Html
 au BufRead,BufNewFile *.html setl ft=htmldjango
 au BufRead,BufNewFile *.tera setl ft=htmldjango
 au BufRead,BufNewFile *.ejs  setl ft=htmldjango
 au BufRead,BufNewFile *.hbs  setl ft=htmldjango
-au FileType htmldjango       setl sts=2 ts=2 sw=2 noexpandtab
+au FileType htmldjango       setl sts=2 ts=2 sw=2
+
+au BufRead,BufNewFile *.sass,*.scss  setl ft=css
+au FileType css              setl sts=2 ts=2 sw=2
 
 " Cpp like lang
 au BufRead,BufNewFile *.c    setl ft=cpp

@@ -532,7 +532,10 @@ fi
 
 if type xinput &>/dev/null; then
   while read id; do
-    xinput set-prop $id $(xinput list-props $id | grep 'libinput Accel Speed (' | head -n 1 | sed -e 's|.*(\([0-9]*\)).*|\1|') 1.0
+    local prop='libinput Accel Speed'
+    xinput set-prop $id $(xinput list-props $id | grep "$prop (" | head -n 1 | sed -e "s|$prop (\([0-9]*\)).*|\1|") 1.0
+    prop='libinput Natural Scrolling Enabled'
+    xinput set-prop $id $(xinput list-props $id | grep "$prop (" | head -n 1 | sed -e "s|$prop (\([0-9]*\)).*|\1|") 0.0
   done< <(xinput | grep 'Magic Trackpad' | sed -e 's|.*id=\([0-9]*\).*|\1|')
 fi
 
@@ -556,3 +559,7 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 # export PATH="$PATH:$HOME/.rvm/bin"
+
+if [ -f "$HOME/.append.sh" ]; then
+  source "$HOME/.append.sh"
+fi
