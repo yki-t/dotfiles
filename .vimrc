@@ -336,12 +336,19 @@ else
 en
 se noswapfile " noswapfile
 
-" Current line content to clipboard
-if OSTYPE == "mac"
-  :command -range Xz :silent :<line1>,<line2>w !pbcopy
-else
-  :command -range Xz :silent :<line1>,<line2>w !xsel -i -b
-en
+" Current line content to clipboard allow multiline
+function! CopyWithoutTrailingNewline(line1, line2)
+  let l:text = getline(a:line1, a:line2)
+  let l:joined_text = join(l:text, "\n")
+  let l:trimmed_text = substitute(l:joined_text, '\n\+$', '', '')
+  if OSTYPE == "mac"
+    call system('echo -n ' . shellescape(l:trimmed_text) . ' | pbcopy')
+  else
+    call system('echo -n ' . shellescape(l:trimmed_text) . ' | xsel -i -b')
+  en
+endf
+
+command! -range Xz call CopyWithoutTrailingNewline(<line1>, <line2>)
 :cabbrev xz Xz
 
 " DateTime now
