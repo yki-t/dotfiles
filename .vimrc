@@ -341,7 +341,7 @@ function! CopyWithoutTrailingNewline(line1, line2)
   let l:text = getline(a:line1, a:line2)
   let l:joined_text = join(l:text, "\n")
   let l:trimmed_text = substitute(l:joined_text, '\n\+$', '', '')
-  if OSTYPE == "mac"
+  if has('mac')
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | pbcopy')
   else
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | xsel -i -b')
