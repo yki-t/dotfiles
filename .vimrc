@@ -159,7 +159,7 @@ au BufRead,BufNewFile *.js   setl ft=typescriptreact
 au BufRead,BufNewFile *.ts   setl ft=typescriptreact
 au BufRead,BufNewFile *.jsx  setl ft=typescriptreact
 
-au FileType typescriptreact  setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+au FileType typescriptreact  setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=3
 
 " Tex
 au BufRead,BufNewFile *.tex  setl ts=4 sts=4 sw=4
@@ -213,13 +213,12 @@ au FileType go               setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 au FileType php              setl sts=4 ts=4 sw=4 fdm=indent
 " au FileType php              setl sts=4 ts=4 sw=4 fdm=indent fdl=0 fdn=2
 
+" Shopify Liquid
+au BufRead,BufNewFile *.liquid setl noexpandtab
+
 " Jinja
 au BufRead,BufNewFile *.liquid setl ft=jinja
-au BufRead,BufNewFile *.liquid setl noexpandtab
-au FileType jinja            setl sts=4 ts=4 sw=4
-
-" Pug
-au FileType jinja            setl sts=2 ts=2 sw=2
+au FileType jinja              setl sts=4 ts=4 sw=4
 
 " Other Files
 func! s:GetBufByte()
@@ -269,7 +268,8 @@ let g:previm_show_header=0
 "   let g:previm_open_cmd='/usr/bin/google-chrome-stable'
 " endif
 let g:previm_open_cmd='open -a Vivaldi'
-nn md :PrevimOpen<CR>
+" nn md :PrevimOpen<CR>
+nn md :MarkdownPreview<CR>
 
 " " php-cs-fixer
 " let g:php_cs_fixer_path = "~/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
