@@ -130,11 +130,9 @@ export XIM=fcitx
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
-type fcitx-autostart &>/dev/null && (fcitx-autostart&>/dev/null &)
 export GIT_EDITOR=vim
 export EDITOR=vim
 export XDG_CONFIG_HOME="${HOME}/.config"
-
 
 # Docker parallel build
 export COMPOSE_DOCKER_CLI_BUILD=1

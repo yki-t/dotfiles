@@ -1,0 +1,9 @@
+[Unit]
+Description=fcitx restarter
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/fcitx5
+
+[Install]
+WantedBy=xsession.target

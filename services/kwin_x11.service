@@ -1,0 +1,9 @@
+[Unit]
+Description=kwin restarter
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/kwin_x11 --replace
+
+[Install]
+WantedBy=xsession.target
