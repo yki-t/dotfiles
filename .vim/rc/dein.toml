@@ -153,3 +153,7 @@ merged = '0'
 repo = 'yaegassy/coc-intelephense'
 build = 'yarn install --frozen-lockfile'
 
+# Copilot
+[[plugins]]
+repo = 'github/copilot.vim'
+
