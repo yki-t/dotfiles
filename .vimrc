@@ -455,6 +455,9 @@ inoremap <silent><expr> <TAB>
   \ coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
+let g:copilot_no_tab_map = v:true
+imap <silent><script><expr> <C-M> copilot#Accept("\<CR>")
+
 let g:coc_global_extensions = [
   \  'coc-webview',
   \  'coc-markdown-preview-enhanced',
