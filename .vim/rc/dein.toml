@@ -140,18 +140,18 @@ repo = 'slim-template/vim-slim'
 # repo = 'stephpy/vim-php-cs-fixer'
 # repo = 'beanworks/vim-phpfmt'
 
-[[plugins]]
-repo = 'neoclide/coc.nvim'
-source = 'release'
-build = 'yarn install --frozen-lockfile'
-# rev = 'release'
-# on_i = 1
-merged = '0'
-# hook_source = 'call coil398#init#coc#hook_source()'
+# [[plugins]]
+# repo = 'neoclide/coc.nvim'
+# source = 'release'
+# build = 'yarn install --frozen-lockfile'
+# # rev = 'release'
+# # on_i = 1
+# merged = '0'
+# # hook_source = 'call coil398#init#coc#hook_source()'
 
-[[plugins]]
-repo = 'yaegassy/coc-intelephense'
-build = 'yarn install --frozen-lockfile'
+# [[plugins]]
+# repo = 'yaegassy/coc-intelephense'
+# build = 'yarn install --frozen-lockfile'
 
 # Copilot
 [[plugins]]
