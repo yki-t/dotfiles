@@ -229,8 +229,8 @@ func! s:GetBufByte()
     return byte - 1
   en
 endf
-au VimEnter * nested if @% == '' && s:GetBufByte() == 0 | se ft=sh | en
-au BufRead,BufNewFile * nested if @% !~ '\.' | se ft=sh | en
+au VimEnter * nested if @% == '' && s:GetBufByte() == 0 | se ft=markdown | en
+au BufRead,BufNewFile * nested if @% !~ '\.' | se ft=markdown | en
 
 
 " +----------------------------------------------------------+
