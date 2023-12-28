@@ -1,0 +1,48 @@
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.bright]
+black = "#7c7c7c"
+blue = "#b5dcfe"
+cyan = "#54ffff"
+green = "#54ff54"
+magenta = "#ff54ff"
+red = "#e64c4c"
+white = "#eeeeee"
+yellow = "#ffff54"
+
+[colors.cursor]
+cursor = "#ffffff"
+text = "#000000"
+
+[colors.normal]
+black = "#4e4e4e"
+blue = "#96cbfe"
+cyan = "#18b2b2"
+green = "#54ff54"
+magenta = "#ff73fd"
+red = "#dd1d1d"
+white = "#eeeeee"
+yellow = "#ea881f"
+
+[colors.primary]
+background = "#000000"
+foreground = "#eeeeee"
+
+[font]
+size = 13.0
+
+[font.normal]
+family = "CascadiaCodePL"
+
+[[keyboard.bindings]]
+action = "CreateNewWindow"
+key = "N"
+mods = "Control|Shift"
+
+[window]
+opacity = 0.85
+
+[window.dimensions]
+columns = 95
+lines = 52
