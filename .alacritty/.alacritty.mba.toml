@@ -1,0 +1,209 @@
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.bright]
+black = "#7c7c7c"
+blue = "#b5dcfe"
+cyan = "#54ffff"
+green = "#54ff54"
+magenta = "#ff54ff"
+red = "#e64c4c"
+white = "#eeeeee"
+yellow = "#ffff54"
+
+[colors.cursor]
+cursor = "#ffffff"
+text = "#000000"
+
+[colors.normal]
+black = "#4e4e4e"
+blue = "#96cbfe"
+cyan = "#18b2b2"
+green = "#54ff54"
+magenta = "#ff73fd"
+red = "#dd1d1d"
+white = "#eeeeee"
+yellow = "#ea881f"
+
+[colors.primary]
+background = "#000000"
+foreground = "#eeeeee"
+
+[font]
+size = 15.0
+
+[font.normal]
+family = "Cascadia Code PL"
+
+[[keyboard.bindings]]
+command = "/Users/yuki/dotfiles/spawn-alacritty-cwd.sh"
+key = "N"
+mods = "Command|Shift"
+
+# [[keyboard.bindings]]
+# key = "N"
+# mods = "Command|Shift"
+# 
+# [keyboard.bindings.command]
+# args = ["/usr/local/opt/new_alacritty_with_cwd.scpt"]
+# program = "osascript"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "Back"
+
+[[keyboard.bindings]]
+chars = "\u0001"
+key = "A"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0002"
+key = "B"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0003"
+key = "C"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0004"
+key = "D"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0005"
+key = "E"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0006"
+key = "F"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0007"
+key = "G"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\b"
+key = "H"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\t"
+key = "I"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = """
+
+"""
+key = "J"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u000B"
+key = "K"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\f"
+key = "L"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\r"
+key = "M"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u000E"
+key = "N"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u000F"
+key = "O"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0010"
+key = "P"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0011"
+key = "Q"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0012"
+key = "R"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0013"
+key = "S"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0014"
+key = "T"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0015"
+key = "U"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0016"
+key = "V"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0017"
+key = "W"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0018"
+key = "X"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0019"
+key = "Y"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001A"
+key = "Z"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001B"
+key = "LBracket"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Command|Shift"
+
+[window]
+decorations = "full"
+dynamic_padding = true
+opacity = 0.85
+
+[window.dimensions]
+columns = 126
+lines = 48
