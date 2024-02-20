@@ -501,7 +501,15 @@ dl() {
 }
 
 require scp && alias scp='scp -c aes256-ctr -pq'
-require bat && alias cat='bat'
+
+if type bat &>/dev/null; then
+  alias cat='bat'
+else
+  if type batcat &>/dev/null; then
+    alias cat='batcat'
+  else
+  fi
+fi
 
 # Ruby
 if [ -d ${HOME}/.rbenv ]; then

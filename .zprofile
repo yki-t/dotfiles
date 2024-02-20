@@ -195,7 +195,7 @@ if [ "$DISPLAY" != '' ]; then
   type realpath&>/dev/null && [[ -f $(realpath ~/.Xmodmap) ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
 
   if type realpath &>/dev/null; then
-    DIR="$(cd "$(dirname "$(realpath $0)")"&>/dev/null &&pwd)" # SCRIPT_DIR on zsh
+    DIR="$(cd "$(dirname "$(realpath -- "$0")")"&>/dev/null &&pwd)" # SCRIPT_DIR on zsh
     [ -f "$DIR/.private.sh" ] && source "$DIR/.private.sh"
   fi
 
