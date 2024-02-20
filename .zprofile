@@ -132,6 +132,7 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
 export GIT_EDITOR=vim
 export EDITOR=vim
+export VISUAL=vim
 export XDG_CONFIG_HOME="${HOME}/.config"
 
 # Docker parallel build
