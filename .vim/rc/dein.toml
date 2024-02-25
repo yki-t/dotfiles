@@ -47,8 +47,17 @@ repo = 'kana/vim-operator-user'
 # MD 記法
 [[plugins]]
 repo = 'plasticboy/vim-markdown'
+
+# [[plugins]]
+# repo = 'iamcco/markdown-preview.vim'
+# on_ft = ['markdown', 'pandoc.markdown', 'rmd']
+# build = 'sh -c "cd app && npx --yes yarn install"'
+
 [[plugins]]
-repo = 'iamcco/markdown-preview.vim'
+repo = 'iamcco/markdown-preview.nvim'
+on_ft = ['markdown', 'pandoc.markdown', 'rmd']
+build = 'sh -c "cd app && npx --yes yarn install"'
+
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 [[plugins]]

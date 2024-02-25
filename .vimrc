@@ -178,7 +178,7 @@ au BufRead,BufNewFile *.hbs  setl ft=htmldjango
 au FileType htmldjango       setl sts=2 ts=2 sw=2
 
 au BufRead,BufNewFile *.sass,*.scss  setl ft=css
-au FileType css              setl sts=2 ts=2 sw=2
+au FileType css              setl sts=4 ts=4 sw=4
 
 " Cpp like lang
 au BufRead,BufNewFile *.c    setl ft=cpp
@@ -458,6 +458,9 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 " C-M is CR, C-I is Tab so ignore them
 " imap <silent><script><expr> <C-M> copilot#Accept("\<CR>")
 " let g:copilot_no_tab_map = v:true
+let g:copilot_filetypes = {
+  \ 'toml': v:false,
+\ }
 
 let g:coc_global_extensions = [
   \  'coc-webview',
