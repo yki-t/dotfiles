@@ -40,6 +40,11 @@ action = "CreateNewWindow"
 key = "N"
 mods = "Control|Shift"
 
+[[keyboard.bindings]]
+action = "None"
+key = "Space"
+mods = "Control|Shift"
+
 [window]
 opacity = 0.85
 
