@@ -146,35 +146,30 @@ pxx() {
   done
 }
 
-# # Encrypt disk
-# function enc() {
-#   # if !(type lsblk&>/dev/null) || !(type cryptsetup&>/dev/null); then
-#   # fi
-#   printf "Disks: $(lsblk)"
-#   echo "ok?(y/N): "
-#   if read -q; then
-#     echo hello
-#   else
-#     echo abort
-#   fi
-#   while read t; do
-#     # rsync -Pr "$1/$f" "$2"
-#     # if [ $? -ne 0 ]; then
-#     #   notify-send 'rmSyncFailed'
-#     #   rm -rf "$2/$f"
-#     #   break
-#     # else
-#     #   rm -rf "$1/$f"
-#     # fi
-#   done
-# }
+# Encrypt file
+function encrypt() {
+  require openssl || return
+  local file=$1 pass
+  if [ $# -ne 1 ] || [ ! -e "$file" ]; then
+    return $(err 'usage: `encrypt file`')
+  fi
+  read -s "passwd?Enter passphrase: "; echo
+  read -s "passwd2?Enter same passphrase again: "; echo
+  if [ "$passwd" != "$passwd2" ]; then
+    return $(err 'Passphrase does not match')
+  fi
+  echo -n "$passwd" | openssl enc -aes-256-cbc -pbkdf2 -in "$file" -out "$file.enc" -pass stdin
+}
 
-# # Completions
-# _rsync() {
-#   _ssh
-# }
-# compdef _rsync rsync
-compdef $_comps[ssh] rsync
+function decrypt() {
+  require openssl || return
+  local file=$1 pass
+  if [ $# -ne 1 ] || [ ! -e "$file" ]; then
+    return $(err 'usage: `decrypt file`')
+  fi
+  read -s "passwd?Enter passphrase: "; echo
+  echo -n "$passwd" | openssl enc -d -aes-256-cbc -pbkdf2 -in "$file" -out "${file%.enc}" -pass stdin
+}
 
 __git_files() { _files }
 
