@@ -158,7 +158,11 @@ function encrypt() {
   if [ "$passwd" != "$passwd2" ]; then
     return $(err 'Passphrase does not match')
   fi
-  echo -n "$passwd" | openssl enc -aes-256-cbc -pbkdf2 -in "$file" -out "$file.enc" -pass stdin
+
+  echo -n "$passwd" \
+    | openssl enc -aes-256-cbc -pbkdf2 -in "$file" -pass stdin \
+    | pv -s $(($(du -sk "$file" | awk '{print $1}') * 1024)) \
+    > "$file.enc"
 }
 
 function decrypt() {
@@ -168,7 +172,10 @@ function decrypt() {
     return $(err 'usage: `decrypt file`')
   fi
   read -s "passwd?Enter passphrase: "; echo
-  echo -n "$passwd" | openssl enc -d -aes-256-cbc -pbkdf2 -in "$file" -out "${file%.enc}" -pass stdin
+  echo -n "$passwd" \
+    | openssl enc -d -aes-256-cbc -pbkdf2 -in "$file" -pass stdin \
+    | pv -s $(($(du -sk "$file" | awk '{print $1}') * 1024)) \
+    > "${file%.enc}"
 }
 
 __git_files() { _files }
