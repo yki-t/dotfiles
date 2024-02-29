@@ -7,9 +7,11 @@ TARGET="$HOME/di/ext"
 
 if [ ! -d "$TARGET/lost+found" ]; then
   uuids=()
-  while read f; do
-    uuid=$(echo "$f" | awk '{print $1}')
+  while read uuid typ name; do
     if ! [[ $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]]; then
+      continue
+    fi
+    if [ ! "$(sudo file -sL /dev/disk/by-uuid/$uuid | grep LUKS)" ]; then
       continue
     fi
     uuids+=($uuid)
@@ -36,6 +38,8 @@ if [ ! -d "$TARGET/lost+found" ]; then
   sleep 1
   sudo mount /dev/mapper/vg--ext-lv--ext $TARGET
 fi
+
+exit
 
 if [ ! "$(lsblk | grep '/var/lib/docker')" ]; then
   sudo mount --bind $TARGET/Cached/docker /var/lib/docker
