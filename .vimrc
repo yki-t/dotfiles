@@ -341,8 +341,11 @@ function! CopyWithoutTrailingNewline(line1, line2)
   let l:text = getline(a:line1, a:line2)
   let l:joined_text = join(l:text, "\n")
   let l:trimmed_text = substitute(l:joined_text, '\n\+$', '', '')
+
   if has('mac')
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | pbcopy')
+  elseif system('uname -r') =~ 'microsoft-standard\|WSL'
+    call system('echo -n ' . shellescape(l:trimmed_text) . ' | clip.exe')
   else
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | xsel -i -b')
   en
@@ -460,6 +463,7 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 " let g:copilot_no_tab_map = v:true
 let g:copilot_filetypes = {
   \ 'toml': v:false,
+  \ 'markdown': v:false,
 \ }
 
 let g:coc_global_extensions = [
