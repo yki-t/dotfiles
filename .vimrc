@@ -345,7 +345,7 @@ function! CopyWithoutTrailingNewline(line1, line2)
   if has('mac')
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | pbcopy')
   elseif system('uname -r') =~ 'microsoft-standard\|WSL'
-    call system('echo -n ' . shellescape(l:trimmed_text) . ' | clip.exe')
+    call system('echo -n ' . shellescape(l:trimmed_text) . ' | iconv -f UTF-8 -t UTF-16LE | clip.exe')
   else
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | xsel -i -b')
   en
