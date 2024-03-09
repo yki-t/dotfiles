@@ -446,7 +446,7 @@ set updatetime=300
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved
-set signcolumn=yes
+" set signcolumn=yes
 
 function! CheckBackspace() abort
   let col = col('.') - 1
