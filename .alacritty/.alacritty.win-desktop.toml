@@ -47,6 +47,8 @@ mods = "Control|Shift"
 
 [window]
 opacity = 0.85
+title = "alacritty"
+dynamic_title = false
 
 [window.dimensions]
 columns = 95
