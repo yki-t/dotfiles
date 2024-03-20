@@ -40,8 +40,8 @@ size = 13.0
 family = "Cascadia Code PL"
 
 [[keyboard.bindings]]
-action = "CreateNewWindow"
-# command = { program = "spawn-alacritty-cwd.bat", args = [] }
+# action = "SpawnNewInstance"
+command = { program = "powershell", args = ["spawn-alacritty-cwd.ps1"] }
 key = "N"
 mods = "Control|Shift"
 

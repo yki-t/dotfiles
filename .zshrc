@@ -575,3 +575,11 @@ if [ -f "$HOME/.append.sh" ]; then
 fi
 
 if [ -e /home/yuki/.nix-profile/etc/profile.d/nix.sh ]; then . /home/yuki/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+# wsl
+if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+  export APPDATA=$(wslpath $(cmd.exe /c "echo %APPDATA%" 2>/dev/null | tr -d '\r'))
+  precmd() {
+    pwd > $APPDATA/lastpwd
+  }
+fi
