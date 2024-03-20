@@ -104,6 +104,7 @@ SetDesktopName(0, "Win1 - 🐱")
 SetDesktopName(1, "Win2 - 🐱🐱")
 SetDesktopName(2, "Win3 - 🐱🐱🐱")
 SetDesktopName(3, "Win4 - 🐱🐱🐱🐱")
+SetDesktopName(4, "Win5 - 🐱🐱🐱🐱")
 
 #h::#^Left
 #l::#^Right
