@@ -201,6 +201,11 @@ if [ "$DISPLAY" != '' ]; then
 
 fi
 
+# wsl
+if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+  export APPDATA=$(wslpath $(cmd.exe /c "echo %APPDATA%" 2>/dev/null | tr -d '\r'))
+fi
+
 # Join Path
 paths+=":${HOME}/.local/bin"
 [[ "$PATH" != *$paths* ]] && export PATH="$PATH$paths"

@@ -578,8 +578,13 @@ if [ -e /home/yuki/.nix-profile/etc/profile.d/nix.sh ]; then . /home/yuki/.nix-p
 
 # wsl
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
-  export APPDATA=$(wslpath $(cmd.exe /c "echo %APPDATA%" 2>/dev/null | tr -d '\r'))
-  precmd() {
-    pwd > $APPDATA/lastpwd
-  }
+  if [ -d $APPDATA ]; then
+    precmd() {
+      pwd > "$APPDATA/lastpwd"
+    }
+  fi
 fi
+
+rmwsltrash() {
+  rm -rf -- \(default\) -a -m -u -w Usage: WSL Windows a absolute force format from path path, result to translate with
+}
