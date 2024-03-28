@@ -559,6 +559,10 @@ if [ $(uname) = 'Darwin' ]; then
   alias vim='/opt/homebrew/bin/vim'
 fi
 
+if [ -e /usr/lib/pkgconfig ]; then
+  export PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig
+fi
+
 export PATH=${PATH}:$HOME/gsutil
 
 # The next line updates PATH for the Google Cloud SDK.
