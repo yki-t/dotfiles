@@ -14,20 +14,17 @@ SetWorkingDir(A_ScriptDir)
 F5::
 {
     SoundSetVolume "+5"
-    SoundBeep 825, 200
 }
 
 F4::
 {
     SoundSetVolume "-5"
-    SoundBeep 660, 200
 }
 
 F3::{
   IsMuted := SoundGetMute()
   if IsMuted {
     SoundSetMute false
-    SoundBeep 660, 200
   } else {
     SoundSetMute true
   }
@@ -135,13 +132,11 @@ SetDesktopName(4, "Win5 - 🐱🐱🐱🐱")
 ; }
 
 
-#IfWinActive Alacritty
-; Ctrl+Shift+V -- change line endings
+#HotIf WinActive("alacritty")
 ^+v::
-    ClipboardBackup := Clipboard                        ; To restore clipboard contents after paste
-    FixString := StrReplace(Clipboard, "`r`n", "`n")    ; Change endings
-    Clipboard := FixString                              ; Set to clipboard
-    Send ^+v                                            ; Paste text
-    Clipboard := ClipboardBackup                        ; Restore clipboard that has windows endings
-    return
-#IfWinActive
+{
+    A_Clipboard := StrReplace(A_Clipboard, "`r`n", "`n")
+    Send("^+v")
+}
+return
+#HotIf
