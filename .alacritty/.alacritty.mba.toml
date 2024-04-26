@@ -40,14 +40,6 @@ command = "/Users/yuki/dotfiles/spawn-alacritty-cwd.sh"
 key = "N"
 mods = "Command|Shift"
 
-# [[keyboard.bindings]]
-# key = "N"
-# mods = "Command|Shift"
-# 
-# [keyboard.bindings.command]
-# args = ["/usr/local/opt/new_alacritty_with_cwd.scpt"]
-# program = "osascript"
-
 [[keyboard.bindings]]
 action = "ReceiveChar"
 key = "Back"

@@ -1,3 +1,7 @@
+[shell]
+program = "wsl"
+args = ["--cd ~"]
+
 [colors]
 draw_bold_text_with_bright_colors = true
 
@@ -33,20 +37,18 @@ foreground = "#eeeeee"
 size = 13.0
 
 [font.normal]
-family = "CascadiaCodePL"
+family = "Cascadia Code PL"
 
 [[keyboard.bindings]]
-action = "CreateNewWindow"
+# action = "SpawnNewInstance"
+command = { program = "powershell", args = ["spawn-alacritty-cwd.ps1"] }
 key = "N"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-action = "None"
-key = "Space"
 mods = "Control|Shift"
 
 [window]
 opacity = 0.85
+title = "alacritty"
+dynamic_title = false
 
 [window.dimensions]
 columns = 95

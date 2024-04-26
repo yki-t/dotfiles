@@ -146,35 +146,37 @@ pxx() {
   done
 }
 
-# # Encrypt disk
-# function enc() {
-#   # if !(type lsblk&>/dev/null) || !(type cryptsetup&>/dev/null); then
-#   # fi
-#   printf "Disks: $(lsblk)"
-#   echo "ok?(y/N): "
-#   if read -q; then
-#     echo hello
-#   else
-#     echo abort
-#   fi
-#   while read t; do
-#     # rsync -Pr "$1/$f" "$2"
-#     # if [ $? -ne 0 ]; then
-#     #   notify-send 'rmSyncFailed'
-#     #   rm -rf "$2/$f"
-#     #   break
-#     # else
-#     #   rm -rf "$1/$f"
-#     # fi
-#   done
-# }
+# Encrypt file
+function encrypt() {
+  require openssl || return
+  local file=$1 pass
+  if [ $# -ne 1 ] || [ ! -e "$file" ]; then
+    return $(err 'usage: `encrypt file`')
+  fi
+  read -s "passwd?Enter passphrase: "; echo
+  read -s "passwd2?Enter same passphrase again: "; echo
+  if [ "$passwd" != "$passwd2" ]; then
+    return $(err 'Passphrase does not match')
+  fi
 
-# # Completions
-# _rsync() {
-#   _ssh
-# }
-# compdef _rsync rsync
-compdef $_comps[ssh] rsync
+  echo -n "$passwd" \
+    | openssl enc -aes-256-cbc -pbkdf2 -in "$file" -pass stdin \
+    | pv -s $(($(du -sk "$file" | awk '{print $1}') * 1024)) \
+    > "$file.enc"
+}
+
+function decrypt() {
+  require openssl || return
+  local file=$1 pass
+  if [ $# -ne 1 ] || [ ! -e "$file" ]; then
+    return $(err 'usage: `decrypt file`')
+  fi
+  read -s "passwd?Enter passphrase: "; echo
+  echo -n "$passwd" \
+    | openssl enc -d -aes-256-cbc -pbkdf2 -in "$file" -pass stdin \
+    | pv -s $(($(du -sk "$file" | awk '{print $1}') * 1024)) \
+    > "${file%.enc}"
+}
 
 __git_files() { _files }
 
@@ -501,7 +503,15 @@ dl() {
 }
 
 require scp && alias scp='scp -c aes256-ctr -pq'
-require bat && alias cat='bat'
+
+if type bat &>/dev/null; then
+  alias cat='bat'
+else
+  if type batcat &>/dev/null; then
+    alias cat='batcat'
+  else
+  fi
+fi
 
 # Ruby
 if [ -d ${HOME}/.rbenv ]; then
@@ -559,6 +569,10 @@ if [ $(uname) = 'Darwin' ]; then
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion 
 fi
 
+if [ -e /usr/lib/pkgconfig ]; then
+  export PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig
+fi
+
 export PATH=${PATH}:$HOME/gsutil
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
@@ -568,3 +582,17 @@ if [ -f "$HOME/.append.sh" ]; then
   source "$HOME/.append.sh"
 fi
 
+if [ -e /home/yuki/.nix-profile/etc/profile.d/nix.sh ]; then . /home/yuki/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+# wsl
+if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+  if [ -d $APPDATA ]; then
+    precmd() {
+      pwd > "$APPDATA/lastpwd"
+    }
+  fi
+fi
+
+rmwsltrash() {
+  rm -rf -- \(default\) -a -m -u -w Usage: WSL Windows a absolute force format from path path, result to translate with
+}

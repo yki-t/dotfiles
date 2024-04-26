@@ -136,6 +136,7 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
 export GIT_EDITOR=vim
 export EDITOR=vim
+export VISUAL=vim
 export XDG_CONFIG_HOME="${HOME}/.config"
 
 # Docker parallel build
@@ -198,10 +199,17 @@ if [ "$DISPLAY" != '' ]; then
   type realpath&>/dev/null && [[ -f $(realpath ~/.Xmodmap) ]] && type xmodmap&>/dev/null && xmodmap ~/.Xmodmap
 
   if type realpath &>/dev/null; then
-    DIR="$(cd "$(dirname "$(realpath $0)")"&>/dev/null &&pwd)" # SCRIPT_DIR on zsh
+    DIR="$(cd "$(dirname "$(realpath -- "$0")")"&>/dev/null &&pwd)" # SCRIPT_DIR on zsh
     [ -f "$DIR/.private.sh" ] && source "$DIR/.private.sh"
   fi
 
+fi
+
+# wsl
+if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+  export APPDATA=$(wslpath $(cmd.exe /c "echo %APPDATA%" 2>/dev/null | tr -d '\r'))
+  export STARTUP="$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup"
+  export HOMEPATH=$(echo $APPDATA | sed -e 's|/AppData/Roaming||')
 fi
 
 # Join Path

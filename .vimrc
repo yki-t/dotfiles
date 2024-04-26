@@ -178,7 +178,7 @@ au BufRead,BufNewFile *.hbs  setl ft=htmldjango
 au FileType htmldjango       setl sts=2 ts=2 sw=2
 
 au BufRead,BufNewFile *.sass,*.scss  setl ft=css
-au FileType css              setl sts=2 ts=2 sw=2
+au FileType css              setl sts=4 ts=4 sw=4
 
 " Cpp like lang
 au BufRead,BufNewFile *.c    setl ft=cpp
@@ -341,8 +341,11 @@ function! CopyWithoutTrailingNewline(line1, line2)
   let l:text = getline(a:line1, a:line2)
   let l:joined_text = join(l:text, "\n")
   let l:trimmed_text = substitute(l:joined_text, '\n\+$', '', '')
+
   if has('mac')
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | pbcopy')
+  elseif system('uname -r') =~ 'microsoft-standard\|WSL'
+    call system('echo -n ' . shellescape(l:trimmed_text) . ' | iconv -f UTF-8 -t cp932 | clip.exe')
   else
     call system('echo -n ' . shellescape(l:trimmed_text) . ' | xsel -i -b')
   en
@@ -443,7 +446,7 @@ set updatetime=300
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved
-set signcolumn=yes
+" set signcolumn=yes
 
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -458,6 +461,10 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 " C-M is CR, C-I is Tab so ignore them
 " imap <silent><script><expr> <C-M> copilot#Accept("\<CR>")
 " let g:copilot_no_tab_map = v:true
+let g:copilot_filetypes = {
+  \ 'toml': v:false,
+  \ 'markdown': v:false,
+\ }
 
 let g:coc_global_extensions = [
   \  'coc-webview',
