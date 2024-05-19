@@ -354,6 +354,9 @@ endf
 command! -range Xz call CopyWithoutTrailingNewline(<line1>, <line2>)
 :cabbrev xz Xz
 
+command! -nargs=0 Uuid execute ":r !uuidgen | sed 's/.*/''&''/' | tr '[A-Z]' '[a-z]'"
+:cabbrev uuid Uuid
+
 " DateTime now
 nn dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
 
