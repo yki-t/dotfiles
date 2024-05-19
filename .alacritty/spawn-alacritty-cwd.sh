@@ -1,3 +1,3 @@
 #!/bin/bash
-CWD="$(cwd)"
+CWD="$(pwd)"
 open -na Alacritty --args --working-directory "$CWD"

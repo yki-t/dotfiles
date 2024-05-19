@@ -15,6 +15,10 @@ if [ $(uname) = 'Darwin' ]; then
   fi
   # for VS Code's `code` command
   paths+=":/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+  # Setting PATH for Python 2.7
+  # The original version is saved in .zprofile.pysave
+  paths+=":/Library/Frameworks/Python.framework/Versions/2.7/bin"
 fi
 
 # tor
