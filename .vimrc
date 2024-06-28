@@ -155,6 +155,7 @@ endf
 " ft: filetype, fdm: foldMethod, fde: foldExpression
 " au BufRead,BufNewFile *.json setl ft=typescriptreact fdm=expr fde=JSFolds()
 au BufRead,BufNewFile *.json setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
+au BufRead,BufNewFile *.toml setl sts=2 ts=2 sw=2 fdm=syntax fdl=0 fdn=2
 au BufRead,BufNewFile *.js   setl ft=typescriptreact
 au BufRead,BufNewFile *.ts   setl ft=typescriptreact
 au BufRead,BufNewFile *.jsx  setl ft=typescriptreact
