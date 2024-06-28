@@ -209,7 +209,7 @@ fi
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
   export APPDATA=$(wslpath $(cmd.exe /c "echo %APPDATA%" 2>/dev/null | tr -d '\r'))
   export STARTUP="$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup"
-  export HOMEPATH=$(echo $APPDATA | sed -e 's|/AppData/Roaming||')
+  export WIN=$(echo $APPDATA | sed -e 's|/AppData/Roaming||')
 fi
 
 # Join Path
