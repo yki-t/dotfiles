@@ -19,6 +19,10 @@ if [ $(uname) = 'Darwin' ]; then
   # Setting PATH for Python 2.7
   # The original version is saved in .zprofile.pysave
   paths+=":/Library/Frameworks/Python.framework/Versions/2.7/bin"
+
+  # Disable the Homebrew auto-update
+  export HOMEBREW_NO_AUTO_UPDATE=1
+  export HOMEBREW_NO_ANALYTICS=1
 fi
 
 # tor
