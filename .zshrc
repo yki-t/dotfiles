@@ -586,7 +586,8 @@ if [ -e /home/yuki/.nix-profile/etc/profile.d/nix.sh ]; then . /home/yuki/.nix-p
 
 # wsl
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
-  if [ -d $APPDATA ]; then
+  # APPDATA is sometimes empty
+  if [ -d "$APPDATA" ]; then
     precmd() {
       pwd > "$APPDATA/lastpwd"
     }
