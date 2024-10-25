@@ -4,50 +4,69 @@ set -eu
 
 TARGET="$HOME/di/ext"
 
-if [ ! -d "$TARGET/lost+found" ]; then
-  uuids=()
-  while read -r uuid _ _; do
-    if ! [[ $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]]; then
-      continue
-    fi
-    if ! sudo file -sL "/dev/disk/by-uuid/$uuid" | grep -q LUKS; then
-      continue
-    fi
-    uuids+=("$uuid")
-  done< <(sudo lsblk -o UUID,NAME,TYPE | grep disk | grep -v nvme)
+is_mounted() {
+  lsblk | grep $TARGET | grep -q lvm
+}
+
+info() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*"
+}
+
+if is_mounted; then
+  echo "Already mounted"
+  exit 0
+fi
+
+# list devices
+info "Listing devices:"
+uuids=()
+while read -r uuid _ _; do
+  if ! [[ $uuid =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]]; then
+    continue
+  fi
+  if ! sudo file -sL "/dev/disk/by-uuid/$uuid" | grep -q LUKS; then
+    continue
+  fi
+  uuids+=("$uuid")
+done< <(sudo lsblk -o UUID,NAME,TYPE | grep disk | grep -v nvme)
+
+# Check if locked disk exists
+has_one=0
+for uuid in "${uuids[@]}"; do
+  id=$(echo "$uuid" | awk -F'-' '{print $1}')
+  if ! lsblk | grep "lv-$id"; then
+    has_one=1
+    break
+  fi
+done
+
+info "Found ${#uuids[@]} LUKS devices. Unlocking.."
+if [ $has_one -eq 1 ]; then
+  # unlock disks
 
   read -rsp "Enter passphrase: " passwd; echo
-
   for uuid in "${uuids[@]}"; do
     id=$(echo "$uuid" | awk -F'-' '{print $1}')
-    echo -n "[uuid] $uuid .."
-
-    if lsblk | grep "lv-$id"; then
-      echo Already mounted
-      continue
-    fi
-    if echo "$passwd" | sudo cryptsetup luksOpen "/dev/disk/by-uuid/$uuid" "lv-$id"; then
-      echo OK
-    else
-      echo NG
-    fi
+    name=$(lsblk -o NAME,UUID | grep "$uuid" | awk '{print $1}')
+    is_mounted=$(lsblk | grep "lv-$id" | wc -l)
+    info "$name ($uuid) -> lv-$id (mounted: $is_mounted)"
+    # FIXME: hacky way of unlocking disks in parallel.
+    # LVM is automatically scanned and activated when 3/4 disks are unlocked,
+    # so we need to unlock all disks at once before udev(?) activating LVM.
+    # This behavior occurs only on WSL (not on pure Linux).
+    echo "$passwd" | sudo cryptsetup luksOpen "/dev/disk/by-uuid/$uuid" "lv-$id" &
   done
 
-  sleep 1
+  # wait for all disks to unlock
+  wait
+  sleep 3
+fi
+
+# mount disks
+# Check if mounted
+if ! is_mounted; then
+  info "Mounting disks.."
   sudo mount /dev/mapper/vg--ext-lv--ext "$TARGET"
 fi
 
-exit
-
-if ! lsblk | grep -q '/var/lib/docker'; then
-  sudo mount --bind "$TARGET/Cached/docker" /var/lib/docker
-fi
-
-if ! lsblk | grep -q "$HOME/.cache/yay"; then
-  sudo mount --bind "$TARGET/Cached/.cache/yay" "$HOME/.cache/yay"
-fi
-
-echo 'moving Trash..'
-rsync -avP "$HOME/.local/share/Trash/" "$TARGET/Cached/Trash/"
-
-echo 'done'
+info 'done'
