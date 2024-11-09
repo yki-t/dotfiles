@@ -146,6 +146,7 @@ pxx() {
   [ $# -eq 0 ] && return $(err 'Quets must be set like `pxx "folder_to_decompress.tar.xz"`')
   for f in "$@"; do
     [ ! -e "$f" ] && continue
+    echo "Expanding $f"
     tar --use-compress-program 'pixz -d' -x -f "$f"
   done
 }
@@ -609,3 +610,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
