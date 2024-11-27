@@ -70,8 +70,8 @@ SetDesktopName(num, name) {
     OutputDebug(name)
     name_utf8 := Buffer(1024, 0)
     StrPut(name, name_utf8, "UTF-8")
-    ran := DllCall(SetDesktopNameProc, "Int", num, "Ptr", name_utf8, "Int")
-    return ran
+    ; ran := DllCall(SetDesktopNameProc, "Int", num, "Ptr", name_utf8, "Int")
+    ; return ran
 }
 
 ; Main Func
