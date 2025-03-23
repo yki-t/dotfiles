@@ -507,6 +507,62 @@ dl() {
   fi
 }
 
+chatgpt() {
+  local api_key="${OPENAI_API_KEY}"
+  local model="${OPENAI_DEFAULT_MODEL:-gpt-3.5-turbo}"
+  local prompt_text tempfile resp error
+  require jq || return
+  prompt_text="$(/bin/cat)"
+  prompt_text="$(printf '%s' "$prompt_text" | jq -Rs .)"
+
+  if [ -z "$api_key" ]; then
+    echo "Error: OPENAI_API_KEY is not set." >&2
+    return 1
+  fi
+  data='{"model": "'"$model"'", "messages": [{"role": "user", "content": '"$prompt_text"'}]}'
+
+  tempfile=$(mktemp /tmp/chatgpt-msg.XXXXXX)
+  curl -s https://api.openai.com/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $api_key" \
+    -d "$data" \
+    > "$tempfile"
+
+  error=$(/bin/cat "$tempfile" | jq -r '.error.message')
+  if [ "$error" != 'null' ]; then
+    echo "Error: $resp" >&2
+    return 1
+  fi
+  /bin/cat "$tempfile" | jq -r '.choices[0].message.content'
+}
+
+commit() {
+  local diff st
+  st="$(git status)"
+  diff="$(git diff --cached)"
+
+  if [ -z "$diff" ]; then
+    echo "No staged changes found. Please stage your changes first."
+    return 1
+  fi
+
+  echo -n "Generating commit message..."
+
+  local prompt_text message
+  prompt_text="Please generate a commit message based on the diff below with conventional commit message format. "
+  prompt_text+="Summarize the key points. "
+  prompt_text+="Response must have only commit message without codeblocks. "
+  prompt_text+="If commit message has multiple lines, the first line must be the summary. "
+  prompt_text+="[status]\n$st\n"
+  prompt_text+="[diff]\n$diff"
+
+  message=$(echo $prompt_text | chatgpt)
+  tmpfile="$(mktemp /tmp/ai-commit-msg.XXXXXX)"
+  echo "$message" > "$tmpfile"
+  git commit --edit -F "$tmpfile"
+  rm -f "$tmpfile"
+}
+
 require scp && alias scp='scp -c aes256-ctr -pq'
 
 if type bat &>/dev/null; then
