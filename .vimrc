@@ -359,7 +359,8 @@ command! -nargs=0 Uuid execute ":r !uuidgen | sed 's/.*/''&''/' | tr '[A-Z]' '[a
 :cabbrev uuid Uuid
 
 " DateTime now
-nn dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
+" nn dt :pu=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR>
+nn dt a<C-r>=strftime('%Y-%m-%dT%H:%M:%S.000Z')<CR><Esc>
 
 " Shell Bootstrap
 func! s:ShellDefault()
