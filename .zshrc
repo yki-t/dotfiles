@@ -39,10 +39,6 @@ else
   alias ls="$LS --color=auto"
 fi
 
-if type rg &>/dev/null; then
-  alias rg='rg --no-ignore --hidden'
-fi
-
 # aliases and functions
 # Error print to stderr
 err() {
