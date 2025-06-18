@@ -619,7 +619,7 @@ if [ $(uname) = 'Darwin' ]; then
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
   # export PATH=$HOME/.nodebrew/current/bin:$PATH
-  export PATH=/opt/homebrew/var/nodebrew/current/bin:$PATH
+  # export PATH=/opt/homebrew/var/nodebrew/current/bin:$PATH
 fi
 
 export NVM_DIR="$HOME/.config/nvm"
