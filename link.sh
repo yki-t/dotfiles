@@ -16,3 +16,5 @@ ln -snf $DIR/.xinitrc ~/
 ln -snf $DIR/.Xmodmap ~/
 ln -snf $DIR/.zprofile ~/
 ln -snf $DIR/.zshrc ~/
+ln -snf $DIR/claude/settings.json ~/.claude/
+ln -snf $DIR/claude/CLAUDE.md ~/.claude/

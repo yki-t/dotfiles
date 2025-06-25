@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo check:*)",
+      "Bash(cargo build:*)",
+      "Bash(chmod:*)",
+      "Bash(mkdir:*)",
+      "Bash(diff:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(fdfind:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)"
+    ]
+  },
+  "model": "opus"
+}
