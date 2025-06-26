@@ -5,7 +5,6 @@ ln -snf $DIR/services/fcitx.service ~/.config/systemd/user/
 ln -snf $DIR/services/kwin_x11.service ~/.config/systemd/user/
 
 ln -snf $DIR/.vim ~/
-ln -snf $DIR/.gitconfig ~/
 ln -snf $DIR/.gitignore ~/
 ln -snf $DIR/.gitmodules ~/
 ln -snf $DIR/.private.sh ~/
@@ -18,3 +17,4 @@ ln -snf $DIR/.zprofile ~/
 ln -snf $DIR/.zshrc ~/
 ln -snf $DIR/claude/settings.json ~/.claude/
 ln -snf $DIR/claude/CLAUDE.md ~/.claude/
+ln -snf $DIR/claude/commands ~/.claude/

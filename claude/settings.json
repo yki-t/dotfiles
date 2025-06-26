@@ -1,11 +1,17 @@
 {
   "permissions": {
     "allow": [
+      "Bash(git grep:*)",
       "Bash(cargo check:*)",
       "Bash(cargo build:*)",
+      "Bash(wc:*)",
       "Bash(chmod:*)",
+      "Bash(head:*)",
+      "Bash(less:*)",
+      "Bash(tail:*)",
       "Bash(mkdir:*)",
       "Bash(diff:*)",
+      "Bash(xargs:*)",
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(fdfind:*)",
