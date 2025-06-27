@@ -468,7 +468,6 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 " let g:copilot_no_tab_map = v:true
 let g:copilot_filetypes = {
   \ 'toml': v:false,
-  \ 'markdown': v:false,
 \ }
 
 let g:coc_global_extensions = [
