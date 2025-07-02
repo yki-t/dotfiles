@@ -19,5 +19,8 @@
       "Bash(rg:*)"
     ]
   },
-  "model": "opus"
+  "model": "opus",
+  "env": {
+    "MAX_THINKING_TOKENS": "31999"
+  }
 }
