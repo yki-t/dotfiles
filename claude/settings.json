@@ -21,5 +21,8 @@
       "Bash(gh pr close:*)"
     ]
   },
-  "model": "opus"
+  "model": "opus",
+  "env": {
+    "MAX_THINKING_TOKENS": "31999"
+  }
 }
