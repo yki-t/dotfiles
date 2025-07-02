@@ -1,7 +1,6 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git grep:*)",
       "Bash(cargo check:*)",
       "Bash(cargo build:*)",
       "Bash(wc:*)",
@@ -17,6 +16,9 @@
       "Bash(fdfind:*)",
       "Bash(grep:*)",
       "Bash(rg:*)"
+    ],
+    "deny": [
+      "Bash(gh pr close:*)"
     ]
   },
   "model": "opus"
