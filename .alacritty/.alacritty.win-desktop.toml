@@ -37,7 +37,8 @@ foreground = "#eeeeee"
 size = 13.0
 
 [font.normal]
-family = "Cascadia Code PL"
+# family = "Cascadia Code PL"
+family = "UDEV Gothic 35JPDOC"
 
 [[keyboard.bindings]]
 # action = "SpawnNewInstance"
