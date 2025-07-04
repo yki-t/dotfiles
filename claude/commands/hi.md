@@ -1,7 +1,7 @@
 # hi
 
 ## Preparing
-Read docs and ultrathink about the project
+Read docs for preparing the project
 
 docs are:
 - [ ] CLAUDE.md
