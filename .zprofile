@@ -127,6 +127,12 @@ if type pyenv &>/dev/null; then
   eval "$(pyenv init -)"
 fi
 
+# Bun
+if type bun &>/dev/null; then
+  export BUN_INSTALL="${HOME}/.bun"
+  paths+=":${BUN_INSTALL}/bin"
+fi
+
 # PKG_CONFIG
 if [[ -e /usr/lib/pkgconfig ]]; then
   export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig"

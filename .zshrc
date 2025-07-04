@@ -579,7 +579,7 @@ chatgpt() {
   
   local data='{"model": "'"$model"'", "messages": [{"role": "user", "content": '"$prompt_text"'}]}'
 
-  tempfile="$(mktemp /tmp/chatgpt-msg.XXXXXX)"
+  tempfile="$(mktemp /tmp/ai-commit-msg.XXXXXX)"
   curl -s https://api.openai.com/v1/chat/completions \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $api_key" \
@@ -677,5 +677,9 @@ if [[ -f /usr/share/nvm/init-nvm.sh ]]; then
   source /usr/share/nvm/init-nvm.sh
 fi
 
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
 # Load additional user configuration
 [[ -f "$HOME/.append.sh" ]] && source "$HOME/.append.sh"
+
