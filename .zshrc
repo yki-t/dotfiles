@@ -304,6 +304,21 @@ rust() {
   fi
 }
 
+ssm() {
+  local instanceName=$1
+  if [[ -z "$instanceName" ]] || [[ -z "$AWS_PROFILE" ]]; then
+    if [[ -z "$instanceName" ]]; then
+      echo "Usage: ssm <instance_name>"
+    fi
+    if [[ -z "$AWS_PROFILE" ]]; then
+      echo "Error: AWS_PROFILE is not set."
+    fi
+    return 1
+  fi
+
+  aws ssm start-session --target $(aws ec2 describe-instances --filters "Name=tag:Name,Values=*$instanceName*" "Name=instance-state-name,Values=running" --query 'Reservations[0].Instances[0].InstanceId' --output text)
+}
+
 # ==============================================================================
 # Text processing
 # ==============================================================================
