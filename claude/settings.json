@@ -23,6 +23,6 @@
   },
   "model": "opus",
   "env": {
-    "MAX_THINKING_TOKENS": "31999"
+    "MAX_THINKING_TOKENS": "61999"
   }
 }

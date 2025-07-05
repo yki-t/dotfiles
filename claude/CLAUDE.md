@@ -14,7 +14,7 @@ Each task should be a high-level description of what needs to be done, without g
 For example, you might write "Implement user authentication" or "Write code for user login and registration" instead of concrete code snippets or specific functions (It should be handled in the each task).
 
 ## Sub Agents
-Please use sub-agents for tasks as much as possible. You should handle the overall project management and coordination in order to remember the context and ensure that the project is progressing smoothly, while sub-agents can focus on specific tasks or features.
+Please use parallelized sub-agents for tasks as much as possible. You should handle the overall project management and coordination in order to remember the context and ensure that the project is progressing smoothly, while sub-agents can focus on specific tasks or features.
 
 # Conversation Guidelines
 Please don't jump into the work right away.
