@@ -21,7 +21,7 @@ function installBasePackages {
   sudo New-Item -Type SymbolicLink '~\AppData\Local\Microsoft\Windows Terminal\settings.json' -Value ~\dotfiles\settings.json
 
   New-Item -ItemType Directory ~\AppData\alacritty -ErrorAction SilentlyContinue
-  sudo New-Item -Type SymbolicLink ~\AppData\alacritty\.alacritty.yml -Value ~\dotfiles\.alacritty.yml
+  sudo New-Item -Type SymbolicLink ~\AppData\alacritty\alacritty.toml -Value ~\dotfiles\alacritty/alacritty.win.toml
 }
 
 function setKeyBinds {

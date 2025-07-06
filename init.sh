@@ -270,7 +270,7 @@ installAdditionalPackages() {
 
   # Link dotfiles
   arch-chroot /mnt sudo -u $USERNAME bash -c "cd /home/$USERNAME && git clone https://github.com/yuki37/dotfiles.git"
-  for dotfile in '.zshrc' '.zshrc.zwc' '.zprofile' '.Xmodmap' '.xinitrc' '.vimrc' '.sshrc' '.vim' '.gitconfig' '.alacritty'; do
+  for dotfile in '.zshrc' '.zshrc.zwc' '.zprofile' '.Xmodmap' '.xinitrc' '.vimrc' '.sshrc' '.vim' '.gitconfig' 'alacritty'; do
     if [ ! -e "/home/$USERNAME/$dotfile" ];then
       arch-chroot /mnt sudo -u $USERNAME ln -snf "/home/$USERNAME/dotfiles/$dotfile" "/home/$USERNAME/$dotfile"
     fi

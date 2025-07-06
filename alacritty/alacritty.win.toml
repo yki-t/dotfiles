@@ -1,4 +1,4 @@
-[shell]
+[terminal.shell]
 program = "wsl"
 args = ["--cd ~"]
 
@@ -37,7 +37,6 @@ foreground = "#eeeeee"
 size = 13.0
 
 [font.normal]
-# family = "Cascadia Code PL"
 family = "UDEV Gothic 35JPDOC"
 
 [[keyboard.bindings]]
@@ -54,3 +53,5 @@ dynamic_title = false
 [window.dimensions]
 columns = 95
 lines = 52
+
+[terminal]
