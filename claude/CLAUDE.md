@@ -16,6 +16,10 @@ For example, you might write "Implement user authentication" or "Write code for 
 ## Sub Agents
 Please use parallelized sub-agents for tasks as much as possible. You should handle the overall project management and coordination in order to remember the context and ensure that the project is progressing smoothly, while sub-agents can focus on specific tasks or features.
 
+## Implementation
+Implement the actual code that is needed for the task at hand.
+Avoid mock or placeholder code except when explicitly requested by the user.
+
 # Conversation Guidelines
 Please don't jump into the work right away.
 First, take the time to make a plan and get feedback from the user, so that the design and overall direction are clearly defined before you start the actual work.
