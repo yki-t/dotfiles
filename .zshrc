@@ -228,6 +228,33 @@ decrypt() {
 # Development utilities
 # ==============================================================================
 
+# Search eternal history
+histgrep() {
+  if [[ $# -eq 0 ]]; then
+    err "usage: histgrep <pattern>"
+    return 1
+  fi
+  
+  if [[ ! -f "$ETERNAL_HISTORY" ]]; then
+    err "Eternal history file not found: $ETERNAL_HISTORY"
+    return 1
+  fi
+  
+  grep -E "$1" "$ETERNAL_HISTORY" | less
+}
+
+# Show recent eternal history
+histtail() {
+  local lines="${1:-50}"
+  
+  if [[ ! -f "$ETERNAL_HISTORY" ]]; then
+    err "Eternal history file not found: $ETERNAL_HISTORY"
+    return 1
+  fi
+  
+  tail -n "$lines" "$ETERNAL_HISTORY"
+}
+
 # Random string generator
 rand() {
   local range max to_clipboard randstr

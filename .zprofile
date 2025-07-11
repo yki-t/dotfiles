@@ -182,11 +182,26 @@ fi
 # ==============================================================================
 
 # History settings
-export HISTFILE="${HOME}/.zsh_history"
-export HISTSIZE=1000
-export SAVEHIST=100000
-setopt hist_ignore_dups
-setopt EXTENDED_HISTORY
+export HISTFILE="${HOME}/.zsh_history_$$"  # Session-specific history file
+export ETERNAL_HISTORY="${HOME}/.zsh_eternal_history"  # All commands history
+export HISTSIZE=10000
+export SAVEHIST=10000
+
+# Session-independent history options
+setopt NO_SHARE_HISTORY        # Don't share history between sessions
+setopt APPEND_HISTORY          # Append to history file
+setopt INC_APPEND_HISTORY      # Write to history file immediately
+setopt HIST_IGNORE_DUPS        # Don't record duplicates in session
+setopt HIST_IGNORE_ALL_DUPS    # Remove older duplicate entries
+setopt HIST_FIND_NO_DUPS       # Don't display duplicates when searching
+setopt HIST_REDUCE_BLANKS      # Remove extra blanks from commands
+setopt HIST_VERIFY             # Show command before executing from history
+setopt EXTENDED_HISTORY        # Add timestamps to history
+
+# Save every command to eternal history using preexec hook
+preexec() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" >> "$ETERNAL_HISTORY"
+}
 
 # Editor settings
 export GIT_EDITOR='vim'
