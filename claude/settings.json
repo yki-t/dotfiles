@@ -1,4 +1,7 @@
 {
+  "env": {
+    "MAX_THINKING_TOKENS": "31999"
+  },
   "permissions": {
     "allow": [
       "Bash(cargo check:*)",
@@ -18,11 +21,31 @@
       "Bash(rg:*)"
     ],
     "deny": [
+      "Bash(git commit:*)",
       "Bash(gh pr close:*)"
     ]
   },
-  "model": "opus",
-  "env": {
-    "MAX_THINKING_TOKENS": "61999"
-  }
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "model": "opus"
 }
