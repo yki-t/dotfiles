@@ -4,11 +4,11 @@
 Read docs for preparing the project
 
 docs are:
-- [ ] CLAUDE.md
+- [ ] CLAUDE.md (global and project specific)
 - [ ] README.md
 - [ ] docker-compose.yml (if exists)
 - [ ] docs/* (if exists)
 
 ## Arguments
-If some arguments are given, you should handle them after the "Preparing" section.
+You should handle arguments after the "Preparing" section.
 
