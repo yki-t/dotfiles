@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi"
+            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi; if [[ \"$FILE_PATH\" == *.sh ]]; then echo 'Error: Creating .sh files is prohibited' >&2; exit 2; fi"
           }
         ]
       },
@@ -41,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi"
+            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi; if [[ \"$FILE_PATH\" == *.sh ]]; then echo 'Error: Creating .sh files is prohibited' >&2; exit 2; fi"
           }
         ]
       }
