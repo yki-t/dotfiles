@@ -28,20 +28,22 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Write",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi; if [[ \"$FILE_PATH\" == *.sh ]]; then echo 'Error: Creating .sh files is prohibited' >&2; exit 2; fi"
+            "command": "~/dotfiles/claude/hook pre"
           }
         ]
-      },
+      }
+    ],
+    "PostToolUse": [
       {
-        "matcher": "MultiEdit",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "if [[ \"$FILE_PATH\" == *.md ]] && [[ \"$FILE_PATH\" != */TODO*.md ]]; then echo 'Error: Creating .md files is prohibited' >&2; exit 2; fi; if [[ \"$FILE_PATH\" == *.sh ]]; then echo 'Error: Creating .sh files is prohibited' >&2; exit 2; fi"
+            "command": "~/dotfiles/claude/hook post"
           }
         ]
       }
