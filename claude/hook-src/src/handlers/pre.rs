@@ -18,7 +18,7 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
 
     // Block WebSearch
     if tool_name == "WebSearch" {
-        return Err(anyhow::anyhow!("Use `gemini-search` instead of `WebSearch`"));
+        return Err(anyhow::anyhow!("Use `gemini -p 'WebSearch: SEARCH_TEXT'` instead of `WebSearch`"));
     }
 
     // Check file writing operations (both direct and via bash)
@@ -47,13 +47,13 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
             return Err(anyhow::anyhow!("Creating or editing .sh files is prohibited"));
         }
 
-        // Block .md files (except TODO*.md)
-        if ext == "md" && !name.starts_with("TODO") {
+        // Block .md files (except TODO.md)
+        if ext == "md" && name != "TODO.md" {
             return Err(anyhow::anyhow!("Creating or editing .md files is prohibited"));
         }
 
         // Validate TODO file format when writing
-        if ext == "md" && name.starts_with("TODO") && tool_name == "Write" {
+        if ext == "md" && name == "TODO.md" && is_file_writing_tool {
             // Get content from tool_input.other["content"]
             if let Some(content_value) = input.tool_input.other.get("content") {
                 if let Some(content) = content_value.as_str() {
