@@ -67,9 +67,9 @@ NOTE: to avoid JSON escape issue, prefer shorter messages like "[PROJECT_NAME] I
 # command instructions
 
 ## Web Search
-Use the `gemini-search` command to search the web for information.
+Use the `gemini -p "WebSearch: SEARCH_TEXT"` command to search the web for information.
 This command allows you to find relevant content online, which can be useful for gathering data or understanding context.
-Might be better than the built-in `fetch` command.
+Might be better than the built-in `WebSearch` command.
 
 ## aws commands
 Assume that the AWS_PROFILE environment variable is set.
