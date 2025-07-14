@@ -42,23 +42,26 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
         let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("");
         let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
 
-        // Block .sh files
-        if ext == "sh" {
-            return Err(anyhow::anyhow!("Creating or editing .sh files is prohibited"));
-        }
+        if is_file_writing_tool {
+            // Block .sh files
+            if ext == "sh" {
+                return Err(anyhow::anyhow!("Creating or editing .sh files is prohibited"));
+            }
 
-        // Block .md files (except TODO.md)
-        if ext == "md" && name != "TODO.md" {
-            return Err(anyhow::anyhow!("Creating or editing .md files is prohibited"));
-        }
+            // Block .md files (except TODO.md)
+            if ext == "md" {
+                if name != "TODO.md" && name != "README.md" {
+                    return Err(anyhow::anyhow!("Creating or editing .md files is prohibited"));
+                }
 
-        // Validate TODO file format when writing
-        if ext == "md" && name == "TODO.md" && is_file_writing_tool {
-            // Get content from tool_input.other["content"]
-            if let Some(content_value) = input.tool_input.other.get("content") {
-                if let Some(content) = content_value.as_str() {
-                    if let Err(e) = validate_todo_format(content) {
-                        return Err(anyhow::anyhow!("Invalid TODO format: {}", e));
+                if name == "TODO.md" {
+                    // Get content from tool_input.other["content"]
+                    if let Some(content_value) = input.tool_input.other.get("content") {
+                        if let Some(content) = content_value.as_str() {
+                            if let Err(e) = validate_todo_format(content) {
+                                return Err(anyhow::anyhow!("Invalid TODO format: {}", e));
+                            }
+                        }
                     }
                 }
             }
