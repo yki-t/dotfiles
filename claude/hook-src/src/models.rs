@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct HookInput {
     pub session_id: String,
