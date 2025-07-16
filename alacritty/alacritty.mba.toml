@@ -36,7 +36,7 @@ size = 15.0
 family = "Cascadia Code PL"
 
 [[keyboard.bindings]]
-command = "/Users/yuki/dotfiles/.alacritty/spawn-alacritty-cwd.sh"
+command = "/Users/yuki/dotfiles/alacritty/spawn-alacritty-cwd.sh"
 key = "N"
 mods = "Command|Shift"
 
