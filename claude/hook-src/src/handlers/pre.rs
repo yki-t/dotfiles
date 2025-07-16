@@ -45,13 +45,13 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
         if is_file_writing_tool {
             // Block .sh files
             if ext == "sh" {
-                return Err(anyhow::anyhow!("Creating or editing .sh files is prohibited"));
+                return Err(anyhow::anyhow!("Creating or editing ad hoc .sh files is prohibited"));
             }
 
             // Block .md files (except TODO.md)
             if ext == "md" {
                 if name != "TODO.md" && name != "README.md" {
-                    return Err(anyhow::anyhow!("Creating or editing .md files is prohibited"));
+                    return Err(anyhow::anyhow!("Creating or editing .md document files is prohibited"));
                 }
 
                 if name == "TODO.md" {
