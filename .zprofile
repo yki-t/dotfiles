@@ -182,8 +182,13 @@ fi
 # ==============================================================================
 
 # History settings
-export HISTFILE="${HOME}/.zsh_history_$$"  # Session-specific history file
-export ETERNAL_HISTORY="${HOME}/.zsh_eternal_history"  # All commands history
+if [ -d /opt/history ]; then
+  export HISTFILE="/opt/history/.zsh_history_$$"
+  export ETERNAL_HISTORY="/opt/history/.zsh_eternal_history"
+else
+  export HISTFILE="/tmp/.zsh_history"
+  export ETERNAL_HISTORY="/tmp/.zsh_eternal_history"
+fi
 export HISTSIZE=10000
 export SAVEHIST=10000
 
