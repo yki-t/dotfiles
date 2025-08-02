@@ -166,3 +166,6 @@ repo = 'slim-template/vim-slim'
 [[plugins]]
 repo = 'github/copilot.vim'
 
+[[plugins]]
+repo = 'hashivim/vim-terraform'
+

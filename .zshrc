@@ -69,7 +69,7 @@ fi
 
 type scp &>/dev/null && alias scp='scp -c aes256-ctr -pq'
 type dstat &>/dev/null && alias dstat='dstat -tlafm --tcp'
-type claude &>/dev/null && alias claude='claude --dangerously-skip-permissions'
+type claude &>/dev/null && alias cc='claude --dangerously-skip-permissions'
 
 # Vim
 alias vi='vim'

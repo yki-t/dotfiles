@@ -146,6 +146,9 @@ if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
   source "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
+# Claude Code bash timeout
+export BASH_DEFAULT_TIMEOUT_MS=600000
+
 # ==============================================================================
 # Terminal and display settings
 # ==============================================================================
