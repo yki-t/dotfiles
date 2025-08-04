@@ -1,4 +1,4 @@
-# go
+# until
 
 ## Never Stop Mode
 

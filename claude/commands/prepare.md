@@ -1,4 +1,4 @@
-# hi
+# prepare
 
 ## Preparing
 Read docs for preparing the project
