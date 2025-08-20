@@ -1,6 +1,7 @@
 use crate::models::HookInput;
 use crate::utils::{log_debug, extract_target_file_from_bash, validate_todo_format};
 use anyhow::Result;
+use std::env;
 use std::path::Path;
 
 pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
@@ -43,13 +44,23 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
         let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
 
         if is_file_writing_tool {
-            // Block .sh files
-            if ext == "sh" {
+            // Check environment variable for .sh files permission
+            let allow_sh = env::var("CLAUDE_HOOK_ALLOW_SH")
+                .map(|v| v.to_lowercase() == "true" || v == "1")
+                .unwrap_or(false);
+            
+            // Block .sh files (unless explicitly allowed)
+            if ext == "sh" && !allow_sh {
                 return Err(anyhow::anyhow!("Creating or editing ad hoc .sh files is prohibited"));
             }
 
-            // Block .md files (except TODO.md)
-            if ext == "md" {
+            // Check environment variable for .md files permission
+            let allow_md = env::var("CLAUDE_HOOK_ALLOW_MD")
+                .map(|v| v.to_lowercase() == "true" || v == "1")
+                .unwrap_or(false);
+
+            // Block .md files (except TODO.md, or if explicitly allowed)
+            if ext == "md" && !allow_md {
                 if name != "TODO.md" && name != "README.md" {
                     return Err(anyhow::anyhow!("Creating or editing .md document files is prohibited"));
                 }
