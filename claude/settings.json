@@ -6,6 +6,8 @@
     "allow": [
       "Bash(cargo check:*)",
       "Bash(cargo build:*)",
+      "Bash(test:*)",
+      "Bash(cat:*)",
       "Bash(wc:*)",
       "Bash(chmod:*)",
       "Bash(head:*)",

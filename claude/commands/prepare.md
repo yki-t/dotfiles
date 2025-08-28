@@ -1,7 +1,9 @@
 # prepare
 
 ## Preparing
-Read docs for preparing the project
+1. Repeat the global CLAUDE.md content
+
+2. Read docs for preparing the project
 
 docs are:
 - [ ] CLAUDE.md (global and project specific)
