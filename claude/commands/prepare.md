@@ -1,16 +1,16 @@
 # prepare
 
-## Preparing
-1. Repeat the global CLAUDE.md content
+## Task
+1. CLAUDE.mdと~/.claude/CLAUDE.mdの内容を復唱してください。
 
-2. Read docs for preparing the project
+2. プロジェクトを準備するためのドキュメントを読む
 
-docs are:
-- [ ] CLAUDE.md (global and project specific)
+ドキュメント例:
+- [ ] ~/.claude/CLAUDE.md
+- [ ] CLAUDE.md
 - [ ] README.md
-- [ ] docker-compose.yml (if exists)
-- [ ] docs/* (if exists)
+- [ ] docker-compose.yml (存在する場合)
+- [ ] docs/* (存在する場合)
 
 ## Arguments
-You should handle arguments after the "Preparing" section.
-
+prepare セクションの後で引数を処理してください。

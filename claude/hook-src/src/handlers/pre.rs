@@ -3,7 +3,6 @@ use crate::utils::{log_debug, extract_target_file_from_bash, validate_todo_forma
 use anyhow::Result;
 use std::env;
 use std::path::Path;
-use std::fs;
 
 pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
     let tool_name = input.tool_name.as_str();
@@ -25,36 +24,6 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
 
     // Check file writing operations (both direct and via bash)
     let is_file_writing_tool = matches!(tool_name, "Write" | "Edit" | "MultiEdit");
-
-    // Check if TODO.md creation should be enforced
-    let skip_todo_check = env::var("CLAUDE_HOOK_SKIP_TODO")
-        .map(|v| v.to_lowercase() == "true" || v == "1")
-        .unwrap_or(false);
-
-    // For code editing tools, check if TODO.md exists (unless check is skipped)
-    if is_file_writing_tool && !skip_todo_check {
-        // Check if the file being written is TODO.md itself
-        let is_todo_file = file_path
-            .and_then(|p| Path::new(p).file_name())
-            .and_then(|n| n.to_str())
-            .map(|name| name == "TODO.md")
-            .unwrap_or(false);
-
-        // If not writing TODO.md, check if TODO.md exists
-        if !is_todo_file {
-            // Check in current directory and project root
-            let todo_exists = fs::metadata("TODO.md").is_ok() || 
-                              fs::metadata("./TODO.md").is_ok() ||
-                              env::current_dir()
-                                  .ok()
-                                  .and_then(|dir| fs::metadata(dir.join("TODO.md")).ok())
-                                  .is_some();
-
-            if !todo_exists {
-                return Err(anyhow::anyhow!("Read CLAUDE.md before starting any tasks. Must create TODO.md before implementation"));
-            }
-        }
-    }
 
     // Get target path from either direct file operations or bash commands
     let bash_target = if tool_name == "Bash" {

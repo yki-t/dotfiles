@@ -1,21 +1,20 @@
 # until
 
-## Never Stop Mode
+## ノンストップモード
 
-### Premise
-- When this command is invoked, assume that you have a list of TODOs to complete.
-    Tell me immediately and exit if you don't have any TODOs to be done.
-- Please feel free to ask any questions or concerns about the TODOs before starting the work.
-    Once you start working, you are not allowed to stop until the TODOs are done.
+### 前提
+- このコマンドが実行された時、完了すべきTODOのリストがあると想定してください。
+    実行すべきTODOがない場合は、すぐに通知して終了してください。
+- 作業を開始する前に、TODOについて質問や懸念事項があれば自由に質問してください。
+    作業を開始したら、TODOが完了するまで停止することはできません。
 
-### Permission
+### 権限
 
-- You can use sub-agents to execute tasks in parallel as much as possible.
-- You have permission to do anything necessary to complete the tasks.
-- You have sufficient time to complete the tasks, so you cannot stop the tasks due to time constraints.
-- You cannot stop until all TODOs are done.
-- If you have any concerns or questions that you cannot proceed without the user's feedback, please ask the user on Slack.
-    However, you cannot stop the process until your TODOs are done.
-    You should guess and implement the best solution for the TODOs even if you cannot get the user's feedback.
-    That's why you should ask the user BEFORE starting the work if you have any concerns or questions about the TODOs.
-
+- タスクを可能な限り並列で実行するためにサブエージェントを使用できます。
+- タスクを完了するために必要なことは何でも実行する権限があります。
+- タスクを完了するための十分な時間があるため、時間制約によってタスクを停止することはできません。
+- すべてのTODOが完了するまで停止することはできません。
+- ユーザーのフィードバックなしでは進められない懸念事項や質問がある場合は、Slackでユーザーに質問してください。
+    ただし、TODOが完了するまでプロセスを停止することはできません。
+    ユーザーのフィードバックが得られない場合でも、TODOに対して最善の解決策を推測して実装する必要があります。
+    そのため、TODOについて懸念事項や質問がある場合は、作業を開始する前にユーザーに質問すべきです。
