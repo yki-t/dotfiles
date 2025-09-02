@@ -23,6 +23,7 @@
       "Bash(rg:*)"
     ],
     "deny": [
+      "Bash(git checkout:*)",
       "Bash(git commit:*)",
       "Bash(gh pr close:*)"
     ]
