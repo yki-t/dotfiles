@@ -121,7 +121,7 @@ if type g++ &>/dev/null; then
 fi
 
 # Python (pyenv)
-if type pyenv &>/dev/null; then
+if [ -f "$HOME/.pyenv/bin/pyenv" ]; then
   export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
