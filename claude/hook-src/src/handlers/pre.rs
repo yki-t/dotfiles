@@ -61,20 +61,7 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
 
             // Block .md files (except TODO.md, or if explicitly allowed)
             if ext == "md" && !allow_md {
-                if name != "TODO.md" && name != "README.md" {
-                    return Err(anyhow::anyhow!("Creating or editing .md document files is prohibited"));
-                }
-
-                if name == "TODO.md" {
-                    // Get content from tool_input.other["content"]
-                    if let Some(content_value) = input.tool_input.other.get("content") {
-                        if let Some(content) = content_value.as_str() {
-                            if let Err(e) = validate_todo_format(content) {
-                                return Err(anyhow::anyhow!("Invalid TODO format: {}", e));
-                            }
-                        }
-                    }
-                }
+                return Err(anyhow::anyhow!("Creating or editing .md document files is prohibited"));
             }
         }
     }
