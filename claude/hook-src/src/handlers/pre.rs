@@ -17,11 +17,6 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
     // Tool-specific checks
     // NOTE: Tool Names: Write|Edit|MultiEdit|Read|Bash|Grep|Glob|LS|Task|TodoWrite|WebSearch|WebFetch
 
-    // Block WebSearch
-    if tool_name == "WebSearch" {
-        return Err(anyhow::anyhow!("Use `gemini -p 'WebSearch: SEARCH_TEXT'` instead of `WebSearch`"));
-    }
-
     // Check file writing operations (both direct and via bash)
     let is_file_writing_tool = matches!(tool_name, "Write" | "Edit" | "MultiEdit");
 
