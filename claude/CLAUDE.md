@@ -122,3 +122,7 @@ curl -X POST -H 'Content-type: application/json' --data '{"text":"あなたの�
 - `git diff`
 
 など
+
+# その他 言語ごとの注意点
+Rustの最新Editionは現時点で2024です。
+https://doc.rust-lang.org/edition-guide/rust-2024/index.html
