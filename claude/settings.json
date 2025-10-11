@@ -23,8 +23,11 @@
       "Bash(rg:*)"
     ],
     "deny": [
-      "Bash(git checkout:*)",
+      "Bash(git add:*)",
       "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git reset:*)",
+      "Bash(git checkout:*)",
       "Bash(gh pr close:*)"
     ]
   },
@@ -52,5 +55,5 @@
       }
     ]
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": false
 }
