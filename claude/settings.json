@@ -23,6 +23,9 @@
       "Bash(rg:*)"
     ],
     "deny": [
+      "Bash(rustc:*)",
+      "Bash(trunk:*)",
+      "Bash(cargo:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
@@ -55,5 +58,5 @@
       }
     ]
   },
-  "alwaysThinkingEnabled": false
+  "alwaysThinkingEnabled": true
 }
