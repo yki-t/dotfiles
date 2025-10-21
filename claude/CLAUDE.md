@@ -137,10 +137,14 @@ curl -X POST -H 'Content-type: application/json' --data '{"text":"あなたの�
 など
 
 # その他
-## 言語ごとの注意点
-Rustの最新Editionは現時点で2024, 1.90.0 です。
+## meta
+現在2025年です
+## Rust
+最新Editionは現時点で2024, 1.90.0 です。
 - https://doc.rust-lang.org/edition-guide/rust-2024/index.html
 - https://blog.rust-lang.org/releases/latest/
+## Node.js
+最新バージョンは22です。
 ## キャッシュについて
 Web開発においてキャッシュが問題になることはほとんどありません。
 ユーザーは常に "Disable Cache" オプションを有効にしてブラウザを使用しています。
