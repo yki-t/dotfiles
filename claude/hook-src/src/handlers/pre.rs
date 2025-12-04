@@ -17,6 +17,17 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
     // Tool-specific checks
     // NOTE: Tool Names: Write|Edit|MultiEdit|Read|Bash|Grep|Glob|LS|Task|TodoWrite|WebSearch|WebFetch
 
+    // Check Task (subagent) usage
+    if tool_name == "Task" {
+        let allow_task = env::var("CLAUDE_HOOK_ALLOW_TASK")
+            .map(|v| v.to_lowercase() == "true" || v == "1")
+            .unwrap_or(false);
+
+        if !allow_task {
+            return Err(anyhow::anyhow!("Spawning subagents (Task) is prohibited"));
+        }
+    }
+
     // Check file writing operations (both direct and via bash)
     let is_file_writing_tool = matches!(tool_name, "Write" | "Edit" | "MultiEdit");
 
