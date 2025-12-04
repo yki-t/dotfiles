@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
@@ -19,8 +18,6 @@ pub struct ToolInput {
     pub file_path: Option<String>,
     #[serde(default)]
     pub command: Option<String>,
-    #[serde(flatten)]
-    pub other: serde_json::Map<String, Value>,
 }
 
 #[derive(Debug, Serialize)]

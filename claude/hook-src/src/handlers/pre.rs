@@ -1,5 +1,5 @@
 use crate::models::HookInput;
-use crate::utils::{log_debug, extract_target_file_from_bash, validate_todo_format};
+use crate::utils::{extract_target_file_from_bash, log_debug};
 use anyhow::Result;
 use std::env;
 use std::path::Path;
@@ -47,7 +47,6 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
     if let Some(path) = target_path {
         let p = Path::new(path);
         let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("");
-        let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
 
         if is_file_writing_tool {
             // Check environment variable for .sh files permission
