@@ -697,7 +697,7 @@ fi
 
 # WSL working directory tracking
 if [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
-  if [[ -d "$APPDATA" ]]; then
+  if [ -d "$APPDATA" ] && [ -n "$APPDATA" ]; then
     precmd() {
       pwd > "$APPDATA/lastpwd"
     }
