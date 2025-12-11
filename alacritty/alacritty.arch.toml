@@ -33,7 +33,7 @@ foreground = "#eeeeee"
 size = 13.0
 
 [font.normal]
-family = "CascadiaCodePL"
+family = "UDEV Gothic 35JPDOC"
 
 [[keyboard.bindings]]
 action = "CreateNewWindow"

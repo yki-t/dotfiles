@@ -1,1 +1,111 @@
-# 以下言語ごとの設定
+# 言語別プラグイン（遅延読み込み）
+
+# TypeScript/JavaScript
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'peitalin/vim-jsx-typescript'
+on_ft = ['typescriptreact']
+
+# Vue
+[[plugins]]
+repo = 'posva/vim-vue'
+on_ft = ['vue']
+
+[[plugins]]
+repo = 'digitaltoad/vim-pug'
+on_ft = ['pug']
+
+# Rust
+[[plugins]]
+repo = 'racer-rust/vim-racer'
+on_ft = ['rust']
+
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = ['rust']
+
+[[plugins]]
+repo = 'sebastianmarkow/deoplete-rust'
+on_ft = ['rust']
+depends = ['deoplete.nvim']
+
+# Go
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = ['go']
+
+# C++
+[[plugins]]
+repo = 'octol/vim-cpp-enhanced-highlight'
+on_ft = ['cpp']
+
+# Dart/Flutter
+[[plugins]]
+repo = 'dart-lang/dart-vim-plugin'
+on_ft = ['dart']
+
+# LaTeX
+[[plugins]]
+repo = 'lervag/vimtex'
+on_ft = ['tex']
+
+# Elm
+[[plugins]]
+repo = 'lambdatoast/elm.vim'
+on_ft = ['elm']
+
+# QML
+[[plugins]]
+repo = 'peterhoeg/vim-qml'
+on_ft = ['qml']
+
+# MQL4
+[[plugins]]
+repo = 'vobornik/vim-mql4'
+on_ft = ['mql4']
+
+# Solidity
+[[plugins]]
+repo = 'tomlion/vim-solidity'
+on_ft = ['solidity']
+
+# PowerShell
+[[plugins]]
+repo = 'zigford/vim-powershell'
+on_ft = ['ps1']
+
+# Terraform
+[[plugins]]
+repo = 'hashivim/vim-terraform'
+on_ft = ['terraform']
+
+# TOML
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = ['toml']
+
+# CSV
+[[plugins]]
+repo = 'mechatroner/rainbow_csv'
+on_ft = ['csv']
+
+# PlantUML
+[[plugins]]
+repo = 'weirongxu/plantuml-previewer.vim'
+on_ft = ['plantuml']
+
+# Template engines
+[[plugins]]
+repo = 'statianzo/vim-jade'
+on_ft = ['jade']
+
+[[plugins]]
+repo = 'Glench/Vim-Jinja2-Syntax'
+on_ft = ['jinja']
+
+[[plugins]]
+repo = 'slim-template/vim-slim'
+on_ft = ['slim']

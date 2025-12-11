@@ -1,10 +1,3 @@
-
-# 補完
-[[plugins]]
-repo = 'roxma/nvim-yarp'
-[[plugins]]
-repo = 'roxma/vim-hug-neovim-rpc'
-
 [[plugins]]
 repo = 'Shougo/unite.vim'
 [[plugins]]
@@ -30,10 +23,6 @@ repo = 'tpope/vim-surround'
 [[plugins]]
 repo = 'luochen1990/rainbow'
 
-# csv
-[[plugins]]
-repo = 'mechatroner/rainbow_csv'
-
 # 画面分割の時に使うもの
 [[plugins]]
 repo = 'kana/vim-submode'
@@ -48,16 +37,6 @@ repo = 'kana/vim-operator-user'
 [[plugins]]
 repo = 'plasticboy/vim-markdown'
 
-# [[plugins]]
-# repo = 'iamcco/markdown-preview.vim'
-# on_ft = ['markdown', 'pandoc.markdown', 'rmd']
-# build = 'sh -c "cd app && npx --yes yarn install"'
-
-[[plugins]]
-repo = 'iamcco/markdown-preview.nvim'
-on_ft = ['markdown', 'pandoc.markdown', 'rmd']
-build = 'sh -c "cd app && npx --yes yarn install"'
-
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 [[plugins]]
@@ -67,105 +46,6 @@ repo = 'previm/previm'
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 
-# Javascript
-[[plugins]]
-repo = 'leafgarland/typescript-vim'
-
-# QML
-[[plugins]]
-repo = 'peterhoeg/vim-qml'
-
-# vue
-[[plugins]]
-repo = 'peitalin/vim-jsx-typescript'
-[[plugins]]
-repo = 'posva/vim-vue'
-
-[[plugins]]
-repo = 'digitaltoad/vim-pug'
-
-[[plugins]]
-repo = 'zigford/vim-powershell'
-
- # Rust lang
-[[plugins]]
-repo = 'racer-rust/vim-racer'
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-[[plugins]]
-repo = 'sebastianmarkow/deoplete-rust'
-on_ft = 'rust'
-depends = ['deoplete.nvim']
-
-# mql4
-[[plugins]]
-repo = 'vobornik/vim-mql4'
-
-# elm
-[[plugins]]
-repo = 'lambdatoast/elm.vim'
-
-# C++
-[[plugins]]
-repo = 'octol/vim-cpp-enhanced-highlight'
-
-# web template
-[[plugins]]
-repo = 'statianzo/vim-jade'
-[[plugins]]
-repo = 'Glench/Vim-Jinja2-Syntax'
-
-# latex
-[[plugins]]
-repo = 'lervag/vimtex'
-
-# Flutter
-[[plugins]]
-repo = 'dart-lang/dart-vim-plugin'
-on_ft = ['dart']
-
-# toml
-[[plugins]]
-repo = 'cespare/vim-toml'
-
-# golang
-[[plugins]]
-repo = 'fatih/vim-go'
-
-# solidity
-[[plugins]]
-repo = 'tomlion/vim-solidity'
-
-# plantuml
-[[plugins]]
-repo = 'weirongxu/plantuml-previewer.vim'
-
-# plantuml
-[[plugins]]
-repo = 'slim-template/vim-slim'
-
-# php linter
-# [[plugins]]
-# repo = 'stephpy/vim-php-cs-fixer'
-# repo = 'beanworks/vim-phpfmt'
-
-# [[plugins]]
-# repo = 'neoclide/coc.nvim'
-# source = 'release'
-# build = 'yarn install --frozen-lockfile'
-# # rev = 'release'
-# # on_i = 1
-# merged = '0'
-# # hook_source = 'call coil398#init#coc#hook_source()'
-
-# [[plugins]]
-# repo = 'yaegassy/coc-intelephense'
-# build = 'yarn install --frozen-lockfile'
-
 # Copilot
 [[plugins]]
 repo = 'github/copilot.vim'
-
-[[plugins]]
-repo = 'hashivim/vim-terraform'
-

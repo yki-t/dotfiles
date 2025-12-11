@@ -29,7 +29,7 @@ if dein#load_state('~/.cache/dein/')
   let g:rc_dir    = expand('~/.vim/rc')
   cal dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
   cal dein#load_toml(g:rc_dir . '/dein.toml', {'lazy': 0})
-  " cal dein#load_toml(g:rc_dir . '/lazy.toml', {'lazy': 1})
+  cal dein#load_toml(g:rc_dir . '/lazy.toml', {'lazy': 1})
   cal dein#end()
   cal dein#save_state()
 en
@@ -263,14 +263,12 @@ let g:vim_jsx_pretty_colorful_config = 0
 " markdown preview
 let g:vim_markdown_folding_disabled=1
 let g:previm_show_header=0
-" if OSTYPE == "mac"
-"   let g:previm_open_cmd='open -a Vivaldi'
-" elseif OSTYPE == "unix"
-"   let g:previm_open_cmd='/usr/bin/google-chrome-stable'
-" endif
-let g:previm_open_cmd='open -a Vivaldi'
-" nn md :PrevimOpen<CR>
-nn md :MarkdownPreview<CR>
+if OSTYPE == "mac"
+  let g:previm_open_cmd='open -a Vivaldi'
+elseif OSTYPE == "unix"
+  let g:previm_open_cmd='xdg-open'
+endif
+nn md :PrevimOpen<CR>
 
 " " php-cs-fixer
 " let g:php_cs_fixer_path = "~/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
@@ -453,28 +451,9 @@ set updatetime=300
 " diagnostics appear/become resolved
 " set signcolumn=yes
 
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-inoremap <silent><expr> <TAB>
-  \ coc#pum#visible() ? coc#pum#next(1) :
-  \ CheckBackspace() ? "\<Tab>" :
-  \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
 " C-M is CR, C-I is Tab so ignore them
 " imap <silent><script><expr> <C-M> copilot#Accept("\<CR>")
 " let g:copilot_no_tab_map = v:true
 let g:copilot_filetypes = {
   \ 'toml': v:false,
 \ }
-
-let g:coc_global_extensions = [
-  \  'coc-webview',
-  \  'coc-markdown-preview-enhanced',
-  \  'coc-jedi',
-  \  'coc-sql',
-  \  'coc-phpls',
-  \]
-
