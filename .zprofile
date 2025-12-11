@@ -58,11 +58,6 @@ if [[ -d "${HOME}/.rbenv/bin" ]]; then
   eval "$(rbenv init --no-rehash -)"
 fi
 
-# Node.js - nvm
-export NVM_DIR="$HOME/.config/nvm"
-[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
-[[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
-
 # Node.js - npm/yarn
 if type npm &>/dev/null; then
   export NO_UPDATE_NOTIFIER=1
@@ -120,12 +115,6 @@ if type g++ &>/dev/null; then
   export CMAKE_CXX_COMPILER="$(which g++)"
 fi
 
-# Python (pyenv)
-if [ -f "$HOME/.pyenv/bin/pyenv" ]; then
-  export PATH="$HOME/.pyenv/bin:$PATH"
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
-fi
 
 # Bun
 if type bun &>/dev/null; then

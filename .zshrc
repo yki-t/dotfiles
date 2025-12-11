@@ -685,15 +685,6 @@ if [[ "$(uname)" = 'Darwin' ]]; then
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
-# Linux X11 - Reset input methods when IME has issues
-if type xinput &>/dev/null; then
-  while read id; do
-    local prop='libinput Accel Speed'
-    xinput set-prop "$id" "$(xinput list-props "$id" | grep "$prop (" | head -n 1 | sed -e "s|$prop (\([0-9]*\)).*|\1|")" 1.0
-    prop='libinput Natural Scrolling Enabled'
-    xinput set-prop "$id" "$(xinput list-props "$id" | grep "$prop (" | head -n 1 | sed -e "s|$prop (\([0-9]*\)).*|\1|")" 0.0
-  done < <(xinput | grep 'Magic Trackpad' | sed -e 's|.*id=\([0-9]*\).*|\1|')
-fi
 
 # WSL working directory tracking
 if [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
@@ -714,14 +705,16 @@ if [[ -f "${HOME}/.zshrc" ]] && \
   zcompile "${HOME}/.zshrc"
 fi
 
-# Load NVM (deferred for performance)
-if [[ -f /usr/share/nvm/init-nvm.sh ]]; then
-  source /usr/share/nvm/init-nvm.sh
-fi
-
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # Load additional user configuration
 [[ -f "$HOME/.append.sh" ]] && source "$HOME/.append.sh"
 
+
+# fnm
+FNM_PATH="/home/yuki/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "`fnm env`"
+fi
