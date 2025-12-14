@@ -74,7 +74,6 @@ type claude &>/dev/null && alias claude='claude --dangerously-skip-permissions'
 # Vim
 alias vi='vim'
 alias v='vim'
-alias ssh='TERM=xterm-256color ssh'
 
 # ==============================================================================
 # Utility functions

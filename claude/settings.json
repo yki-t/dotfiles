@@ -18,7 +18,25 @@
       "Bash(find:*)",
       "Bash(fdfind:*)",
       "Bash(grep:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(docker compose exec:*)",
+      "Bash(mv:*)",
+      "Bash(gh issue view:*)",
+      "Bash(npx cdk synth:*)",
+      "Bash(npm run build:*)",
+      "Bash(rm:*)",
+      "Bash(npm run synth:stg:*)",
+      "Bash(npm run synth:prd:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(pnpm test:*)",
+      "Bash(docker restart:*)",
+      "Bash(aws:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(gh issue list:*)",
+      "WebFetch(domain:cloud.google.com)"
     ],
     "deny": [
       "Bash(rustc:*)",
@@ -29,8 +47,13 @@
       "Bash(git push:*)",
       "Bash(git reset:*)",
       "Bash(git checkout:*)",
-      "Bash(gh pr close:*)"
-    ]
+      "Bash(gh pr close:*)",
+      "Bash(npm run cdk deploy:*)",
+      "Bsah(npm run -- cdk deploy:*)",
+      "Bash(npm run cdk destroy:*)",
+      "Bash(npm run -- cdk destroy:*)"
+    ],
+    "defaultMode": "default"
   },
   "hooks": {
     "PreToolUse": [
