@@ -266,7 +266,7 @@ let g:previm_show_header=0
 if OSTYPE == "mac"
   let g:previm_open_cmd='open -a Vivaldi'
 elseif OSTYPE == "unix"
-  let g:previm_open_cmd='xdg-open'
+  let g:previm_open_cmd='vivaldi'
 endif
 nn md :PrevimOpen<CR>
 
