@@ -18,6 +18,8 @@ pub struct ToolInput {
     pub file_path: Option<String>,
     #[serde(default)]
     pub command: Option<String>,
+    #[serde(default)]
+    pub subagent_type: Option<String>,
 }
 
 #[derive(Debug, Serialize)]

@@ -19,12 +19,17 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
 
     // Check Task (subagent) usage
     if tool_name == "Task" {
-        let allow_task = env::var("CLAUDE_HOOK_ALLOW_TASK")
-            .map(|v| v.to_lowercase() == "true" || v == "1")
-            .unwrap_or(false);
+        let subagent_type = input.tool_input.subagent_type.as_deref();
+        let is_explore = subagent_type == Some("Explore");
 
-        if !allow_task {
-            return Err(anyhow::anyhow!("Spawning subagents (Task) is prohibited"));
+        if !is_explore {
+            let allow_task = env::var("CLAUDE_HOOK_ALLOW_TASK")
+                .map(|v| v.to_lowercase() == "true" || v == "1")
+                .unwrap_or(false);
+
+            if !allow_task {
+                return Err(anyhow::anyhow!("Spawning subagents (Task) is prohibited"));
+            }
         }
     }
 
