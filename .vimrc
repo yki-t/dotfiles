@@ -254,9 +254,6 @@ nn VS :VimShellInteractive zsh<CR>
 " Rainbow Parentheses Improved
 let g:rainbow_active = 1
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-
 " jsx color
 let g:vim_jsx_pretty_colorful_config = 0
 

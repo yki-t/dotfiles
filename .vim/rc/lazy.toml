@@ -27,11 +27,6 @@ on_ft = ['rust']
 repo = 'rust-lang/rust.vim'
 on_ft = ['rust']
 
-[[plugins]]
-repo = 'sebastianmarkow/deoplete-rust'
-on_ft = ['rust']
-depends = ['deoplete.nvim']
-
 # Go
 [[plugins]]
 repo = 'fatih/vim-go'
