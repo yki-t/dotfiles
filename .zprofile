@@ -175,7 +175,7 @@ fi
 
 # History settings
 if [ -d /opt/history ]; then
-  export HISTFILE="/opt/history/.zsh_history_$$"
+  export HISTFILE="/opt/history/.zsh_history"
   export ETERNAL_HISTORY="/opt/history/.zsh_eternal_history"
 else
   export HISTFILE="/tmp/.zsh_history"
@@ -185,7 +185,7 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 
 # Session-independent history options
-setopt NO_SHARE_HISTORY        # Don't share history between sessions
+setopt SHARE_HISTORY           # Share history between sessions
 setopt APPEND_HISTORY          # Append to history file
 setopt INC_APPEND_HISTORY      # Write to history file immediately
 setopt HIST_IGNORE_DUPS        # Don't record duplicates in session
