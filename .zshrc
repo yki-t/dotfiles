@@ -604,26 +604,27 @@ dl() {
 # AI utilities
 # ==============================================================================
 
-# ChatGPT API
-chatgpt() {
-  local api_key="${OPENAI_API_KEY}"
-  local model="${OPENAI_DEFAULT_MODEL:-gpt-3.5-turbo}"
-  local prompt_text tempfile resp error
+# Anthropic API
+ask() {
+  local api_key="${ANTHROPIC_API_KEY}"
+  local model="${ANTHROPIC_DEFAULT_MODEL:-claude-sonnet-4-20250514}"
+  local prompt_text tempfile error
   require jq || return
   prompt_text="$(/bin/cat)"
   prompt_text="$(printf '%s' "$prompt_text" | jq -Rs .)"
 
   if [[ -z "$api_key" ]]; then
-    echo "Error: OPENAI_API_KEY is not set." >&2
+    echo "Error: ANTHROPIC_API_KEY is not set." >&2
     return 1
   fi
-  
-  local data='{"model": "'"$model"'", "messages": [{"role": "user", "content": '"$prompt_text"'}]}'
 
-  tempfile="$(mktemp /tmp/ai-commit-msg.XXXXXX)"
-  curl -s https://api.openai.com/v1/chat/completions \
+  local data='{"model": "'"$model"'", "max_tokens": 4096, "messages": [{"role": "user", "content": '"$prompt_text"'}]}'
+
+  tempfile="$(mktemp /tmp/ai-msg.XXXXXX)"
+  curl -s https://api.anthropic.com/v1/messages \
     -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $api_key" \
+    -H "x-api-key: $api_key" \
+    -H "anthropic-version: 2023-06-01" \
     -d "$data" \
     > "$tempfile"
 
@@ -632,7 +633,7 @@ chatgpt() {
     echo "Error: $error" >&2
     return 1
   fi
-  /bin/cat "$tempfile" | jq -r '.choices[0].message.content'
+  /bin/cat "$tempfile" | jq -r '.content[0].text'
 }
 
 # AI-powered git commit
@@ -656,7 +657,7 @@ commit() {
   prompt_text+="[status]\n$st\n"
   prompt_text+="[diff]\n$diff"
 
-  message="$(echo "$prompt_text" | chatgpt)"
+  message="$(echo "$prompt_text" | ask)"
   local tmpfile="$(mktemp /tmp/ai-commit-msg.XXXXXX)"
   echo "$message" > "$tmpfile"
   git commit --edit -F "$tmpfile"
@@ -717,3 +718,5 @@ if [ -d "$FNM_PATH" ]; then
   export PATH="$FNM_PATH:$PATH"
   eval "`fnm env`"
 fi
+
+export TERM=xterm-256color
