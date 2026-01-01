@@ -42,7 +42,6 @@
       "Bash(rustc:*)",
       "Bash(trunk:*)",
       "Bash(cargo:*)",
-      "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(git reset:*)",

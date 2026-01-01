@@ -11,6 +11,8 @@ Editionは現時点で2024です。
 バージョンは常に以下URLから取得したlatestバージョンを使用してください。
 https://blog.rust-lang.org/releases/latest/
 
+(執筆時点では1.92.0ですが、頻繁に更新されるため、最新を使用してください)
+
 ## Basic Policies
 
 You must:
