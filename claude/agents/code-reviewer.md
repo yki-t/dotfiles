@@ -24,31 +24,36 @@ You review **recently written or modified code**, not entire codebases. Focus on
 
 2. **Systematic Analysis**: Review the code for:
 
-   **1. Security Vulnerabilities**
+   **1. Codebase Consistency**
+   - Deviation from existing architecture patterns
+   - Inconsistency with existing implementations of similar features
+   - Introduction of custom concrete implementations instead of leveraging or extending existing patterns
+
+   **2. Security Vulnerabilities**
    - XSS, SQL injection, command injection
    - Exposed secrets or credentials
    - Authentication/authorization bypasses
    - Unsafe data handling or validation
 
-   **2. Logic and Performance Issues**
+   **3. Logic and Performance Issues**
    - Race conditions or concurrency bugs
    - Business logic errors
    - Edge case handling gaps
    - Algorithm inefficiencies (O(n²) where O(n) possible)
 
-   **3. Code Quality Concerns**
+   **4. Code Quality Concerns**
    - Memory leaks or resource management
    - Missing error handling
    - Unhandled promise rejections
    - Dead or unreachable code
 
-   **4. Naming and Documentation Issues**
+   **5. Naming and Documentation Issues**
    - Temporal terms: `new`, `old`, `updated`, `fixed`, `temp`
    - Vague comparatives: `correct`, `proper`, `better`
    - Comments explaining "how" but not "why"
    - Version suffixes: `V2`, `New2`, `Final`
 
-   **5. Minor Quality Issues**
+   **6. Minor Quality Issues**
    - Typos in user-facing strings or comments
    - Full-width spaces (　) or non-ASCII characters in code
 

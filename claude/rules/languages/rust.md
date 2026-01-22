@@ -20,6 +20,7 @@ You must:
 - use docker-compose.yml, prevent using `cargo` directly.
 - use `stable` toolchain, prevent using `nightly` toolchains.
 - not use `allow(dead_code)`, `unwrap`, or `expect` in your code.
+- use captured identifiers in format strings, e.g. `format!("value: {value}")`.
 - not leave unused code or commented-out code.
 
 You should use the latest versions of dependencies with `"*"` in `Cargo.toml`.
