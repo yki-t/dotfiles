@@ -5,6 +5,7 @@
 ### Prerequisites
 - Assume there is a TODO list to complete when this command is executed.
   If no TODOs exist, notify immediately and exit.
+- TODOs are pre-approved by the user. No additional approval needed during execution.
 - Before starting work, feel free to ask questions or raise concerns about the TODOs.
   Once work begins, you cannot stop until all TODOs are complete.
 

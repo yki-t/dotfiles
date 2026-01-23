@@ -2,7 +2,7 @@
 
 ## Scope
 
-This workflow is an exception to the "no execution without approval" rule.
+This workflow is an exception to the "no code edits beyond agreed scope" rule.
 Follow this workflow when using sub-agents that edit code.
 
 ## Workflow
