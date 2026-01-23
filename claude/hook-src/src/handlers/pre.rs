@@ -14,6 +14,11 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
             tool_name, file_path, command
     ));
 
+    // Block AskUserQuestion
+    if tool_name == "AskUserQuestion" {
+        return Err(anyhow::anyhow!("AskUserQuestion is prohibited"));
+    }
+
     // Tool-specific checks
     // NOTE: Tool Names: Write|Edit|MultiEdit|Read|Bash|Grep|Glob|LS|Task|TodoWrite|WebSearch|WebFetch
 
