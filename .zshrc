@@ -651,9 +651,9 @@ commit() {
 
   local prompt_text message
   prompt_text="Please generate a commit message based on the diff below with conventional commit message format. "
-  prompt_text+="Summarize the key points. "
-  prompt_text+="Response must have only commit message without codeblocks. "
-  prompt_text+="If commit message has multiple lines, the first line must be the summary. "
+  prompt_text+="The commit message must be one line only with conventional prefix like feat:, fix:, docs:, refactor:, etc. "
+  prompt_text+="Output must be in Japanese, but you can use English technical terms. "
+  prompt_text+="Summarize the key points into one concise commit message. \n"
   prompt_text+="[status]\n$st\n"
   prompt_text+="[diff]\n$diff"
 
