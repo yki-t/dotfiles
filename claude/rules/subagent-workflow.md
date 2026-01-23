@@ -1,68 +1,70 @@
-# サブエージェント利用時のワークフロー
+# Sub-agent Workflow
 
-## 適用条件
+## Scope
 
-このワークフローは `prohibitions.md` の「承認を得ずに実行することは禁止」の例外として扱う。
-コード編集を行うサブエージェントを使用する場合、このワークフローに従ってください。
+This workflow is an exception to the "no execution without approval" rule.
+Follow this workflow when using sub-agents that edit code.
 
-## ワークフロー
+## Workflow
 
-### 1. 事前準備
+### 1. Preparation
 
-サブエージェントをspawnする前に、編集対象ファイルを git add してください。
+Before spawning sub-agents, stage the target files with git add.
 
 ```bash
-git add <編集対象ファイル1> <編集対象ファイル2> ...
+git add <file1> <file2> ...
 ```
 
-**禁止**: `git add .` や `git add -A` は使用しないでください。ファイルを明示的に指定してください。
+**Prohibited**: Do not use `git add .` or `git add -A`. Specify files explicitly.
 
-### 2. サブエージェント実行
+### 2. Execute Sub-agents
 
-サブエージェントに編集タスクを委譲します。複数のサブエージェントを並列実行しても構いません。
+Delegate editing tasks to sub-agents. Multiple sub-agents can run in parallel.
 
-### 3. Subagents-checker による検証
+### 3. Verify with subagents-checker
 
-全サブエージェント完了後、`subagents-checker` エージェントに編集要件を渡してください。
+After all sub-agents complete, pass the editing requirements to `subagents-checker`.
 
 ```
-subagents-checker に渡すプロンプト例：
+Example prompt for subagents-checker:
 
-## 編集要件
-- <要件1>
-- <要件2>
+## Editing Requirements
+- <requirement 1>
+- <requirement 2>
 ```
 
-なお、`git diff` は `subagents-checker` が自分で実行するため、メインエージェントが実行する必要はありません。
+Note: `subagents-checker` runs `git diff` itself; main agent doesn't need to.
 
-### 4. Subagents-checker の出力確認
-検証の結果以下の出力が得られます。
+### 4. Check subagents-checker Output
 
-- **PASS**: 編集要件が満たされています。STEP5へ進んでください。
-- **FAIL**, **PARTIAL**: 編集要件が満たされていません。再度サブエージェントに修正を依頼してください。つまり、STEP2,3,4を繰り返します。
+Verification results:
 
-すべてPASSしたらSTEP5へ進んでください。
+- **PASS**: Requirements fulfilled. Proceed to STEP 5.
+- **FAIL**, **PARTIAL**: Requirements not met. Request fixes from sub-agents. Repeat STEP 2-4.
 
-### 5. Code-reviewer によるレビュー
+Proceed to STEP 5 when all PASS.
 
-変更全体を `code-reviewer` でレビューしてください。
+### 5. Review with code-reviewer
 
-- **Critical**: 修正対象
-- **Important**: 修正対象
-- **Suggestion**: ユーザーに方針確認
+Review all changes with `code-reviewer`.
 
-**Critical / Important がある場合、再度サブエージェントに修正を依頼してください。**
-つまり、STEP2,3,4,5を繰り返します。
+- **Critical**: Must fix
+- **Important**: Must fix
+- **Suggestion**: Confirm approach with user
 
-### 6. 後処理
-これで、以下が担保されました。
-- [ ] ユーザーの編集要件がPASSしていること (STEP3)
-- [ ] レビューが完了していること (STEP5)
-- [ ] レビューでCritical, Important issueが無いこと (STEP5)
+**If Critical/Important issues exist, request fixes from sub-agents.**
+Repeat STEP 2-5.
 
-Suggestionがある場合ユーザーに報告してください。
-Suggestionが無い場合、ユーザーにレビュー依頼してください。
+### 6. Completion
 
-## 注意事項
+At this point, the following are guaranteed:
+- [ ] User's editing requirements PASS (STEP 3)
+- [ ] Review complete (STEP 5)
+- [ ] No Critical/Important issues in review (STEP 5)
 
-- このワークフローは編集系サブエージェントにのみ適用されます（調査・レビュー系は対象外）
+If Suggestions exist, report to user.
+If no Suggestions, request user review.
+
+## Notes
+
+- This workflow applies only to editing sub-agents (not research/review sub-agents)

@@ -1,16 +1,14 @@
 # prepare
 
 ## Task
-1. CLAUDE.mdと~/.claude/CLAUDE.mdの内容を復唱してください。
+1. Recite the contents of CLAUDE.md and ~/.claude/CLAUDE.md.
 
-2. プロジェクトを準備するためのドキュメントを読む
-
-ドキュメント例:
+2. Read project documentation:
 - [ ] ~/.claude/CLAUDE.md
 - [ ] CLAUDE.md
 - [ ] README.md
-- [ ] docker-compose.yml (存在する場合)
-- [ ] docs/* (存在する場合)
+- [ ] docker-compose.yml (if exists)
+- [ ] docs/* (if exists)
 
 ## Arguments
-本セクションの後で引数を処理してください。
+Process arguments after this section.

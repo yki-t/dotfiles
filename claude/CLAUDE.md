@@ -1,81 +1,81 @@
-# 根本原則
+# Core Principle
 
-**合意した作業範囲を超えたコード編集は禁止**
+**No code edits beyond agreed scope.**
 
-この原則はすべてのルールに優先する。
+This principle overrides all other rules.
 
-# タスク分類
+# Task Classification
 
-| タスク種別 | 定義 | 承認 |
-|-----------|------|------|
-| 調査タスク | コード編集を伴わない | 不要 |
-| 実装タスク | コード編集を伴う | 必須 |
+| Task Type | Definition | Approval |
+|-----------|------------|----------|
+| Research | No code edits | Not required |
+| Implementation | Code edits | Required |
 
-実装タスクの手順：
-1. タスクを理解する（不明点があれば質問）
-2. 実装計画を提案する
-3. 承認を得る
-4. 実装する
+Implementation workflow:
+1. Understand the task (ask questions if unclear)
+2. Propose implementation plan
+3. Get approval
+4. Implement
 
-承認を得るまでコードを書いてはいけない。
+Do not write code until approval is obtained.
 
-# 依頼の解釈
+# Request Interpretation
 
-ユーザーの依頼は常に最新の状況を前提としている。
-以前失敗した理由があっても、再調査してから判断する。
+User requests assume the current state of the environment.
+Even if a previous attempt failed, re-investigate before concluding.
 
-# 質問の基準
+# Question Guidelines
 
-| レベル | 質問するか |
-|--------|-----------|
-| 設計レベル | デフォルトで質問する |
-| コードレベル | ユーザーが指示した場合のみ |
+| Level | When to ask |
+|-------|-------------|
+| Design-level | Always ask by default |
+| Code-level | Only when user requests |
 
-# 作業方法
+# Work Method
 
-ファイル編集はすべてサブエージェントを使用する。
+Use sub-agents for all file edits.
 
-サブエージェントへの指示例：
+Sub-agent instruction example:
 ```
-以下を実装まで完了してください（承認不要）
+Complete the following implementation (no approval needed)
 ```
 
-# 実装ガイドライン
+# Implementation Guidelines
 
-努力目標として以下を遵守：
-- YAGNI（必要になるまで作らない）
-- KISS（シンプルに保つ）
-- DRY（繰り返さない）
+Follow these as best-effort goals:
+- YAGNI (You Aren't Gonna Need It)
+- KISS (Keep It Simple, Stupid)
+- DRY (Don't Repeat Yourself)
 
-## 一貫性
+## Consistency
 
-既存コードベースに従う：
-- 命名規則、ディレクトリ構造、エラーハンドリングパターン
-- 共通ユーティリティがあれば使う（再発明しない）
-- 新しいパターンを導入しない
+Follow the existing codebase:
+- Naming conventions, directory structure, error handling patterns
+- Use existing utilities (don't reinvent the wheel)
+- Don't introduce new patterns
 
-コード量は最小限に：
-- 既存の拡張で対応できるならそうする
-- ただし、拡張が複雑になるなら新規に作る
+Minimize code:
+- Extend existing code when possible
+- Create new code if extension would be overly complex
 
-# 制約
+# Constraints
 
 ## git
-- 編集は禁止（commit, push, pull, checkout, merge, rebaseなど）
-- git add は許可
-- 読み取りは許可
-- gh は許可
+- Edits prohibited (commit, push, pull, checkout, merge, rebase, etc.)
+- git add allowed
+- Read operations allowed
+- gh allowed
 
-## キャッシュ
-キャッシュは問題にならない。ユーザーは常に Disable Cache を有効にしている。
+## Cache
+Cache is not the issue. User always has Disable Cache enabled.
 
-## 後方互換
-後方互換は指示した場合のみ考慮する。
-- フォールバック実装は不要
-- 古いインターフェースの維持は不要
+## Backward Compatibility
+Only consider backward compatibility when explicitly instructed.
+- No fallback implementations
+- No maintaining old interfaces
 
-※ 一貫性（既存のスタイル・パターンに従うこと）とは別
+Note: This is separate from consistency (following existing patterns/styles).
 
 # Meta
 
-現在2026年
+Current year: 2026

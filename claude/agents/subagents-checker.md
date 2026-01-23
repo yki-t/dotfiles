@@ -1,6 +1,6 @@
 ---
 name: subagents-checker
-description: サブエージェントによる編集完了後、編集要件との整合性を確認するエージェント。編集要件を受け取り、git diff を実行して要件が満たされているかをレビューする。
+description: Verifies sub-agent edits against requirements. Receives editing requirements, runs git diff, and reviews whether requirements are fulfilled.
 tools: Read, Bash
 model: sonnet
 ---

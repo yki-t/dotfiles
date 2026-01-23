@@ -1,34 +1,36 @@
 # pull request
 
 ## Task
-Argumentsで与えられるBaseブランチに対してPull Requestを作成してください。
-- git fetchでbaseブランチを最新化する
-- PRを仮構成しユーザーに承認を得る
-- 承認後、PRを作成する (ghコマンドを使用)
+Create a Pull Request against the base branch specified in Arguments.
+- Fetch the base branch with git fetch
+- Draft the PR and get user approval
+- After approval, create the PR (use gh command)
 
 ## Summary
-gitコマンドを使用して差分タイトルと差分内容を取得し、変更内容を理解してからPRのタイトルと説明に使用してください。
-    不明点があれば質問してください。
-単なるコードの変更(What)だけでなく、コード変更の意図(Why)もタイトルと内容に含めてください。
+Use git commands to get diff title and content, understand the changes, then use them for PR title and description.
+Ask questions if unclear.
+Include not just what changed (What) but also the intent behind changes (Why) in title and description.
 
 ## Format
 ### Title
-- タイトルには feat: 等のプレフィックスを含めないでください。
+- Do not include prefixes like feat: in the title.
 
 ### Description
-- Pull Requestの説明には以下の情報を含めてください：
-    - Summary
-    - Changes Made
-    - Related Commits (含まれるコミットタイトルとハッシュのリスト)
-- Test PlanやDeployment Instructionsは含めないでください。
-- `**`での強調は避けてください。
+Include the following in the PR description:
+- Summary
+- Changes Made
+- Related Commits (list of commit titles and hashes)
+
+Do not include:
+- Test Plan
+- Deployment Instructions
+- Bold emphasis with `**`
 
 ## Notes
-- プロジェクトのPRの規約が存在するか確認してください。規約が存在する場合は必ず従ってください。以下は要確認場所
-    - [ ] README.md
-    - [ ] CLAUDE.md
-    - [ ] docs/
-- 末尾の "Generated with Claude Code" のような署名は不要
-- 常に常体かつ過去形で客観的かつ中立的に記述してください (体言止めは許容される)
-- commitやpushはすでに完了しているものとしてください (ユーザーが言及していないとしても)
-
+- Check if project PR conventions exist. If so, follow them. Check:
+  - [ ] README.md
+  - [ ] CLAUDE.md
+  - [ ] docs/
+- No "Generated with Claude Code" signature at the end
+- Write in plain past tense, objective and neutral (noun phrases acceptable)
+- Assume commit and push are already done (even if user doesn't mention it)

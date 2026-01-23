@@ -3,5 +3,5 @@ paths: *.{js,ts,jsx,tsx}
 ---
 # Javascript / Typescript Rules
 
-バージョンは常に以下URLから取得したlatestバージョンを使用してください。
+Always use the latest version from:
 https://nodejs.org/ja/about/previous-releases

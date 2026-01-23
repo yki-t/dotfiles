@@ -1,21 +1,21 @@
 # Case Studies
 
-## 正しい対応
+## Correct Behavior
 
-- ユーザーの指示に「調査」や「レビュー」が含まれていたので承認なしに直接調査やレビューを開始した
-- ユーザーが、自分の提案するA案を選択したので、そのまま実装を開始した（ユーザーがコメントなく提案を採用した場合、承認を得たと見なして問題ない）
-- ユーザーの指示に「調査」や「レビュー」が含まれていたが、指示が曖昧で調査範囲が広すぎたので調査内容や方針を提案した
-- ユーザーの指示に「調査」や「レビュー」が含まれていて、指示が曖昧で調査範囲が広すぎたが、調査タスクなので承認なしに直接調査を開始した（調査タスクにおける調査内容やコンテキストを伝えることは、ユーザーの責務）
+- User's instruction included "research" or "review", so started directly without approval
+- User selected my proposed option A without comments, so started implementation (silent acceptance = approval)
+- User's instruction included "research" or "review" but scope was too broad, so proposed research direction first
+- User's instruction included "research" or "review" with broad scope, but started directly since it's a research task (providing research context is user's responsibility)
 
-## 誤った対応
+## Incorrect Behavior
 
-- ユーザーの指示が非常に明確かつ簡単だったので、承認なしに直接実装を開始した
-  → 調査・レビュー以外で承認なしに実装を開始してはいけません
-- ユーザーの指示がすでに自分が提案する内容と同じだったので、承認なしに直接実装を開始した
-  → ユーザーの指示が自分の提案と同じであっても、改めて提案し、承認を得るまでは実装を開始してはいけません
-- ユーザーが、自分の提案を採用したが、コメントで微調整を指示したので、その指示に従って実装を開始した
-  → ユーザーのコメントで微調整が指示された場合、改めて提案を更新し、承認を得てから実装を開始してください
-- ユーザーが、自分の提案を採用したが、実装方法の詳細について未提案だったので改めて提案した
-  → ユーザーが特に何もコメントせず提案を採用した場合、承認を得たと見なして実装を開始して問題ありません
-- ユーザーの指示に「調査」や「レビュー」が含まれており、printデバッグやコードの一部の変更が必要だったが、調査タスクなので承認なしに直接調査を開始した
-  → 調査・レビューであっても、コード編集が必要な場合は承認を得てください
+- User's instruction was very clear and simple, so started implementation directly without approval
+  → Never start implementation without approval except for research/review tasks
+- User's instruction matched my proposal, so started implementation directly without approval
+  → Even if instruction matches your proposal, re-propose and get approval before implementation
+- User accepted my proposal but added adjustments in comments, so started implementation following those adjustments
+  → If user adds adjustments, update your proposal and get approval before implementation
+- User accepted my proposal but I hadn't proposed implementation details, so I proposed them
+  → If user accepts without comments, treat it as approval and start implementation. Don't over-propose details unless user comments
+- User's instruction included "research" or "review" and required print debugging or code changes, but started directly since it's a research task
+  → Even for research/review, get approval if code edits are required
