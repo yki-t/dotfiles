@@ -17,6 +17,13 @@ git add <file1> <file2> ...
 
 **Prohibited**: Do not use `git add .` or `git add -A`. Specify files explicitly.
 
+### 1.5. Provide Context to Sub-agents
+
+Include the following in sub-agent prompts:
+- Purpose of the edit
+- Project design patterns
+- Related utilities
+
 ### 2. Execute Sub-agents
 
 Delegate editing tasks to sub-agents. Multiple sub-agents can run in parallel.

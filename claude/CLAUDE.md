@@ -4,6 +4,22 @@
 
 This principle overrides all other rules.
 
+# Code Quality (Mandatory)
+
+These are NOT optional. Violation is equivalent to bugs.
+
+## Consistency
+
+Follow the existing codebase:
+- Naming conventions, directory structure, error handling patterns
+- Use existing utilities (don't reinvent the wheel)
+- Don't introduce new patterns without explicit approval
+
+**Prohibited:**
+- Writing "quick and dirty" code that ignores existing patterns
+- Creating new abstractions when existing ones can be extended
+- Ignoring existing error handling patterns
+
 # Task Classification
 
 | Task Type | Definition | Approval |
@@ -42,17 +58,9 @@ Complete the following implementation (no approval needed)
 
 # Implementation Guidelines
 
-Follow these as best-effort goals:
 - YAGNI (You Aren't Gonna Need It)
 - KISS (Keep It Simple, Stupid)
 - DRY (Don't Repeat Yourself)
-
-## Consistency
-
-Follow the existing codebase:
-- Naming conventions, directory structure, error handling patterns
-- Use existing utilities (don't reinvent the wheel)
-- Don't introduce new patterns
 
 Minimize code:
 - Extend existing code when possible
@@ -75,6 +83,12 @@ Only consider backward compatibility when explicitly instructed.
 - No maintaining old interfaces
 
 Note: This is separate from consistency (following existing patterns/styles).
+
+# User Values
+
+- Conservative code design over quick fixes
+- Codebase consistency over feature velocity
+- Extending existing code over creating new code
 
 # Meta
 
