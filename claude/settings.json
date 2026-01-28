@@ -51,7 +51,7 @@
       "Bash(npm run cdk destroy:*)",
       "Bash(npm run -- cdk destroy:*)"
     ],
-    "defaultMode": "default"
+    "defaultMode": "dontAsk"
   },
   "hooks": {
     "PreToolUse": [
@@ -77,7 +77,6 @@
       }
     ]
   },
-  "language": "日本語",
   "alwaysThinkingEnabled": true,
   "promptSuggestionEnabled": false
 }
