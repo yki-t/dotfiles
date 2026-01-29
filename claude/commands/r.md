@@ -26,7 +26,10 @@ Review a Pull Request from all perspectives and post line comments.
    - Categorize findings:
      - Critical: Must fix
      - Important: Should fix
-     - Suggestion: Consider fixing
+     - Question: Ask coder about intent
+   - Comment tone (Critical/Important only):
+     - Use assertive language (e.g., "should", "must")
+     - Avoid vague expressions (e.g., "consider", "検討してください")
    - Include specific file paths and line numbers
    - Present draft to user
 
@@ -46,7 +49,7 @@ Review a Pull Request from all perspectives and post line comments.
 ```
 ## PR #{number} Review
 
-### Consistency (最重要)
+### Consistency
 1. **File:** `path/to/file.rs` **Line:** 42
    - Issue description
 
