@@ -34,3 +34,4 @@ Do not include:
 - No "Generated with Claude Code" signature at the end
 - Write in plain past tense, objective and neutral (noun phrases acceptable)
 - Assume commit and push are already done (even if user doesn't mention it)
+- Use `git diff base...HEAD` (3 dots) to get only changes made in this branch, not `git diff base..HEAD` (2 dots)

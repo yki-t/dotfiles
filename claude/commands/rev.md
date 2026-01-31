@@ -26,10 +26,9 @@ Review a Pull Request from all perspectives and post line comments.
    - Categorize findings:
      - Critical: Must fix
      - Important: Should fix
-     - Question: Ask coder about intent
-   - Comment tone (Critical/Important only):
+   - Comment tone:
      - Use assertive language (e.g., "should", "must")
-     - Avoid vague expressions (e.g., "consider", "検討してください")
+     - Avoid vague expressions (e.g., "consider", "検討してください", "推奨します")
    - Include specific file paths and line numbers
    - Present draft to user
 

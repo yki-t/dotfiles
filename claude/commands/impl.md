@@ -1,4 +1,4 @@
-# prepare
+# implement
 
 ## Task
 1. Report the contents of CLAUDE.md and ~/.claude/CLAUDE.md to the user.
