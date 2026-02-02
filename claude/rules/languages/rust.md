@@ -11,7 +11,7 @@ Edition: 2024
 Always use the latest version from:
 https://blog.rust-lang.org/releases/latest/
 
-Example: 1.92.0 (as of writing)
+Example: 1.93.0 (as of writing)
 
 ## Basic Policies
 
@@ -22,6 +22,7 @@ You must:
 - not use `allow(dead_code)`, `unwrap`, or `expect` in your code.
 - use captured identifiers in format strings, e.g. `format!("value: {value}")`.
 - not leave unused code or commented-out code.
+- not define free functions. All functions must be associated with a type via `impl` blocks (exceptions: `main`, utility modules, `#[test]`, macro-attributed functions like `#[function_component]`/`#[hook]`).
 
 You should use the latest versions of dependencies with `"*"` in `Cargo.toml`.
 
