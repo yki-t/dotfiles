@@ -81,14 +81,5 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
         }
     }
 
-    // Additional bash command checks
-    if tool_name == "Bash" {
-        if let Some(cmd) = command {
-            if cmd.contains("git commit") {
-                return Err(anyhow::anyhow!("git commit is prohibited"));
-            }
-        }
-    }
-
     Ok(())
 }
