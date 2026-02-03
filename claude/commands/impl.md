@@ -1,9 +1,8 @@
 # implement
 
 ## Task
-1. Report the contents of CLAUDE.md and ~/.claude/CLAUDE.md to the user.
-   You MUST output this report BEFORE reading any other files.
-   Do NOT skip this step even if contents are in system prompt.
+1. Recite the contents of CLAUDE.md and ~/.claude/CLAUDE.md.
+  The user surely wants you to behave according to the instructions in those files.
 
 2. Read project documentation:
 - [ ] ~/.claude/CLAUDE.md

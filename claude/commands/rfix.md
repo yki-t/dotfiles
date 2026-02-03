@@ -33,7 +33,7 @@ Implement fixes for review comments and post responses.
 # Reply to a review comment
 gh api repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies \
   -X POST -f body="こちらで対応しました
-#{commit_hash}"
+{commit_hash}"
 ```
 
 ## Commit Message Requirements
@@ -45,6 +45,7 @@ gh api repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies \
 
 ## Notes
 - This command is allowed to create commits (exception to CLAUDE.md git restrictions)
+- Commit hash should not have `#` prefix
 
 ## Examples
 - `/rfix 157` - Respond to review comments on PR #157
