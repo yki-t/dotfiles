@@ -14,30 +14,6 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
             tool_name, file_path, command
     ));
 
-    // Block AskUserQuestion
-    if tool_name == "AskUserQuestion" {
-        return Err(anyhow::anyhow!("AskUserQuestion is prohibited"));
-    }
-
-    // Tool-specific checks
-    // NOTE: Tool Names: Write|Edit|MultiEdit|Read|Bash|Grep|Glob|LS|Task|TodoWrite|WebSearch|WebFetch
-
-    // // Check Task (subagent) usage
-    // if tool_name == "Task" {
-    //     let subagent_type = input.tool_input.subagent_type.as_deref();
-    //     let is_explore = subagent_type == Some("Explore");
-
-    //     if !is_explore {
-    //         let allow_task = env::var("CLAUDE_HOOK_ALLOW_TASK")
-    //             .map(|v| v.to_lowercase() == "true" || v == "1")
-    //             .unwrap_or(false);
-
-    //         if !allow_task {
-    //             return Err(anyhow::anyhow!("Spawning subagents (Task) is prohibited"));
-    //         }
-    //     }
-    // }
-
     // Check file writing operations (both direct and via bash)
     let is_file_writing_tool = matches!(tool_name, "Write" | "Edit" | "MultiEdit");
 

@@ -1,7 +1,8 @@
 # swarm
 
-## Arguments
-- Plan: The implementation plan agreed upon with the user
+## Rules
+- Main agent MUST NOT edit code directly. All code edits MUST be delegated to sub-agents.
+- This workflow takes priority over subagent-workflow.
 
 ## Task
 1. Plan with main agent
