@@ -36,16 +36,8 @@ gh api repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies \
 {commit_hash}"
 ```
 
-## Commit Message Requirements
-- one line only
-- conventional commit format (e.g., feat:, fix:, docs:, refactor:)
-- in Japanese (English technical terms allowed)
-- concise summary of key points
-- no "Co-Authored-By: Claude" signature at the end
-
 ## Notes
 - This command is allowed to create commits (exception to CLAUDE.md git restrictions)
-- Commit hash should not have `#` prefix
 
 ## Examples
 - `/rfix 157` - Respond to review comments on PR #157

@@ -44,6 +44,7 @@
       "Bash(git stash:*)",
       "Bash(git restore:*)",
       "Bash(gh pr close:*)",
+      "Bash(terraform apply:*)",
       "Bash(npx:*)",
       "Bash(npm run cdk deploy:*)",
       "Bsah(npm run -- cdk deploy:*)",
