@@ -453,4 +453,5 @@ set updatetime=300
 " let g:copilot_no_tab_map = v:true
 let g:copilot_filetypes = {
   \ 'toml': v:false,
+  \ 'markdown': v:false,
 \ }

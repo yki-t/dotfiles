@@ -601,20 +601,6 @@ dl() {
 }
 
 # ==============================================================================
-# Auto implementation workflow
-# ==============================================================================
-
-# Automated issue implementation with separate review sessions
-impl() {
-  local script_dir="${HOME}/dotfiles/scripts/impl"
-  if [[ $# -eq 0 ]]; then
-    err "usage: impl <issue_url> [base_branch]"
-    return 1
-  fi
-  bash "${script_dir}/main.sh" "$@"
-}
-
-# ==============================================================================
 # AI utilities
 # ==============================================================================
 
