@@ -26,7 +26,7 @@ Include the following in sub-agent prompts:
 
 ### 2. Execute Sub-agents
 
-Delegate editing tasks to sub-agents. Multiple sub-agents can run in parallel.
+Delegate editing tasks to sub-agents. Multiple sub-agents can run in parallel (see Context Management for limits).
 
 ### 3. Verify with subagents-checker
 
@@ -71,6 +71,23 @@ At this point, the following are guaranteed:
 
 If Suggestions exist, report to user.
 If no Suggestions, request user review.
+
+## Context Management
+
+### Parallel Limit
+- Maximum 3 sub-agents concurrently
+- If more tasks exist, batch them
+
+### Output Size
+Sub-agents MUST return only:
+- Changed file paths
+- Commit hash (if committed)
+- Brief summary (max 5 lines)
+
+Prohibited:
+- Returning full file contents
+- Returning full diffs
+- Returning large read results
 
 ## Notes
 
