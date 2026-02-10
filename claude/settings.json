@@ -53,6 +53,7 @@
     ],
     "defaultMode": "dontAsk"
   },
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
