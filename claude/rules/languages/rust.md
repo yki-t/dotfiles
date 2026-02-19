@@ -22,7 +22,7 @@ You must:
 - not use `allow(dead_code)`, `unwrap`, or `expect` in your code.
 - use captured identifiers in format strings, e.g. `format!("value: {value}")`.
 - not leave unused code or commented-out code.
-- not define free functions. All functions must be associated with a type via `impl` blocks (exceptions: `main`, utility modules, `#[test]`, macro-attributed functions like `#[function_component]`/`#[hook]`).
+- not define free functions. All functions must be associated with a type via `impl` blocks (exceptions: `main`, utility modules, `#[test]`, macro-attributed functions like `#[component]`/`#[server(...)]`).
 
 You should use the latest versions of dependencies with `"*"` in `Cargo.toml`.
 
@@ -45,52 +45,58 @@ You must:
 src/
 ├── main.rs            # entry point
 ├── error.rs           # custom error type
+├── state.rs           # AppState (DB pool, clients, connections)
+├── routes.rs          # route definitions
 ├── constants/         # constants and env vars
-├── extractors/        # custom extractors (typed request extraction, e.g. AuthUser, Json validation)
-├── middlewares/       # middleware
+├── extractors/        # custom extractors (e.g. AuthUser, RequireAuth)
+├── middlewares/       # middleware (e.g. JWT verification)
 ├── handlers/          # request handlers
 ├── services/          # business logic
-├── models/            # data structures and DB queries
+├── repositories/      # data access layer (trait + Postgres/Mock implementations)
+├── models/            # data structures and request/response types
 │   └── {resource}/    # resource-specific modules
-└── utils/             # utility functions
+└── utils.rs            # utility functions
 ```
 
 ### Layer Responsibilities
 
-| Layer   | Responsibility |
-|---------|----------------|
-| Handler | Transaction management, authentication/authorization, response formation |
-| Service | Business logic, validation |
-| Model   | Type definitions, DB queries |
+| Layer      | Responsibility |
+|------------|----------------|
+| Handler    | Transaction management, authentication/authorization, response formation |
+| Service    | Business logic, validation |
+| Repository | Database abstraction (trait-based with Postgres/Mock implementations) |
+| Model      | Type definitions, request/response types |
 
 ---
 
-## Frontend (Yew/WASM)
+## Frontend (Leptos SSR + Hydration)
 
 ### Directory Structure
 
 ```
 src/
-├── main.rs
-├── auth/            # Authentication logic
-├── error/           # Error types and messages
-├── components/      # Reusable UI components
-│   └── common/      # Common components (Button, Loading, etc.)
-├── pages/           # Page components
-├── contexts/        # Global state management (Reducer pattern)
-├── hooks/           # Custom hooks
-├── guards/          # Route guards
-├── services/        # External service integration
-│   └── api_client/  # API client (submodules per resource)
-├── styles/          # SCSS styles
-└── utils/           # Utility functions
+├── app.rs             # router configuration
+├── auth/              # authentication logic (Cognito, JWT)
+├── error/             # error types with codes and messages
+├── constants/         # constants and env vars
+├── components/        # reusable UI components
+│   ├── common/        # common components (Button, Loading, etc.)
+│   ├── layout/        # layout components (Header, Footer)
+│   ├── modals/        # modal components
+├── pages/             # page components
+├── contexts/          # global state management (Context + Signal)
+├── hooks/             # custom hooks
+├── guards/            # route guards
+├── server_fn/         # Leptos server functions (SSR-only API calls)
+├── services/          # client-side services (WebSocket, WebRTC)
+└── utils/             # utility functions
 ```
 
 ### Design Patterns
 
 | Pattern | Description |
 |---------|-------------|
-| Component | `#[function_component]` + `Properties` |
-| State Management | Context + Reducer (`use_reducer` + `ContextProvider`) |
-| API Client | Common request method + resource-specific submodules |
-| Hook | Custom hooks with `#[hook]` attribute |
+| Component | `#[component]` + `#[prop(...)]` attributes |
+| State Management | `provide_context()` / `expect_context()` + `RwSignal<T>` |
+| Server Function | `#[server(Name, "/api")]` for SSR-only API calls |
+| Hook | Plain functions returning structs with reactive signals |
