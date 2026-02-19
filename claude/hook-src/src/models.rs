@@ -1,15 +1,17 @@
 use serde::{Deserialize, Serialize};
 
-#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct HookInput {
-    pub session_id: String,
-    pub transcript_path: String,
-    pub hook_event_name: String,
+    #[serde(rename = "session_id")]
+    pub _session_id: String,
+    #[serde(rename = "transcript_path")]
+    pub _transcript_path: String,
+    #[serde(rename = "hook_event_name")]
+    pub _hook_event_name: String,
     pub tool_name: String,
     pub tool_input: ToolInput,
-    #[serde(default)]
-    pub tool_response: Option<serde_json::Value>,
+    #[serde(default, rename = "tool_response")]
+    pub _tool_response: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -18,8 +20,6 @@ pub struct ToolInput {
     pub file_path: Option<String>,
     #[serde(default)]
     pub command: Option<String>,
-    #[serde(default)]
-    pub subagent_type: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
