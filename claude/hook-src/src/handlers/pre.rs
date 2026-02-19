@@ -35,23 +35,24 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
         let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("");
 
         if is_file_writing_tool {
-            // Check environment variable for .sh files permission
-            let allow_sh = env::var("CLAUDE_HOOK_ALLOW_SH")
-                .map(|v| v.to_lowercase() == "true" || v == "1")
-                .unwrap_or(false);
-            
+            let ch_allow = env::var("CH_ALLOW")
+                .unwrap_or_default()
+                .to_ascii_lowercase();
+            let allowed: Vec<&str> = ch_allow
+                .split(',')
+                .map(|s| s.trim())
+                .filter(|s| !s.is_empty())
+                .collect();
+
+            let allow_all = allowed.contains(&"all");
+
             // Block .sh files (unless explicitly allowed)
-            if ext == "sh" && !allow_sh {
+            if ext == "sh" && !allow_all && !allowed.contains(&"sh") {
                 return Err(anyhow::anyhow!("Creating or editing ad hoc .sh files is prohibited"));
             }
 
-            // Check environment variable for .md files permission
-            let allow_md = env::var("CLAUDE_HOOK_ALLOW_MD")
-                .map(|v| v.to_lowercase() == "true" || v == "1")
-                .unwrap_or(false);
-
-            // Block .md files (except TODO.md, or if explicitly allowed)
-            if ext == "md" && !allow_md {
+            // Block .md files (unless explicitly allowed)
+            if ext == "md" && !allow_all && !allowed.contains(&"md") {
                 return Err(anyhow::anyhow!("Creating or editing .md document files is prohibited"));
             }
         }
