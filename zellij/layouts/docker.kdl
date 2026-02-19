@@ -16,4 +16,9 @@ layout {
             }
         }
     }
+    tab name="docker" {
+        pane name="docker" command="zsh" {
+            args "-c" "docker compose up; exec zsh"
+        }
+    }
 }
