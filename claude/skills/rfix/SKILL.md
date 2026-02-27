@@ -45,6 +45,8 @@ gh api repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies \
 
 ## Notes
 - This command is allowed to create commits (exception to CLAUDE.md git restrictions)
+- This skill's workflow is self-contained and takes precedence over CLAUDE.md's generic workflows (e.g., sub-agent workflow). Do NOT substitute or merge with other workflows.
+- Implementation uses sub-agents, but the overall flow (commit per comment, draft responses, present together, post after approval) must be strictly followed.
 
 ## Examples
 - `/rfix 157` - Respond to review comments on PR #157
