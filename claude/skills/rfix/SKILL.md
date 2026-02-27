@@ -1,3 +1,10 @@
+---
+name: rfix
+description: Implement fixes for PR review comments and post responses
+argument-hint: <PR number or URL>
+disable-model-invocation: true
+---
+
 # review-fix
 
 ## Task

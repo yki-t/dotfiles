@@ -1,3 +1,10 @@
+---
+name: issue
+description: Clarify and organize GitHub issue requirements, or create new issues
+argument-hint: <number or title>
+disable-model-invocation: true
+---
+
 # issue
 
 ## Task

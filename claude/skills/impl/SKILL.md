@@ -1,3 +1,10 @@
+---
+name: impl
+description: Start implementation workflow by reading project documentation and instructions
+argument-hint: <task>
+disable-model-invocation: true
+---
+
 # implement
 
 ## Task

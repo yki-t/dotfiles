@@ -12,7 +12,7 @@ ln -snf $DIR/.zshrc ~/
 ln -snf $DIR/alacritty/alacritty.arch.toml ~/.alacritty.toml
 ln -snf $DIR/claude/settings.json ~/.claude/
 ln -snf $DIR/claude/CLAUDE.md ~/.claude/
-ln -snf $DIR/claude/commands ~/.claude/
+ln -snf $DIR/claude/skills ~/.claude/
 ln -snf $DIR/claude/rules ~/.claude/
 ln -snf $DIR/claude/agents ~/.claude/
 ln -snf $DIR/zellij ~/.config/zellij

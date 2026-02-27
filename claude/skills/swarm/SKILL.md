@@ -1,3 +1,9 @@
+---
+name: swarm
+description: Coordinated multi-agent parallel implementation workflow with worktrees
+disable-model-invocation: true
+---
+
 # swarm
 
 ## Rules

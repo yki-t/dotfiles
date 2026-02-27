@@ -1,3 +1,10 @@
+---
+name: rev
+description: Review a Pull Request from all perspectives and post line comments
+argument-hint: <PR number or URL>
+disable-model-invocation: true
+---
+
 # review
 
 ## Task
