@@ -14,6 +14,10 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
             tool_name, file_path, command
     ));
 
+    if tool_name == "EnterPlanMode" {
+        return Err(anyhow::anyhow!("EnterPlanMode is blocked by hook"));
+    }
+
     // Check file writing operations (both direct and via bash)
     let is_file_writing_tool = matches!(tool_name, "Write" | "Edit" | "MultiEdit");
 
