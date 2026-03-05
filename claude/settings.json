@@ -49,5 +49,6 @@
   },
   "language": "敬体",
   "promptSuggestionEnabled": false,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "effortLevel": "high"
 }
