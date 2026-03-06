@@ -8,7 +8,7 @@ mod models;
 mod utils;
 
 use cli::Cli;
-use handlers::{post::handle_post_tool_use, pre::handle_pre_tool_use};
+use handlers::{notification::handle_notification, post::handle_post_tool_use, pre::handle_pre_tool_use};
 use models::{HookInput, HookOutput};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -25,6 +25,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let result = match &cli.command {
         cli::Commands::Pre => handle_pre_tool_use(&input),
         cli::Commands::Post => handle_post_tool_use(&input),
+        cli::Commands::Notification => {
+            handle_notification(&input);
+            return Ok(());
+        }
     };
 
     // Process result and output HookOutput for PreToolUse
@@ -43,6 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         (cli::Commands::Post, _) => {
             // PostToolUse doesn't return decision
         }
+        (cli::Commands::Notification, _) => {}
     }
 
     Ok(())

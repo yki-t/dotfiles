@@ -35,6 +35,17 @@
         ]
       }
     ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/dotfiles/claude/hook notification"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "*",

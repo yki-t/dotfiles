@@ -5,9 +5,16 @@ use std::env;
 use std::path::Path;
 
 pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
-    let tool_name = input.tool_name.as_str();
-    let file_path = input.tool_input.file_path.as_deref();
-    let command = input.tool_input.command.as_deref();
+    let tool_name = match input.tool_name.as_deref() {
+        Some(name) => name,
+        None => return Ok(()),
+    };
+    let tool_input = match &input.tool_input {
+        Some(ti) => ti,
+        None => return Ok(()),
+    };
+    let file_path = tool_input.file_path.as_deref();
+    let command = tool_input.command.as_deref();
 
     log_debug(&format!(
             "PreToolUse: tool={}, file_path={:?}, command={:?}",

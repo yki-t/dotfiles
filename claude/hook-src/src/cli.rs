@@ -13,4 +13,6 @@ pub enum Commands {
     Pre,
     /// Handle post-tool-use hooks
     Post,
+    /// Handle notification hooks
+    Notification,
 }
