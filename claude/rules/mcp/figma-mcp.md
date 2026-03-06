@@ -2,107 +2,67 @@
 
 ## Scope
 
-Guidelines for implementing designs using Figma MCP.
+Guidelines for implementing designs using the official Figma MCP server.
 
-## Data Retrieval
+## Context Management (Critical)
 
-### 1. Get Page Structure
+Figma MCP tools can return large payloads that flood the context window. Follow these rules strictly:
 
-```
-get_figma_data(fileKey, depth=1)
-```
+- **For large or unknown-size selections**, start with `get_metadata` (sparse XML) to identify `nodeId`s, then fetch only specific nodes with `get_design_context`. For small, known nodes, `get_design_context` directly is acceptable.
+- **Never fetch an entire page at once.** Break designs into small logical chunks (header, sidebar, card, etc.).
+- **Select the smallest possible node** that covers your needs.
+- **Disable `get_screenshot`** when token limits are tight — screenshots consume significant tokens.
+- When only design tokens are needed, use `get_variable_defs` instead of `get_design_context`.
+- **Process section-by-section sequentially.** Do not fetch everything upfront.
 
-Identify the target page/frame `nodeId`.
+## Available Tools
 
-### 2. Get Detailed Data
-
-```
-get_figma_data(fileKey, nodeId="1:305")
-```
-
-Omit `depth` to retrieve all hierarchy levels.
-
-### 3. Download Images (Optional)
-
-```
-download_figma_images(fileKey, nodes, localPath, pngScale)
-```
-
-## Data Structure Reference
-
-### Layout (`globalVars.styles.layout_XXXXX`)
-
-| Property | CSS Equivalent |
-|----------|----------------|
-| `padding` | `padding` |
-| `gap` | `gap` |
-| `dimensions.width/height` | `width`, `height` |
-| `locationRelativeToParent.x/y` | `margin`, `position` |
-| `mode` (`row`, `column`, `none`) | `flex-direction` |
-| `alignItems`, `justifyContent` | same |
-| `sizing` (`fixed`, `hug`, `fill`) | `width`, `flex` |
-
-### Fills
-
-- Solid: `['#FF7300']`
-- Gradient: `[{type: 'GRADIENT_LINEAR', gradient: '...'}]`
-- Image: `[{type: 'IMAGE', imageRef: '...'}]`
-
-### Text Style
-
-```yaml
-fontFamily: Lexend Deca
-fontWeight: 400
-fontSize: 40
-lineHeight: 1.2em
-```
-
-### Strokes
-
-```yaml
-colors: ['#FF7300']
-strokeWeight: 0px 0px 2px  # top right bottom left
-```
+| Tool | Purpose | Context Cost |
+|------|---------|-------------|
+| `get_metadata` | Sparse XML overview of layer structure | Low |
+| `get_design_context` | Full styled design spec (React+Tailwind by default) | **High** |
+| `get_screenshot` | Visual screenshot of selection | **High** |
+| `get_variable_defs` | Design tokens (colors, spacing, typography) | Low |
+| `get_code_connect_map` | Retrieve component-to-code mappings | Low |
+| `add_code_connect_map` | Create component-to-code mapping | Low |
+| `get_code_connect_suggestions` | Auto-detect component mapping suggestions | Low |
+| `send_code_connect_mappings` | Confirm Code Connect relationships | Low |
+| `create_design_system_rules` | Generate design system context rules | Low |
+| `get_figjam` | FigJam diagram metadata | Medium |
+| `generate_diagram` | Create FigJam diagrams from descriptions | Low |
+| `generate_figma_design` | Convert live web UI into Figma design layers (remote only) | N/A |
+| `whoami` | Verify authenticated user identity (remote only) | Low |
 
 ## Implementation Workflow
 
-### 1. Extract Figma Data
+1. For large designs: get page structure with `get_metadata`, identify target `nodeId`s
+2. Fetch design context for **specific small sections only** via `get_design_context`
+3. Read current implementation (existing code, SCSS, templates, variables)
+4. Create comparison table per section:
+   - padding, gap, margin
+   - width, height
+   - border-radius
+   - colors (background, text, border)
+   - font (family, size, weight, lineHeight)
+   - element order
+5. Fix by section — delegate to sub-agents per section
 
-1. Get page structure with `depth=1`
-2. Identify target `nodeId`
-3. Retrieve detailed data
+## Design File Preparation (for Designers)
 
-### 2. Read Current Implementation
+- Use Auto Layout (maps to CSS flexbox)
+- Set Variables / Design Tokens for colors, spacing, typography
+- Use semantic layer names (not "Group 5")
+- Add annotations for hover states and responsive behavior
 
-1. SCSS files
-2. HTML templates
-3. Variable files
+## Code Generation Tips
 
-### 3. Create Comparison Table
-
-Compare by section:
-
-- padding, gap, margin
-- width, height
-- border-radius
-- colors (background, text, border)
-- font (family, size, weight, lineHeight)
-- element order (calculate from y-coordinates)
-
-### 4. Calculate Element Order
-
-Derive order from `locationRelativeToParent.y`:
-
-```
-y=0   → 1st
-y=93  → 2nd
-y=215 → 3rd
-```
-
-### 5. Fix by Section
-
-Delegate fixes to sub-agents per section.
+- Use Code Connect to map Figma components to codebase components
+- Extract tokens with `get_variable_defs` and map to project CSS variables/tokens
+- Avoid hardcoded values; reference Figma variables
+- Default output is React+Tailwind — customize via prompt for other stacks
+- Always adapt output to the project's existing stack, components, and conventions
 
 ## Notes
 
 - For responsive design, check mobile frames separately
+- `get_design_context` output is a reference, not final code — always adapt to project patterns
