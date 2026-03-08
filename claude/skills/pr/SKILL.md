@@ -10,8 +10,12 @@ disable-model-invocation: true
 ## Task
 Create a Pull Request against the base branch specified in Arguments.
 - Fetch the base branch with git fetch
+- Verify the remote branch is up to date (user already pushed)
 - Draft the PR and get user approval
 - After approval, create the PR (use gh command)
+
+## Constraints
+- Do NOT push (assume user already pushed)
 
 ## Summary
 Use git commands to get diff title and content, understand the changes, then use them for PR title and description.
