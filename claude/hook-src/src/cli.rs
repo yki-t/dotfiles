@@ -15,4 +15,6 @@ pub enum Commands {
     Post,
     /// Handle notification hooks
     Notification,
+    /// Guard against main agent edits during swarm workflow
+    SwarmGuard,
 }

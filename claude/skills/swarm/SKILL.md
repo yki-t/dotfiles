@@ -2,6 +2,12 @@
 name: swarm
 description: Coordinated multi-agent parallel implementation workflow with worktrees
 disable-model-invocation: true
+hooks:
+  PreToolUse:
+    - matcher: "*"
+      hooks:
+        - type: command
+          command: "~/dotfiles/claude/hook swarm-guard"
 ---
 
 # swarm

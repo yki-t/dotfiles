@@ -18,6 +18,8 @@ pub struct HookInput {
     pub message: Option<String>,
     #[serde(default)]
     pub notification_type: Option<String>,
+    #[serde(default)]
+    pub agent_id: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]

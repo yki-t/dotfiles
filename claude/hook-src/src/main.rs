@@ -8,7 +8,10 @@ mod models;
 mod utils;
 
 use cli::Cli;
-use handlers::{notification::handle_notification, post::handle_post_tool_use, pre::handle_pre_tool_use};
+use handlers::{
+    notification::handle_notification, post::handle_post_tool_use, pre::handle_pre_tool_use,
+    swarm_guard::handle_swarm_guard,
+};
 use models::{HookInput, HookOutput};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -29,11 +32,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             handle_notification(&input);
             return Ok(());
         }
+        cli::Commands::SwarmGuard => handle_swarm_guard(&input),
     };
 
     // Process result and output HookOutput for PreToolUse
     match (&cli.command, result) {
-        (cli::Commands::Pre, Err(e)) => {
+        (cli::Commands::Pre | cli::Commands::SwarmGuard, Err(e)) => {
             // Block with reason
             let output = HookOutput {
                 decision: "block".to_string(),
@@ -41,7 +45,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             };
             println!("{}", serde_json::to_string(&output)?);
         }
-        (cli::Commands::Pre, Ok(())) => {
+        (cli::Commands::Pre | cli::Commands::SwarmGuard, Ok(())) => {
             // Allow - no output needed
         }
         (cli::Commands::Post, _) => {
