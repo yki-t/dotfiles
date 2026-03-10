@@ -1,5 +1,7 @@
 ---
-paths:*.rs
+paths:
+  - "**/*.rs"
+  - "**/Cargo.toml"
 ---
 
 # Rust Rules

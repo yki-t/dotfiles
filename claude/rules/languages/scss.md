@@ -1,3 +1,8 @@
+---
+paths:
+  - "**/*.scss"
+---
+
 # SCSS Rules
 
 ## Design Philosophy

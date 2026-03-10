@@ -1,5 +1,7 @@
 ---
-paths: *.{js,ts,jsx,tsx}
+paths:
+  - "**/*.{js,ts,jsx,tsx}"
+  - "**/package.json"
 ---
 # Javascript / Typescript Rules
 
