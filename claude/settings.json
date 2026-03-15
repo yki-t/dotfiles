@@ -5,9 +5,6 @@
   },
   "permissions": {
     "deny": [
-      "Bash(rustc *)",
-      "Bash(trunk *)",
-      "Bash(cargo *)",
       "Bash(git *push *)",
       "Bash(git *reset *)",
       "Bash(git *checkout *)",

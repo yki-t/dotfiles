@@ -19,7 +19,6 @@ Example: 1.93.0 (as of writing)
 
 You must:
 - use `-D warnings` to treat all warnings as errors.
-- use docker-compose.yml, prevent using `cargo` directly.
 - use `stable` toolchain, prevent using `nightly` toolchains.
 - not use `allow(dead_code)`, `unwrap`, or `expect` in your code.
 - use captured identifiers in format strings, e.g. `format!("value: {value}")`.
