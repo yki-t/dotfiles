@@ -1,5 +1,6 @@
 {
   "env": {
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "MAX_THINKING_TOKENS": "31999"
   },
   "permissions": {
@@ -14,7 +15,7 @@
       "Bash(git *restore *)",
       "Bash(gh pr close *)",
       "Bash(terraform apply *)",
-      "Bash(npx *)",
+      "Bash(terraform destroy *)",
       "Bash(npm run cdk deploy *)",
       "Bash(npm run -- cdk deploy *)",
       "Bash(npm run cdk destroy *)",
@@ -22,7 +23,6 @@
     ],
     "defaultMode": "dontAsk"
   },
-  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -59,7 +59,8 @@
     ]
   },
   "language": "敬体",
+  "effortLevel": "high",
   "promptSuggestionEnabled": false,
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "high"
+  "voiceEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }

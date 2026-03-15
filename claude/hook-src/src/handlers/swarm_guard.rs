@@ -15,7 +15,7 @@ pub fn handle_swarm_guard(input: &HookInput) -> Result<()> {
 
     if BLOCKED_TOOLS.contains(&tool_name) {
         return Err(anyhow::anyhow!(
-            "Main agent cannot use {tool_name} during swarm workflow. Delegate to sub-agents."
+            "Main agent cannot use {tool_name} during swarm workflow. Delegate to sub-agents with git worktree."
         ));
     }
 

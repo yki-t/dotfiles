@@ -51,7 +51,7 @@ hooks:
         5. Stage and commit the changes → **Prohibited unless Gate A and Gate B have passed**
         6. Report completion status and change summary to the main agent
 7. Merge all worktree branches to the base branch; sub-agents resolve conflicts
-8. Remove git worktrees and their branches
+8. Remove git worktrees, their branches, and their containers if exists
 9. Review merged changes with code-reviewer by comparing against the Plan
 10. If there are issues, go to step 6
 11. Report to the user for reviewing and testing
