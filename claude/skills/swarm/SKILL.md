@@ -20,7 +20,7 @@ hooks:
 - Main agent's role is planning and coordination. Detailed work (research, file reading, implementation, review) MUST be delegated to sub-agents.
 - Main agent should maintain only high-level understanding. Do not read source files directly.
 - This workflow takes priority over subagent-workflow.
-- Worktrees should be created at /tmp/
+- Worktrees MUST be created under /tmp/. File edits outside /tmp/ are blocked by hooks during swarm workflow.
 
 ## Project Checks
 - Project checks = build, lint, and test commands defined in the project (e.g., Makefile, package.json scripts, CLAUDE.md).
