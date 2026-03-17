@@ -5,6 +5,7 @@ use std::io::{self, Read};
 mod cli;
 mod handlers;
 mod models;
+mod services;
 mod utils;
 
 use cli::Cli;
