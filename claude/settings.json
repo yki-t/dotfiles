@@ -4,20 +4,6 @@
     "MAX_THINKING_TOKENS": "31999"
   },
   "permissions": {
-    "deny": [
-      "Bash(git *push *)",
-      "Bash(git *reset *)",
-      "Bash(git *checkout *)",
-      "Bash(git *stash *)",
-      "Bash(git *restore *)",
-      "Bash(gh pr close *)",
-      "Bash(terraform apply *)",
-      "Bash(terraform destroy *)",
-      "Bash(npm run cdk deploy *)",
-      "Bash(npm run -- cdk deploy *)",
-      "Bash(npm run cdk destroy *)",
-      "Bash(npm run -- cdk destroy *)"
-    ],
     "defaultMode": "dontAsk"
   },
   "hooks": {
