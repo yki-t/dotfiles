@@ -54,15 +54,48 @@ fn is_escaped(chars: &[char], pos: usize) -> bool {
     count % 2 == 1
 }
 
-/// Check if `text` starts with `prefix` followed by end of string or whitespace.
-fn starts_with_command(text: &str, prefix: &str) -> bool {
-    if !text.starts_with(prefix) {
+/// Check if a command matches a blocked pattern using token subsequence matching.
+///
+/// Splits both the command and pattern into whitespace-delimited tokens.
+/// The first non-flag token of the command must match the first pattern token.
+/// Remaining pattern tokens must appear in order among the command's non-flag tokens.
+/// Flag tokens (starting with `-`) in the command are skipped.
+///
+/// Examples:
+///   matches_command_pattern("git push", "git push") → true
+///   matches_command_pattern("git -C DIR push", "git push") → true
+///   matches_command_pattern("gh --repo foo/bar pr close", "gh pr close") → true
+///   matches_command_pattern("git status", "git push") → false
+///   matches_command_pattern("echo git push", "git push") → false
+fn matches_command_pattern(text: &str, pattern: &str) -> bool {
+    let cmd_tokens: Vec<&str> = text.split_whitespace().collect();
+    let pat_tokens: Vec<&str> = pattern.split_whitespace().collect();
+
+    if cmd_tokens.is_empty() || pat_tokens.is_empty() {
         return false;
     }
-    match text.as_bytes().get(prefix.len()) {
-        None => true,
-        Some(b) => b.is_ascii_whitespace(),
+
+    // First token must match exactly
+    if cmd_tokens[0] != pat_tokens[0] {
+        return false;
     }
+
+    // Remaining pattern tokens must appear in order among non-flag command tokens
+    let mut pat_idx = 1;
+    for &token in &cmd_tokens[1..] {
+        if pat_idx >= pat_tokens.len() {
+            break;
+        }
+        // Skip flag tokens
+        if token.starts_with('-') {
+            continue;
+        }
+        if token == pat_tokens[pat_idx] {
+            pat_idx += 1;
+        }
+    }
+
+    pat_idx >= pat_tokens.len()
 }
 
 /// Check for blocked npm run cdk patterns.
@@ -71,9 +104,9 @@ fn check_npm_cdk(segment: &str) -> Option<&'static str> {
     let rest = trimmed.strip_prefix("npm run")?;
     let rest = rest.trim_start();
     let rest = rest.strip_prefix("--").map_or(rest, |r| r.trim_start());
-    if starts_with_command(rest, "cdk deploy") {
+    if matches_command_pattern(rest, "cdk deploy") {
         Some("npm run cdk deploy is blocked: CDK deployment requires manual approval")
-    } else if starts_with_command(rest, "cdk destroy") {
+    } else if matches_command_pattern(rest, "cdk destroy") {
         Some("npm run cdk destroy is blocked: CDK destruction requires manual approval")
     } else {
         None
@@ -362,7 +395,7 @@ fn check_segment(segment: &str, reasons: &mut Vec<&'static str>, depth: u8) {
     let normalized = normalize_segment(segment);
 
     for pattern in BLOCKED_PATTERNS {
-        if starts_with_command(normalized, pattern.prefix) && !reasons.contains(&pattern.reason) {
+        if matches_command_pattern(normalized, pattern.prefix) && !reasons.contains(&pattern.reason) {
             reasons.push(pattern.reason);
         }
     }
@@ -487,15 +520,28 @@ mod tests {
         assert!(!is_escaped(&chars2, 7));
     }
 
-    // === starts_with_command ===
+    // === matches_command_pattern ===
 
     #[test]
-    fn test_starts_with_command() {
-        assert!(starts_with_command("git push", "git push"));
-        assert!(starts_with_command("git push origin main", "git push"));
-        assert!(!starts_with_command("git pushed", "git push"));
-        assert!(!starts_with_command("git restore-mtime .", "git restore"));
-        assert!(starts_with_command("git restore --staged file.txt", "git restore"));
+    fn test_matches_command_pattern() {
+        // Basic matches
+        assert!(matches_command_pattern("git push", "git push"));
+        assert!(matches_command_pattern("git push origin main", "git push"));
+        assert!(matches_command_pattern("gh pr close 123", "gh pr close"));
+        assert!(matches_command_pattern("terraform apply", "terraform apply"));
+
+        // With flags between command and subcommand
+        assert!(matches_command_pattern("git -C /some/dir push", "git push"));
+        assert!(matches_command_pattern("git -c core.x=y push", "git push"));
+        assert!(matches_command_pattern("git --no-pager push", "git push"));
+        assert!(matches_command_pattern("gh --repo foo/bar pr close", "gh pr close"));
+        assert!(matches_command_pattern("terraform -chdir=modules apply", "terraform apply"));
+
+        // Non-matches
+        assert!(!matches_command_pattern("git status", "git push"));
+        assert!(!matches_command_pattern("echo git push", "git push"));
+        assert!(!matches_command_pattern("git restore-mtime .", "git restore"));
+        assert!(!matches_command_pattern("", "git push"));
     }
 
     // === Simple blocked commands ===
@@ -695,6 +741,18 @@ mod tests {
     fn test_word_boundary() {
         assert!(check_blocked_command("git restore-mtime .").is_none());
         assert!(check_blocked_command("git restore --staged file.txt").is_some());
+    }
+
+    // === Bypass with flags between command and subcommand ===
+
+    #[test]
+    fn test_flags_between_command_and_subcommand() {
+        assert!(check_blocked_command("git -C /some/dir push").is_some());
+        assert!(check_blocked_command("git -c core.x=y push origin main").is_some());
+        assert!(check_blocked_command("git --no-pager stash").is_some());
+        assert!(check_blocked_command("gh --repo foo/bar pr close 123").is_some());
+        assert!(check_blocked_command("terraform -chdir=modules apply").is_some());
+        assert!(check_blocked_command("terraform -chdir=modules destroy -auto-approve").is_some());
     }
 
     // === split_shell_segments ===
