@@ -371,6 +371,10 @@ fn normalize_segment(segment: &str) -> &str {
             break;
         }
     }
+    // Strip leading backslash (alias bypass: \git → git)
+    if s.starts_with('\\') {
+        s = &s[1..];
+    }
     // Strip leading env var assignments and command prefixes in a single convergence loop.
     // Handles arbitrary chaining like "env FOO=bar command BAZ=1 git push".
     loop {
@@ -394,10 +398,40 @@ fn normalize_segment(segment: &str) -> &str {
             }
         }
         // Try stripping a command prefix
-        for prefix in ["env ", "command ", "exec "] {
+        for prefix in [
+            "env ", "command ", "exec ", "sudo ", "nohup ", "nice ", "time ", "timeout ",
+            "strace ", "setsid ", "eval ",
+        ] {
             if let Some(rest) = s.strip_prefix(prefix) {
                 s = rest.trim();
                 break;
+            }
+        }
+        // Try stripping a leading flag token (e.g., leftover from `env -i`)
+        if s.starts_with('-') {
+            let token_end = s.find(' ').unwrap_or(s.len());
+            if token_end < s.len() {
+                s = s[token_end..].trim_start();
+                continue;
+            }
+        }
+        // Try stripping a leading non-command token (e.g., flag argument like `FOO` from
+        // `-u FOO`, or numeric argument like `10` from `timeout 10`).
+        // Safe because blocked commands start with lowercase tokens (git, gh, terraform, npm).
+        // Skip tokens containing `=` to avoid interfering with env var assignment logic.
+        if !s.is_empty() {
+            let token_end = s.find(' ').unwrap_or(s.len());
+            if token_end < s.len() {
+                let token = &s[..token_end];
+                if !token.contains('=') {
+                    let first = token.as_bytes()[0];
+                    let is_non_command = first.is_ascii_uppercase()
+                        || first.is_ascii_digit();
+                    if is_non_command {
+                        s = s[token_end..].trim_start();
+                        continue;
+                    }
+                }
             }
         }
         if std::ptr::eq(s, prev) {
@@ -405,6 +439,16 @@ fn normalize_segment(segment: &str) -> &str {
         }
     }
     s
+}
+
+/// Detect `eval "cmd"` / `eval 'cmd'` patterns and extract the argument.
+fn extract_eval_arg(segment: &str) -> Option<String> {
+    let s = segment.trim();
+    if let Some(rest) = s.strip_prefix("eval ") {
+        Some(strip_outer_quotes(rest.trim()))
+    } else {
+        None
+    }
 }
 
 /// Check a single segment against blocked patterns, recursing into shell wrappers.
@@ -428,6 +472,15 @@ fn check_segment(segment: &str, reasons: &mut Vec<&'static str>, depth: u8) {
 
     // Recurse into shell wrappers (sh -c, bash -c, zsh -c)
     if let Some(inner) = extract_shell_c_arg(normalized) {
+        let inner_segments = split_shell_segments(&inner);
+        for inner_seg in &inner_segments {
+            check_segment(inner_seg, reasons, depth + 1);
+        }
+    }
+
+    // Recurse into eval arguments (eval "git push", eval 'cmd1 && cmd2')
+    // Use original segment since normalize_segment strips the `eval ` prefix.
+    if let Some(inner) = extract_eval_arg(segment) {
         let inner_segments = split_shell_segments(&inner);
         for inner_seg in &inner_segments {
             check_segment(inner_seg, reasons, depth + 1);
@@ -953,5 +1006,45 @@ mod tests {
             extract_filename("test.txt && echo done"),
             Some("test.txt".to_string())
         );
+    }
+
+    // === Bypass with sudo, nohup, nice, time, timeout, strace, setsid ===
+
+    #[test]
+    fn test_bypass_sudo_nohup_nice() {
+        assert!(check_blocked_command("sudo git push").is_some());
+        assert!(check_blocked_command("nohup git push").is_some());
+        assert!(check_blocked_command("nice git push").is_some());
+        assert!(check_blocked_command("time git push").is_some());
+        assert!(check_blocked_command("timeout 10 git push").is_some());
+        assert!(check_blocked_command("strace git push").is_some());
+        assert!(check_blocked_command("setsid git push").is_some());
+    }
+
+    #[test]
+    fn test_bypass_eval() {
+        assert!(check_blocked_command("eval git push").is_some());
+        assert!(check_blocked_command("eval \"git push\"").is_some());
+    }
+
+    #[test]
+    fn test_bypass_env_flags() {
+        assert!(check_blocked_command("env -i git push").is_some());
+        assert!(check_blocked_command("env -u FOO git push").is_some());
+    }
+
+    #[test]
+    fn test_bypass_backslash_escape() {
+        assert!(check_blocked_command("\\git push").is_some());
+    }
+
+    #[test]
+    fn test_normalize_segment_new_prefixes() {
+        assert_eq!(normalize_segment("sudo git push"), "git push");
+        assert_eq!(normalize_segment("nohup git push"), "git push");
+        assert_eq!(normalize_segment("time git push"), "git push");
+        assert_eq!(normalize_segment("eval git push"), "git push");
+        assert_eq!(normalize_segment("env -i git push"), "git push");
+        assert_eq!(normalize_segment("\\git push"), "git push");
     }
 }
