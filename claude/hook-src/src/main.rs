@@ -12,6 +12,7 @@ use cli::Cli;
 use handlers::{
     notification::handle_notification, post::handle_post_tool_use, pre::handle_pre_tool_use,
     swarm_guard::handle_swarm_guard,
+    worktree::{handle_worktree_create, handle_worktree_remove},
 };
 use models::{HookInput, HookOutput};
 
@@ -25,15 +26,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Parse JSON
     let input: HookInput = serde_json::from_str(&buffer)?;
 
-    // Handle based on command
-    let result = match &cli.command {
-        cli::Commands::Pre => handle_pre_tool_use(&input),
-        cli::Commands::Post => handle_post_tool_use(&input),
+    // Handle commands with non-HookOutput protocols (early return)
+    match &cli.command {
+        cli::Commands::WorktreeCreate => {
+            match handle_worktree_create(&input) {
+                Ok(path) => {
+                    print!("{}", path);
+                    return Ok(());
+                }
+                Err(e) => {
+                    eprintln!("{}", e);
+                    std::process::exit(1);
+                }
+            }
+        }
+        cli::Commands::WorktreeRemove => {
+            if let Err(e) = handle_worktree_remove(&input) {
+                eprintln!("{}", e);
+                std::process::exit(1);
+            }
+            return Ok(());
+        }
         cli::Commands::Notification => {
             handle_notification(&input);
             return Ok(());
         }
+        _ => {}
+    }
+
+    // Handle based on command
+    let result = match &cli.command {
+        cli::Commands::Pre => handle_pre_tool_use(&input),
+        cli::Commands::Post => handle_post_tool_use(&input),
         cli::Commands::SwarmGuard => handle_swarm_guard(&input),
+        _ => unreachable!(),
     };
 
     // Process result and output HookOutput for PreToolUse
@@ -52,7 +78,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         (cli::Commands::Post, _) => {
             // PostToolUse doesn't return decision
         }
-        (cli::Commands::Notification, _) => {}
+        _ => unreachable!(),
     }
 
     Ok(())

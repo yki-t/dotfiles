@@ -17,4 +17,8 @@ pub enum Commands {
     Notification,
     /// Guard against main agent edits during swarm workflow
     SwarmGuard,
+    /// Handle worktree creation
+    WorktreeCreate,
+    /// Handle worktree removal
+    WorktreeRemove,
 }
