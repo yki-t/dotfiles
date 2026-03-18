@@ -29,6 +29,13 @@ hooks:
 
 ## Task
 1. Plan with main agent
+    - **Task Splitting Criteria** — A single worktree is acceptable. Splitting is a means, not an end.
+      - Split only when **all** of the following conditions are met:
+        1. Tasks are independent (different features or responsibilities)
+        2. No overlapping files to edit (no conflicts possible)
+        3. Splitting improves implementation speed
+      - If multiple tasks edit the same file, do not split or serialize them in dependency order
+      - Maximum split count is 5, but prefer 1 or 2 when reasonable
 2. Implement concurrently with sub-agents (each spawned with `isolation: "worktree"`):
     1. For each task in parallel, spawn a sub-agent with `isolation: "worktree"`:
         1. Implement

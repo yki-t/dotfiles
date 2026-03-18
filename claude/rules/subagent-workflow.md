@@ -75,7 +75,7 @@ If no Suggestions, request user review.
 ## Context Management
 
 ### Parallel Limit
-- Maximum 3 sub-agents concurrently
+- Maximum 5 sub-agents concurrently
 - If more tasks exist, batch them
 
 ### Output Size
