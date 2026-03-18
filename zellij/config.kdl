@@ -155,9 +155,6 @@ keybinds clear-defaults=true {
         bind "Alt Shift p" { ToggleGroupMarking; }
         bind "Ctrl q" { Quit; }
     }
-    shared_except "locked" "scroll" "search" "tmux" {
-        bind "Ctrl b" { SwitchToMode "tmux"; }
-    }
     shared_except "locked" "scroll" "search" {
         bind "Ctrl s" { SwitchToMode "scroll"; }
     }
@@ -183,7 +180,6 @@ keybinds clear-defaults=true {
         bind "down" { ScrollDown; }
         bind "up" { ScrollUp; }
         bind "right" { PageScrollDown; }
-        bind "Ctrl b" { PageScrollUp; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "normal"; }
         bind "d" { HalfPageScrollDown; }
         bind "Ctrl f" { PageScrollDown; }
@@ -221,7 +217,6 @@ keybinds clear-defaults=true {
         bind "%" { NewPane "right"; SwitchToMode "normal"; }
         bind "," { SwitchToMode "renametab"; }
         bind "[" { SwitchToMode "scroll"; }
-        bind "Ctrl b" { Write 2; SwitchToMode "normal"; }
         bind "c" { NewTab; SwitchToMode "normal"; }
         bind "h" { MoveFocus "left"; SwitchToMode "normal"; }
         bind "j" { MoveFocus "down"; SwitchToMode "normal"; }
