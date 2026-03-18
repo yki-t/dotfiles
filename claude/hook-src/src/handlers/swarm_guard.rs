@@ -30,12 +30,12 @@ pub fn handle_swarm_guard(input: &HookInput) -> Result<()> {
         return Ok(());
     }
 
-    // SubAgent: block file edits outside /tmp/
+    // SubAgent: block file edits outside /tmp/ and .claude/worktrees/
     let cwd = input.cwd.as_deref();
 
     if BLOCKED_TOOLS.contains(&tool_name) {
         match file_path {
-            Some(fp) => path::check_subagent_file_path(fp, cwd, tool_name)?,
+            Some(fp) => path::ensure_path_in_sandbox(fp, cwd, tool_name)?,
             None => return Err(anyhow::anyhow!(
                 "Sub-agent used {tool_name} without a file_path; blocked by swarm guard."
             )),
@@ -48,7 +48,7 @@ pub fn handle_swarm_guard(input: &HookInput) -> Result<()> {
     if tool_name == "Bash" {
         if let Some(cmd) = command {
             if let Some(target) = shell::extract_target_file_from_bash(cmd) {
-                path::check_subagent_file_path(&target, cwd, "Bash")?;
+                path::ensure_path_in_sandbox(&target, cwd, "Bash")?;
             }
         }
     }

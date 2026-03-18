@@ -34,22 +34,33 @@ pub fn is_under_tmp(path: &str) -> bool {
     normalized.starts_with("/tmp")
 }
 
+/// Check if a normalized path contains `/.claude/worktrees/`.
+///
+/// Uses `contains` instead of `starts_with` (unlike `is_under_tmp`) because
+/// the worktree path is `${PROJECT_ROOT}/.claude/worktrees/` and the project
+/// root varies. `contains` intentionally allows any project's worktrees.
+/// Path traversal is prevented by `normalize_path` resolving `..` before this check.
+pub fn is_under_claude_worktree(path: &str) -> bool {
+    let normalized = normalize_path(path);
+    normalized.to_string_lossy().contains("/.claude/worktrees/")
+}
+
 pub fn resolve_path(file_path: &str, cwd: Option<&str>) -> String {
     if file_path.starts_with('/') {
         file_path.to_string()
     } else if let Some(cwd) = cwd {
         format!("{}/{}", cwd, file_path)
     } else {
-        // Relative path without cwd - is_under_tmp will reject it (fail-closed)
+        // Relative path without cwd - allowlist checks will reject it (fail-closed)
         file_path.to_string()
     }
 }
 
-pub fn check_subagent_file_path(file_path: &str, cwd: Option<&str>, tool_name: &str) -> Result<()> {
+pub fn ensure_path_in_sandbox(file_path: &str, cwd: Option<&str>, tool_name: &str) -> Result<()> {
     let resolved = resolve_path(file_path, cwd);
-    if !is_under_tmp(&resolved) {
+    if !is_under_tmp(&resolved) && !is_under_claude_worktree(&resolved) {
         return Err(anyhow::anyhow!(
-            "Sub-agent cannot use {tool_name} on paths outside /tmp/. Target: {resolved}"
+            "Sub-agent cannot use {tool_name} on paths outside /tmp/ or .claude/worktrees/. Target: {resolved}"
         ));
     }
     Ok(())
@@ -104,5 +115,26 @@ mod tests {
         assert!(!is_under_tmp("/tmp/../../home/user/file"));
         assert!(!is_under_tmp("/tmp/../home/file"));
         assert!(is_under_tmp("/tmp/foo/../bar"));
+    }
+
+    #[test]
+    fn test_is_under_claude_worktree() {
+        assert!(is_under_claude_worktree(
+            "/home/user/project/.claude/worktrees/branch/src/main.rs"
+        ));
+        assert!(is_under_claude_worktree(
+            "/home/user/project/.claude/worktrees/branch"
+        ));
+        assert!(!is_under_claude_worktree("/home/user/project/src/main.rs"));
+    }
+
+    #[test]
+    fn test_is_under_claude_worktree_bypass_attempt() {
+        assert!(!is_under_claude_worktree(
+            "/home/user/.claude/worktrees/../../etc/passwd"
+        ));
+        assert!(!is_under_claude_worktree(
+            "/home/user/project/.claude/worktrees/../../../etc/passwd"
+        ));
     }
 }
