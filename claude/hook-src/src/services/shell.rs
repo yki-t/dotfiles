@@ -371,9 +371,29 @@ fn normalize_segment(segment: &str) -> &str {
             break;
         }
     }
-    // Strip leading command prefixes (loop to handle chained prefixes like "env command git push")
+    // Strip leading env var assignments and command prefixes in a single convergence loop.
+    // Handles arbitrary chaining like "env FOO=bar command BAZ=1 git push".
     loop {
         let prev = s;
+        // Try stripping a VAR=value token
+        let token_end = s.find(' ').unwrap_or(s.len());
+        if token_end < s.len() {
+            let token = &s[..token_end];
+            if let Some(eq_pos) = token.find('=') {
+                let name = &token[..eq_pos];
+                if name.is_empty() {
+                    break;
+                }
+                let first = name.as_bytes()[0];
+                if (first.is_ascii_alphabetic() || first == b'_')
+                    && name.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'_')
+                {
+                    s = s[token_end..].trim_start();
+                    continue;
+                }
+            }
+        }
+        // Try stripping a command prefix
         for prefix in ["env ", "command ", "exec "] {
             if let Some(rest) = s.strip_prefix(prefix) {
                 s = rest.trim();
@@ -800,6 +820,48 @@ mod tests {
         assert_eq!(normalize_segment("env git push"), "git push");
         assert_eq!(normalize_segment("command git push"), "git push");
         assert_eq!(normalize_segment("env command git push"), "git push");
+    }
+
+    // === Bypass with env var assignments ===
+
+    #[test]
+    fn test_bypass_env_var_assignment() {
+        assert!(check_blocked_command("FOO=bar git push").is_some());
+        assert!(check_blocked_command("A=1 B=2 git push").is_some());
+        assert!(check_blocked_command("ENV=env git push").is_some());
+    }
+
+    #[test]
+    fn test_normalize_segment_env_var() {
+        assert_eq!(normalize_segment("FOO=bar git push"), "git push");
+        assert_eq!(normalize_segment("A=1 B=2 git push"), "git push");
+    }
+
+    #[test]
+    fn test_bypass_env_prefix_with_var_assignment() {
+        assert!(check_blocked_command("env FOO=bar git push").is_some());
+        assert!(check_blocked_command("command FOO=bar git push").is_some());
+    }
+
+    #[test]
+    fn test_normalize_segment_env_prefix_with_var() {
+        assert_eq!(normalize_segment("env FOO=bar git push"), "git push");
+    }
+
+    #[test]
+    fn test_normalize_segment_env_var_edge_cases() {
+        assert_eq!(normalize_segment("FOO= git push"), "git push");
+        assert_eq!(normalize_segment("_FOO=bar git push"), "git push");
+        assert_eq!(normalize_segment("=foo git push"), "=foo git push");
+        assert_eq!(normalize_segment("123=bar git push"), "123=bar git push");
+    }
+
+    #[test]
+    fn test_bypass_env_var_edge_cases() {
+        assert!(check_blocked_command("FOO= git push").is_some());
+        assert!(check_blocked_command("_FOO=bar git push").is_some());
+        assert!(check_blocked_command("=foo git push").is_none());
+        assert!(check_blocked_command("123=bar git push").is_none());
     }
 
     // === extract_target_file_from_bash ===
