@@ -20,6 +20,13 @@ pub fn handle_swarm_guard(input: &HookInput) -> Result<()> {
         tool_name, input.agent_id, file_path, command
     ));
 
+    // Create swarm flag when main agent spawns a sub-agent
+    if tool_name == "Agent" {
+        let flag = format!("/tmp/claude-swarm-{}", input.session_id);
+        let _ = std::fs::File::create(&flag);
+        log_debug(&format!("SwarmGuard: created swarm flag {}", flag));
+    }
+
     // MainAgent: block Edit/Write/NotebookEdit/MultiEdit
     if input.agent_id.is_none() {
         if BLOCKED_TOOLS.contains(&tool_name) {

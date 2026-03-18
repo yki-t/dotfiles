@@ -26,6 +26,24 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
         return Err(anyhow::anyhow!("EnterPlanMode is blocked by hook"));
     }
 
+    // Swarm mode: block sub-agent file edits outside worktrees
+    if input.agent_id.is_some() {
+        let swarm_flag = format!("/tmp/claude-swarm-{}", input.session_id);
+        if std::path::Path::new(&swarm_flag).exists() {
+            use crate::services::path;
+
+            let is_swarm_writing_tool = matches!(tool_name, "Write" | "Edit" | "MultiEdit" | "NotebookEdit");
+            if is_swarm_writing_tool {
+                match file_path {
+                    Some(fp) => path::ensure_path_in_sandbox(fp, input.cwd.as_deref(), tool_name)?,
+                    None => return Err(anyhow::anyhow!(
+                        "Swarm mode: sub-agent used {tool_name} without a file_path"
+                    )),
+                }
+            }
+        }
+    }
+
     // Check blocked Bash commands
     if tool_name == "Bash" {
         if let Some(cmd) = command {
