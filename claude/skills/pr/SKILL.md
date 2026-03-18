@@ -30,10 +30,10 @@ Include not just what changed (What) but also the intent behind changes (Why) in
 Include the following in the PR description:
 - Summary
 - Changes Made
+- Test Plan (with checkbox `- [ ]`, and fill what you confirmed)
 - Related Commits (list of commit titles and hashes)
 
 Do not include:
-- Test Plan
 - Deployment Instructions
 - Bold emphasis with `**`
 
