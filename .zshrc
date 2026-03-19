@@ -677,6 +677,15 @@ commit() {
   rm -f "$tmpfile"
 }
 
+# Swarm mode - autonomous multi-agent workflow
+swarm() {
+  command claude --dangerously-skip-permissions \
+    --system-prompt "$(cat ~/dotfiles/claude/swarm/prompt.txt)" \
+    --setting-sources "user" \
+    --settings ~/dotfiles/claude/swarm/settings.json \
+    "$@"
+}
+
 # ==============================================================================
 # WSL-specific functions
 # ==============================================================================
