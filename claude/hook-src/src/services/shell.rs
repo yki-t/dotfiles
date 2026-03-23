@@ -25,6 +25,10 @@ const BLOCKED_PATTERNS: &[BlockedPattern] = &[
         reason: "git restore is blocked: working tree modifications not allowed",
     },
     BlockedPattern {
+        prefix: "git revert",
+        reason: "git revert is blocked: revert commits must be created manually",
+    },
+    BlockedPattern {
         prefix: "gh pr close",
         reason: "gh pr close is blocked: PR lifecycle must be managed manually",
     },
@@ -629,6 +633,7 @@ mod tests {
         assert!(check_blocked_command("git checkout main").is_some());
         assert!(check_blocked_command("git stash").is_some());
         assert!(check_blocked_command("git restore .").is_some());
+        assert!(check_blocked_command("git revert HEAD").is_some());
         assert!(check_blocked_command("gh pr close 123").is_some());
         assert!(check_blocked_command("terraform apply").is_some());
         assert!(check_blocked_command("terraform destroy").is_some());
