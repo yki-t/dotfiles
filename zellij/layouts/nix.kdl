@@ -12,7 +12,7 @@ layout {
         pane split_direction="vertical" {
             pane size="40%" name="terminal"
             pane size="60%" name="claude code" command="zsh" {
-                args "-c" "claude --dangerously-skip-permissions; exec zsh"
+                args "-c" "source ~/dotfiles/zellij/scripts/claude-launcher.sh; exec zsh"
             }
         }
     }
