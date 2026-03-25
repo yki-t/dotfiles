@@ -691,37 +691,6 @@ ec2s() {
 }
 
 # ==============================================================================
-# WSL-specific functions
-# ==============================================================================
-
-# Remove WSL trash
-rmwsltrash() {
-  rm -rf -- \(default\) -a -m -u -w Usage: WSL Windows a absolute force format from path path, result to translate with
-}
-
-# ==============================================================================
-# Platform-specific configurations
-# ==============================================================================
-
-# macOS-specific settings
-if [[ "$(uname)" = 'Darwin' ]]; then
-  alias vim='/opt/homebrew/bin/vim'
-  
-  source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-  source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
-fi
-
-
-# WSL working directory tracking
-if [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
-  if [ -d "$APPDATA" ] && [ -n "$APPDATA" ]; then
-    precmd() {
-      pwd > "$APPDATA/lastpwd"
-    }
-  fi
-fi
-
-# ==============================================================================
 # Shell performance
 # ==============================================================================
 
