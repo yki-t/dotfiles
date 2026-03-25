@@ -686,6 +686,10 @@ swarm() {
     "$@"
 }
 
+ec2s() {
+  aws ec2 describe-instances | MAX_THINKING_TOKENS=0 claude --model haiku --effort low -p summarize
+}
+
 # ==============================================================================
 # WSL-specific functions
 # ==============================================================================
