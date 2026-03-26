@@ -40,6 +40,7 @@ unset zle_bracketed_paste  # Disable ^[[2004h
 # Key bindings
 bindkey -v  # Vi mode
 bindkey -a '^[[3${HOME}' delete-char  # <DEL> to be {lower,upper}case
+set -o vi
 
 # Git completion
 __git_files() { _files }
