@@ -238,33 +238,6 @@ export PSQL='psql -P pager=off -U username -h localhost database'
 # SQLite
 export SQL='sqlite3 -table -header'
 
-# Cloud Spanner emulator
-_SPANNER() {
-  local q='' t='' h=''
-  while getopts "e:th" opt; do
-    case $opt in
-      e) q="$OPTARG";;
-      t) t=1;;
-      h) h=1;;
-    esac
-  done
-  
-  local cmd=(docker exec -it $(docker ps --filter 'name=spanner-cli' --format '{{.Names}}') spanner-cli -p project -i instance -d database)
-  
-  if [[ -n "$h" ]]; then
-    cmd+=('-h')
-    "${cmd[@]}"
-    return
-  fi
-  
-  [[ -n "$t" ]] && cmd+=('-t')
-  [[ -n "$q" ]] && cmd+=(-e "$q")
-  
-  echo "${cmd[@]}"
-  "${cmd[@]}"
-}
-export SPANNER='_SPANNER'
-
 # ==============================================================================
 # Account settings
 # ==============================================================================
