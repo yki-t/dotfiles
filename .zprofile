@@ -213,6 +213,10 @@ export GTK_IM_MODULE='fcitx'
 export QT_IM_MODULE='fcitx'
 export XMODIFIERS='@im=fcitx'
 
+# Alacritty IME workaround: force XWayland to use XIM frontend
+# KWin bug (KDE Bug 493098) prevents text-input-v3 IME in non-Qt Wayland apps
+alias alacritty='env WAYLAND_DISPLAY= alacritty'
+
 # Docker settings
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDKIT=1
