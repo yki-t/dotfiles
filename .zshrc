@@ -662,12 +662,15 @@ commit() {
 
   echo -n "Generating commit message..."
 
-  local prompt_text message
+  local prompt_text message log
+  log="$(git log --oneline -10)"
   prompt_text="Please generate a commit message based on the diff below with conventional commit message format. "
   prompt_text+="The commit message must be one line only with conventional prefix like feat:, fix:, docs:, refactor:, etc. "
   prompt_text+="Output must be in Japanese, but you can use English technical terms. "
-  prompt_text+="Summarize the key points into one concise commit message. \n"
+  prompt_text+="Summarize the key points into one concise commit message. "
+  prompt_text+="If the recent commits show a consistent style, follow that style. \n"
   prompt_text+="[status]\n$st\n"
+  prompt_text+="[recent commits]\n$log\n"
   prompt_text+="[diff]\n$diff"
 
   message="$(echo "$prompt_text" | ask)"
