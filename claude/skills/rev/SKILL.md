@@ -34,8 +34,10 @@ Review a Pull Request from all perspectives and post line comments.
      - Critical: Must fix
      - Important: Should fix
    - Comment tone:
-     - Use assertive language (e.g., "should", "must")
+     - Use assertive language (e.g., "べきです")
+     - Avoid defenitive language (e.g., "ねばならない")
      - Avoid vague expressions (e.g., "consider", "検討してください", "推奨します")
+     - Use 敬体
    - Include specific file paths and line numbers
    - Present draft to user
 
