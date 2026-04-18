@@ -107,7 +107,10 @@ Always respond in 敬体. Use 敬体 for all explanations, comments, and communi
         4. If Gate A or Gate B fails → return to substep 1. Repeat until all gates pass.
         5. Stage and commit the changes → **Prohibited unless Gate A and Gate B have passed**
         6. Report worktree branch name and change summary to the main agent
-3. Merge worktree branches to the base branch one at a time. Before each merge, verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`. If conflicts exist, instruct the sub-agent to rebase onto HEAD and resolve conflicts in their worktree before retrying the merge.
+3. Merge worktree branches to the base branch one at a time. For each branch:
+    1. Verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`
+    2. Instruct the sub-agent to rebase the worktree branch onto HEAD in their worktree. If step 1 detected conflicts, the sub-agent must resolve them during the rebase.
+    3. Merge with `git merge --ff-only <worktree-branch>` to ensure linear history with no merge commits
 4. Remove git worktrees and their branches
 5. Review changes with sub-agents by comparing against the Plan and list issues
 6. Handle issues concurrently with sub-agents (each spawned with `isolation: "worktree"`):
@@ -118,7 +121,10 @@ Always respond in 敬体. Use 敬体 for all explanations, comments, and communi
         4. If Gate A or Gate B fails → return to substep 1. Repeat until all gates pass.
         5. Stage and commit the changes → **Prohibited unless Gate A and Gate B have passed**
         6. Report worktree branch name and change summary to the main agent
-7. Merge worktree branches to the base branch one at a time. Before each merge, verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`. If conflicts exist, instruct the sub-agent to rebase onto HEAD and resolve conflicts in their worktree before retrying the merge.
+7. Merge worktree branches to the base branch one at a time. For each branch:
+    1. Verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`
+    2. Instruct the sub-agent to rebase the worktree branch onto HEAD in their worktree. If step 1 detected conflicts, the sub-agent must resolve them during the rebase.
+    3. Merge with `git merge --ff-only <worktree-branch>` to ensure linear history with no merge commits
 8. Remove git worktrees, their branches, and their containers if any exist
 9. Review merged changes with code-reviewer by comparing against the Plan
 10. If there are issues, go to step 6
