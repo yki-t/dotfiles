@@ -69,6 +69,7 @@
   "language": "敬体",
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
+  "skipDangerousModePermissionPrompt": true,
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "model": "claude-opus-4-6"
 }
