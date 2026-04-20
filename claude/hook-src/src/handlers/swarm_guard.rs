@@ -2,6 +2,7 @@ use crate::models::HookInput;
 use crate::services::{path, shell};
 use crate::utils::log_debug;
 use anyhow::Result;
+use std::path::Path;
 
 const BLOCKED_TOOLS: &[&str] = &["Edit", "Write", "NotebookEdit", "MultiEdit"];
 
@@ -25,6 +26,13 @@ pub fn handle_swarm_guard(input: &HookInput) -> Result<()> {
         let flag = format!("/tmp/claude-swarm-{}", input.session_id);
         let _ = std::fs::File::create(&flag);
         log_debug(&format!("SwarmGuard: created swarm flag {}", flag));
+
+        // Worktree agents must include CLAUDE.md's Git Worktree instructions if present
+        if let Some(ti) = tool_input {
+            if ti.isolation.as_deref() == Some("worktree") {
+                validate_worktree_prompt(ti.prompt.as_deref(), input.cwd.as_deref())?;
+            }
+        }
     }
 
     // MainAgent: block Edit/Write/NotebookEdit/MultiEdit
@@ -58,6 +66,35 @@ pub fn handle_swarm_guard(input: &HookInput) -> Result<()> {
                 path::ensure_path_in_sandbox(&target, cwd, "Bash")?;
             }
         }
+    }
+
+    Ok(())
+}
+
+fn validate_worktree_prompt(prompt: Option<&str>, cwd: Option<&str>) -> Result<()> {
+    let cwd = match cwd {
+        Some(c) => c,
+        None => return Ok(()),
+    };
+
+    let claude_md = Path::new(cwd).join("CLAUDE.md");
+    if !claude_md.exists() {
+        return Ok(());
+    }
+
+    let content = std::fs::read_to_string(&claude_md).unwrap_or_default();
+    if !content.contains("Git Worktree") {
+        return Ok(());
+    }
+
+    let prompt = prompt.unwrap_or("");
+    let prompt_lower = prompt.to_lowercase();
+    if !prompt_lower.contains("docker compose") && !prompt_lower.contains("docker-compose") {
+        return Err(anyhow::anyhow!(
+            "CLAUDE.md has a Git Worktree section with container setup instructions. \
+             Worktree sub-agent prompts must include docker compose setup procedures \
+             (docker-compose.override.yml, port offsets, docker compose up -d)."
+        ));
     }
 
     Ok(())

@@ -32,6 +32,10 @@ pub struct ToolInput {
     pub file_path: Option<String>,
     #[serde(default)]
     pub command: Option<String>,
+    #[serde(default)]
+    pub prompt: Option<String>,
+    #[serde(default)]
+    pub isolation: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
