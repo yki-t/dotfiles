@@ -92,8 +92,8 @@ fn validate_worktree_prompt(prompt: Option<&str>, cwd: Option<&str>) -> Result<(
     if !prompt_lower.contains("docker compose") && !prompt_lower.contains("docker-compose") {
         return Err(anyhow::anyhow!(
             "CLAUDE.md has a Git Worktree section with container setup instructions. \
-             Worktree sub-agent prompts must include docker compose setup procedures \
-             (docker-compose.override.yml, port offsets, docker compose up -d)."
+             Worktree sub-agent prompts must instruct the agent to execute docker compose setup \
+             (docker-compose.override.yml, port offsets, docker compose up -d) and run tests defined in the project."
         ));
     }
 
