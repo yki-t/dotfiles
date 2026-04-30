@@ -69,4 +69,11 @@ if ! is_mounted; then
   sudo mount /dev/mapper/vg--ext-lv--ext "$TARGET"
 fi
 
+# restart docker if not running
+if ! systemctl is-active --quiet docker; then
+  sleep 1
+  info "Starting Docker service.."
+  sudo systemctl restart docker
+fi
+
 info 'done'
