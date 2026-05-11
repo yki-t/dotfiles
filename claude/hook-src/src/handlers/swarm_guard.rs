@@ -35,7 +35,12 @@ pub fn handle_swarm_guard(input: &HookInput) -> Result<()> {
         }
     }
 
-    // MainAgent: block Edit/Write/NotebookEdit/MultiEdit
+    // Block AskUserQuestion unconditionally (main agent and sub-agents)
+    if tool_name == "AskUserQuestion" {
+        return Err(anyhow::anyhow!("AskUserQuestion is blocked by hook"));
+    }
+
+    // MainAgent: block file-editing tools
     if input.agent_id.is_none() {
         if BLOCKED_TOOLS.contains(&tool_name) {
             return Err(anyhow::anyhow!(

@@ -26,6 +26,10 @@ pub fn handle_pre_tool_use(input: &HookInput) -> Result<()> {
         return Err(anyhow::anyhow!("EnterPlanMode is blocked by hook"));
     }
 
+    if tool_name == "AskUserQuestion" {
+        return Err(anyhow::anyhow!("AskUserQuestion is blocked by hook"));
+    }
+
     // Swarm mode: block sub-agent file edits outside worktrees
     if input.agent_id.is_some() {
         let swarm_flag = format!("/tmp/claude-swarm-{}", input.session_id);

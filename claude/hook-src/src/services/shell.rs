@@ -40,6 +40,14 @@ const BLOCKED_PATTERNS: &[BlockedPattern] = &[
         prefix: "terraform destroy",
         reason: "terraform destroy is blocked: infrastructure destruction requires manual approval",
     },
+    BlockedPattern {
+        prefix: "reboot",
+        reason: "reboot is blocked: system reboot must be done manually",
+    },
+    BlockedPattern {
+        prefix: "shutdown",
+        reason: "shutdown is blocked: system shutdown must be done manually",
+    },
 ];
 
 /// Count consecutive backslashes before position `pos`.
@@ -1076,6 +1084,15 @@ mod tests {
     fn test_bypass_backslash_after_prefix() {
         assert!(check_blocked_command("sudo \\git push").is_some());
         assert!(check_blocked_command("env \\git push").is_some());
+    }
+
+    #[test]
+    fn test_simple_blocked_reboot_shutdown() {
+        assert!(check_blocked_command("reboot").is_some());
+        assert!(check_blocked_command("shutdown").is_some());
+        assert!(check_blocked_command("shutdown -h now").is_some());
+        assert!(check_blocked_command("sudo reboot").is_some());
+        assert!(check_blocked_command("sudo shutdown -h now").is_some());
     }
 
     #[test]
