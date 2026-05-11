@@ -70,7 +70,10 @@
   "language": "敬体",
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "voiceEnabled": true,
-  "awaySummaryEnabled": false
+  "editorMode": "vim",
+  "fileCheckpointingEnabled": false,
+  "remoteControlAtStartup": false
 }
