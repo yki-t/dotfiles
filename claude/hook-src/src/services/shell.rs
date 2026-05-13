@@ -48,6 +48,10 @@ const BLOCKED_PATTERNS: &[BlockedPattern] = &[
         prefix: "shutdown",
         reason: "shutdown is blocked: system shutdown must be done manually",
     },
+    BlockedPattern {
+        prefix: "cargo",
+        reason: "cargo is blocked: use docker to run cargo commands",
+    },
 ];
 
 /// Count consecutive backslashes before position `pos`.
