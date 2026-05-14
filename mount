@@ -5,7 +5,7 @@ set -eu
 TARGET="$HOME/di/ext"
 
 is_mounted() {
-  lsblk | grep $TARGET | grep -q lvm
+  mountpoint -q "$TARGET" 2>/dev/null
 }
 
 info() {
@@ -17,7 +17,7 @@ if is_mounted; then
   exit 0
 fi
 
-# list devices
+# list LUKS devices (non-NVMe disks only)
 info "Listing devices:"
 uuids=()
 while read -r uuid _ _; do
@@ -30,50 +30,43 @@ while read -r uuid _ _; do
   uuids+=("$uuid")
 done< <(sudo lsblk -o UUID,NAME,TYPE | grep disk | grep -v nvme)
 
-# Check if locked disk exists
-has_one=0
+# Check if any disk needs unlocking
+has_locked=0
 for uuid in "${uuids[@]}"; do
   id=$(echo "$uuid" | awk -F'-' '{print $1}')
-  if ! lsblk | grep "lv-$id"; then
-    has_one=1
+  if ! lsblk | grep -q "r1-$id"; then
+    has_locked=1
     break
   fi
 done
 
-info "Found ${#uuids[@]} LUKS devices. Unlocking.."
-if [ $has_one -eq 1 ]; then
-  # unlock disks
-
+info "Found ${#uuids[@]} LUKS devices."
+if [ $has_locked -eq 1 ]; then
+  info "Unlocking.."
   read -rsp "Enter passphrase: " passwd; echo
   for uuid in "${uuids[@]}"; do
     id=$(echo "$uuid" | awk -F'-' '{print $1}')
-    name=$(lsblk -o NAME,UUID | grep "$uuid" | awk '{print $1}')
-    is_mounted=$(lsblk | grep "lv-$id" | wc -l)
-    info "$name ($uuid) -> lv-$id (mounted: $is_mounted)"
-    # FIXME: hacky way of unlocking disks in parallel.
-    # LVM is automatically scanned and activated when 3/4 disks are unlocked,
-    # so we need to unlock all disks at once before udev(?) activating LVM.
-    # This behavior occurs only on WSL (not on pure Linux).
-    echo "$passwd" | sudo cryptsetup luksOpen "/dev/disk/by-uuid/$uuid" "lv-$id" &
+    if lsblk | grep -q "r1-$id"; then
+      info "r1-$id already unlocked, skipping"
+      continue
+    fi
+    info "Unlocking $uuid -> r1-$id"
+    echo "$passwd" | sudo cryptsetup luksOpen "/dev/disk/by-uuid/$uuid" "r1-$id" &
   done
-
-  # wait for all disks to unlock
   wait
-  sleep 3
 fi
 
-# mount disks
-# Check if mounted
+# mount btrfs RAID1
 if ! is_mounted; then
-  info "Mounting disks.."
-  sudo mount /dev/mapper/vg--ext-lv--ext "$TARGET"
-fi
-
-# restart docker if not running
-if ! systemctl is-active --quiet docker; then
-  sleep 1
-  info "Starting Docker service.."
-  sudo systemctl restart docker
+  info "Mounting btrfs RAID1.."
+  # mount using the first available LUKS device
+  for uuid in "${uuids[@]}"; do
+    id=$(echo "$uuid" | awk -F'-' '{print $1}')
+    if [ -e "/dev/mapper/r1-$id" ]; then
+      sudo mount "/dev/mapper/r1-$id" "$TARGET"
+      break
+    fi
+  done
 fi
 
 info 'done'
