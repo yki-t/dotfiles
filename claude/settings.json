@@ -6,9 +6,11 @@
     "MAX_THINKING_TOKENS": "31999"
   },
   "permissions": {
+    "deny": [
+      "AskUserQuestion"
+    ],
     "defaultMode": "dontAsk"
   },
-  "model": "claude-opus-4-6",
   "hooks": {
     "PreToolUse": [
       {
@@ -72,8 +74,10 @@
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
-  "voiceEnabled": true,
   "editorMode": "vim",
+  "autoCompactEnabled": true,
   "fileCheckpointingEnabled": false,
-  "remoteControlAtStartup": false
+  "remoteControlAtStartup": false,
+  "voiceEnabled": true,
+  "model": "claude-opus-4-6"
 }
