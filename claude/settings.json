@@ -75,6 +75,7 @@
   "awaySummaryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
+  "verbose": false,
   "autoCompactEnabled": true,
   "fileCheckpointingEnabled": false,
   "remoteControlAtStartup": false,

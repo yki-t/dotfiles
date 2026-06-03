@@ -15,8 +15,6 @@ Before spawning sub-agents, stage the target files with git add.
 git add <file1> <file2> ...
 ```
 
-**Prohibited**: Do not use `git add .` or `git add -A`. Specify files explicitly.
-
 ### 1.5. Provide Context to Sub-agents
 
 Include the following in sub-agent prompts:
