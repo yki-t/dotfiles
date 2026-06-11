@@ -74,12 +74,12 @@
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
+  "autoUpdatesChannel": "stable",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "verbose": false,
   "autoCompactEnabled": true,
   "fileCheckpointingEnabled": false,
   "remoteControlAtStartup": false,
-  "voiceEnabled": true,
-  "autoUpdatesChannel": "stable"
+  "voiceEnabled": true
 }
