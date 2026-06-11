@@ -11,6 +11,7 @@
     ],
     "defaultMode": "dontAsk"
   },
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -80,5 +81,5 @@
   "fileCheckpointingEnabled": false,
   "remoteControlAtStartup": false,
   "voiceEnabled": true,
-  "model": "claude-opus-4-6"
+  "autoUpdatesChannel": "stable"
 }
