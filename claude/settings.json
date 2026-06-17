@@ -3,7 +3,8 @@
     "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
-    "MAX_THINKING_TOKENS": "31999"
+    "MAX_THINKING_TOKENS": "31999",
+    "DISABLE_AUTOUPDATER": "1"
   },
   "permissions": {
     "deny": [
@@ -11,7 +12,7 @@
     ],
     "defaultMode": "dontAsk"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "claude-opus-4-6",
   "hooks": {
     "PreToolUse": [
       {
@@ -67,6 +68,7 @@
       }
     ]
   },
+  "workflowKeywordTriggerEnabled": false,
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true
   },
@@ -74,12 +76,14 @@
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
-  "autoUpdatesChannel": "stable",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "verbose": false,
   "autoCompactEnabled": true,
   "fileCheckpointingEnabled": false,
+  "terminalProgressBarEnabled": true,
   "remoteControlAtStartup": false,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "comment": "claude-fable-5[1m]",
+  "autoUpdatesChannel": "stable"
 }
