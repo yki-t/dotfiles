@@ -10,7 +10,7 @@ disable-model-invocation: true
 ## Task
 Create a Pull Request against the base branch specified in Arguments.
 - Fetch the base branch with git fetch
-- Verify the remote branch is up to date (user already pushed)
+- Verify the remote branch is up to date by `git ls-remote --heads origin {branch}`
 - Draft the PR and get user approval
 - After approval, create the PR (use gh command)
 
