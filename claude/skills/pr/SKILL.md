@@ -38,11 +38,9 @@ Do not include:
 - Bold emphasis with `**`
 
 ## Notes
-- Check if project PR conventions exist. If so, follow them. Check:
-  - [ ] README.md
-  - [ ] CLAUDE.md
-  - [ ] docs/
+- Follow the project's existing PR conventions (title format, description style, language). Check recent merged PRs with `gh pr list --state merged` for reference.
 - No "Generated with Claude Code" signature at the end
 - Write in plain past tense, objective and neutral (noun phrases acceptable)
 - Assume commit and push are already done (even if user doesn't mention it)
 - Use `git diff base...HEAD` (3 dots) to get only changes made in this branch, not `git diff base..HEAD` (2 dots)
+- After PR creation, monitor CI status with `gh pr checks --watch`
