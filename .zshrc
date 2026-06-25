@@ -365,6 +365,108 @@ git-pull-all() {
   git checkout "$current"
 }
 
+# Create a merge branch for environment deployment
+git-merge-for() {
+  if [[ $# -ne 1 ]]; then
+    err "usage: git-merge-for <env> (e.g. dev, stg, prd, develop, staging, production, ...)"
+    return 1
+  fi
+
+  local env_alias="$1"
+  local feature_branch
+  feature_branch=$(git branch --show-current)
+  if [[ -z "$feature_branch" ]]; then
+    err "Detached HEAD state. Please checkout a branch first."
+    return 1
+  fi
+
+  if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+    err "Working tree has uncommitted changes. Please commit or stash first."
+    return 1
+  fi
+
+  local -a candidates
+  case "$env_alias" in
+    dev|develop|release/dev|release/develop)
+      candidates=(dev develop release/dev release/develop) ;;
+    stg|stage|staging|release/stg|release/stage|release/staging)
+      candidates=(stg stage staging release/stg release/stage release/staging) ;;
+    prd|prod|production|release/prd|release/prod|release/production)
+      candidates=(prd prod production release/prd release/prod release/production) ;;
+    *)
+      err "Unknown env alias: $env_alias (use dev, stg, or prd)"
+      return 1
+      ;;
+  esac
+
+  local branches
+  branches=$(git branch -a --format='%(refname:short)')
+  local env_branch=""
+  local c
+  for c in "${candidates[@]}"; do
+    if echo "$branches" | grep -Fqx "$c"; then
+      env_branch="$c"
+      break
+    fi
+    if echo "$branches" | grep -Fqx "origin/$c"; then
+      env_branch="$c"
+      break
+    fi
+  done
+  if [[ -z "$env_branch" ]]; then
+    err "No matching branch found for env alias: $env_alias"
+    return 1
+  fi
+
+  if [[ "$feature_branch" = "$env_branch" ]]; then
+    err "Already on $env_branch. Switch to a feature branch first."
+    return 1
+  fi
+
+  if ! git checkout "$env_branch"; then
+    err "Failed to checkout $env_branch"
+    return 1
+  fi
+  if ! git pull; then
+    err "Failed to pull $env_branch"
+    git checkout "$feature_branch"
+    return 1
+  fi
+  if ! git checkout "$feature_branch"; then
+    err "Failed to checkout $feature_branch"
+    return 1
+  fi
+
+  git merge-tree --write-tree "$env_branch" "$feature_branch" &>/dev/null
+  local merge_tree_exit=$?
+  if [[ $merge_tree_exit -eq 0 ]]; then
+    echo "No conflicts detected: git checkout $env_branch && git merge $feature_branch"
+    return 0
+  elif [[ $merge_tree_exit -ne 1 ]]; then
+    err "git merge-tree failed (exit code: $merge_tree_exit)"
+    return 1
+  fi
+
+  local merge_branch="merge_for_${env_branch}/${feature_branch}"
+  if git rev-parse --verify "$merge_branch" &>/dev/null; then
+    echo "Deleting existing branch: $merge_branch"
+    if ! git branch -D "$merge_branch"; then
+      err "Failed to delete branch: $merge_branch"
+      return 1
+    fi
+  fi
+
+  if ! git switch -c "$merge_branch" "$env_branch"; then
+    err "Failed to create branch: $merge_branch"
+    return 1
+  fi
+  git merge "$feature_branch"
+
+  echo ""
+  echo "Created branch: $merge_branch"
+  echo "Resolve conflicts and push this branch."
+}
+
 # ==============================================================================
 # Text processing
 # ==============================================================================
