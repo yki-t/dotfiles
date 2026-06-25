@@ -806,6 +806,15 @@ ec2s() {
   aws ec2 describe-instances | MAX_THINKING_TOKENS=0 claude --model haiku --effort low -p summarize
 }
 
+cloudflare-access() {
+  echo "curl -s \"https://api.cloudflare.com/client/v4/user\" \\
+    -H \"X-Auth-Email: \$CLOUDFLARE_EMAIL\" \\
+    -H \"X-Auth-Key: \$CLOUDFLARE_API_KEY\" | jq ."
+  curl -s "https://api.cloudflare.com/client/v4/user" \
+    -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+    -H "X-Auth-Key: $CLOUDFLARE_API_KEY" | jq .
+}
+
 # ==============================================================================
 # Shell performance
 # ==============================================================================
