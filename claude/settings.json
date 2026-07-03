@@ -12,7 +12,7 @@
     ],
     "defaultMode": "dontAsk"
   },
-  "model": "claude-opus-4-6",
+  "model": "claude-fable-5",
   "hooks": {
     "PreToolUse": [
       {
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/dotfiles/claude/hook pre"
+            "command": "~/.cargo/bin/cc-rein hook"
           }
         ]
       }
@@ -31,7 +31,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/dotfiles/claude/hook notification"
+            "command": "~/.cargo/bin/cc-rein hook"
           }
         ]
       }
@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/dotfiles/claude/hook post"
+            "command": "~/.cargo/bin/cc-rein hook"
           }
         ]
       }
@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/dotfiles/claude/hook worktree-create"
+            "command": "~/.cargo/bin/cc-rein hook"
           }
         ]
       }
@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/dotfiles/claude/hook worktree-remove"
+            "command": "~/.cargo/bin/cc-rein hook"
           }
         ]
       }
@@ -73,9 +73,9 @@
     "frontend-design@claude-plugins-official": true
   },
   "language": "敬体",
-  "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
+  "autoUpdatesChannel": "stable",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "verbose": false,
@@ -84,6 +84,5 @@
   "terminalProgressBarEnabled": true,
   "remoteControlAtStartup": false,
   "voiceEnabled": true,
-  "comment": "claude-fable-5[1m]",
-  "autoUpdatesChannel": "stable"
+  "comment": "claude-fable-5[1m]"
 }
