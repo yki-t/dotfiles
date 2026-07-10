@@ -13,6 +13,7 @@
     "defaultMode": "dontAsk"
   },
   "model": "claude-fable-5",
+  "cleanupPeriodDays": 99999,
   "hooks": {
     "PreToolUse": [
       {
