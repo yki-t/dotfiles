@@ -1,10 +1,10 @@
 {
+  "cleanupPeriodDays": 99999,
   "env": {
     "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
-    "MAX_THINKING_TOKENS": "31999",
-    "DISABLE_AUTOUPDATER": "1"
+    "MAX_THINKING_TOKENS": "31999"
   },
   "permissions": {
     "deny": [
@@ -13,7 +13,6 @@
     "defaultMode": "dontAsk"
   },
   "model": "claude-fable-5",
-  "cleanupPeriodDays": 99999,
   "hooks": {
     "PreToolUse": [
       {
@@ -69,6 +68,7 @@
       }
     ]
   },
+  "enableWorkflows": false,
   "workflowKeywordTriggerEnabled": false,
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true
@@ -81,9 +81,11 @@
   "editorMode": "vim",
   "verbose": false,
   "autoCompactEnabled": true,
+  "switchModelsOnFlag": false,
   "fileCheckpointingEnabled": false,
   "terminalProgressBarEnabled": true,
   "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
   "voiceEnabled": true,
   "comment": "claude-fable-5[1m]"
 }
