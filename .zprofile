@@ -122,11 +122,6 @@ if type bun &>/dev/null; then
   paths+=":${BUN_INSTALL}/bin"
 fi
 
-# PKG_CONFIG
-if [[ -e /usr/lib/pkgconfig ]]; then
-  export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig"
-fi
-
 # Google Cloud SDK (gsutil)
 paths+=":$HOME/gsutil"
 
