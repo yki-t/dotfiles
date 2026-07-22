@@ -730,25 +730,24 @@ dl() {
 ask() {
   local api_key="${ANTHROPIC_API_KEY}"
   local model="${ANTHROPIC_DEFAULT_MODEL:-claude-sonnet-4-6}"
-  local prompt_text tempfile error
+  local tempfile error
   require jq || return
-  prompt_text="$(/bin/cat)"
-  prompt_text="$(printf '%s' "$prompt_text" | jq -Rs .)"
 
   if [[ -z "$api_key" ]]; then
     echo "Error: ANTHROPIC_API_KEY is not set." >&2
     return 1
   fi
 
-  local data='{"model": "'"$model"'", "max_tokens": 4096, "messages": [{"role": "user", "content": '"$prompt_text"'}]}'
-
   tempfile="$(mktemp /tmp/ai-msg.XXXXXX)"
-  curl -s https://api.anthropic.com/v1/messages \
-    -H "Content-Type: application/json" \
-    -H "x-api-key: $api_key" \
-    -H "anthropic-version: 2023-06-01" \
-    -d "$data" \
-    > "$tempfile"
+  /bin/cat \
+    | jq -Rs --arg model "$model" \
+        '{model: $model, max_tokens: 4096, messages: [{role: "user", content: .}]}' \
+    | curl -s https://api.anthropic.com/v1/messages \
+        -H "Content-Type: application/json" \
+        -H "x-api-key: $api_key" \
+        -H "anthropic-version: 2023-06-01" \
+        -d @- \
+        > "$tempfile"
 
   error="$(/bin/cat "$tempfile" | jq -r '.error.message')"
   if [[ "$error" != 'null' ]]; then
