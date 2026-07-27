@@ -21,7 +21,9 @@ ARGUMENTS specify the target areas (e.g., "API, CMS"). The perspectives are fixe
 ## Phase 1: Audit (research — no approval needed)
 
 1. Identify the repo structure (one quick `ls`/find is enough; do not read source files in the main agent).
-2. Spawn read-only research sub-agents in parallel: **one per target area**, plus **one holistic agent** that evaluates the system as a whole. Each prompt MUST include:
+2. Main agent directly reads the project's README and docs (design docs, ADRs, contributing guides, etc.) to understand the project as a whole — not just architecture and tech stack, but what the application does, its purpose/domain, and who the intended users are. Also capture project-specific conventions and any explicitly accepted risks/exceptions (e.g. an accepted-risks doc) that must be excluded from audit findings. This step is done by the main agent (not delegated) because it may need to ask the user clarifying questions if the purpose, target users, or philosophy is unclear, undocumented, or docs are missing. Summarize the resulting understanding — application purpose, target users, architecture/conventions, accepted risks — for use as context in sub-agent prompts.
+3. Spawn read-only research sub-agents in parallel: **one per target area**, plus **one holistic agent** that evaluates the system as a whole. Each prompt MUST include:
+   - The project's philosophy/conventions summary from step 2, with instruction to evaluate findings against those conventions rather than generic best practices
    - Area agents: the area's file list or directory scope. Holistic agent: all areas, with instructions to look *between* them, not into each file
    - The perspectives, broken into concrete sub-perspectives:
      - Consistency: pattern divergence between sibling files, DRY violations, unused/dead code, naming
@@ -37,7 +39,11 @@ ARGUMENTS specify the target areas (e.g., "API, CMS"). The perspectives are fixe
 ## Phase 2: Report & Approval (STOP here)
 
 - Assign each finding a stable ID (e.g., A1..An per area, X1..Xn for holistic findings) — later phases reference these IDs. Deduplicate overlaps between area and holistic findings before reporting.
-- Report to the user: lead with the few most important findings in prose, then per-area tables (ID / item / location / severity), then a recommended processing order.
+- Selection cap: after deduplication, first enumerate all findings internally, then:
+  1. Exclude findings whose resolution hinges on a design decision or is a matter of coding preference rather than an objectively verifiable defect
+  2. Rank the remainder by importance (severity first, then impact) and report at most 12 findings
+  If the remainder is under 12, excluded items may fill the gap up to 12. Findings cut here are not reported and not carried into later phases.
+- Report to the user: first enumerate every finding's details (ID / title / location / severity / category, plus the 2-4 line description of what is wrong and how to fix), then per-area summary tables (ID / item / location / severity), then a recommended processing order.
 - Do NOT start any implementation until the user approves. Approval of "fix all" or a subset defines the agreed scope.
 
 ## Phase 3: Sequential Processing
