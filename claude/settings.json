@@ -15,6 +15,16 @@
   },
   "model": "claude-fable-5[1m]",
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "date '+[%Y-%m-%d (%a) %H:%M:%S %Z]'"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "*",
