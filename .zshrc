@@ -346,25 +346,6 @@ ssm() {
   aws ssm start-session --target $(aws ec2 describe-instances --filters "Name=tag:Name,Values=*$instanceName*" "Name=instance-state-name,Values=running" --query 'Reservations[0].Instances[0].InstanceId' --output text)
 }
 
-# Pull all local branches from their remote
-git-pull-all() {
-  local current
-  current=$(git branch --show-current)
-  git fetch --all --prune
-  git branch --format='%(refname:short) %(upstream:short)' | while read -r local remote; do
-    echo "--- $local ---"
-    git checkout "$local" || continue
-    if [ -n "$remote" ]; then
-      git pull
-    elif git rev-parse --verify "origin/$local" &>/dev/null; then
-      git merge "origin/$local"
-    else
-      echo "No remote branch found. skip."
-    fi
-  done
-  git checkout "$current"
-}
-
 # Create a merge branch for environment deployment
 git-merge-for() {
   if [[ $# -ne 1 ]]; then

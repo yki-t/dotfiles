@@ -2,6 +2,7 @@
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"&>/dev/null &&pwd)" # SCRIPT_DIR
 
 ln -snf $DIR/.vim ~/
+ln -snf $DIR/.gitconfig ~/
 ln -snf $DIR/.gitignore ~/
 ln -snf $DIR/.gitmodules ~/
 ln -snf $DIR/.private.sh ~/

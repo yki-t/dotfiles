@@ -1,0 +1,23 @@
+[include]
+	path = ~/.gitconfig.local
+[init]
+	defaultBranch = main
+[url "https://invent.kde.org/"]
+	insteadOf = kde:
+[url "ssh://git@invent.kde.org/"]
+	pushInsteadOf = kde:
+[push]
+	default = current
+[alias]
+	sweep = "!git branch --format='%(refname:short)' | fzf -m | xargs -r git branch -D"
+	pull-all = "!f() { \
+		current=$(git branch --show-current); \
+		git fetch --all --prune; \
+		git branch --format='%(refname:short) %(upstream:short)' | while read -r local remote; do \
+			echo \"--- $local ---\"; \
+			git checkout \"$local\" || continue; \
+			if [ -n \"$remote\" ]; then git pull; \
+			elif git rev-parse --verify \"origin/$local\" >/dev/null 2>&1; then git merge \"origin/$local\"; \
+			else echo 'No remote branch found. skip.'; fi; \
+		done; \
+		git checkout \"$current\"; }; f"

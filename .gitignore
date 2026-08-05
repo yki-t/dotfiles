@@ -1,6 +1,6 @@
 .private.sh
 .alacritty.yml
-.gitconfig
+.gitconfig.local
 .php-cs-fixer.cache
 lastpwd
 .claude/
