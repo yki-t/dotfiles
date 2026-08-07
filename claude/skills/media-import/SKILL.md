@@ -107,7 +107,7 @@ For large files (>1GB), run transfers in background and report progress.
 
 ### STEP 5: Convert for DaVinci Resolve
 
-Linux版DaVinci ResolveはAACデコードライセンスを含まないため、音声をPCMに変換する。
+DaVinci Resolve for Linux does not include an AAC decode license, so convert the audio to PCM.
 
 ```bash
 ffmpeg -i <original> -c:v copy -c:a pcm_s16le -map 0:v -map 0:a <output>

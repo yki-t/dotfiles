@@ -36,11 +36,17 @@ Include the following in the PR description:
 Do not include:
 - Deployment Instructions
 - Bold emphasis with `**`
+- Task ID references (e.g. `(UZU-XXXX)`, `Closes #123`)
 
 ## Notes
 - Follow the project's existing PR conventions (title format, description style, language). Check recent merged PRs with `gh pr list --state merged` for reference.
 - No "Generated with Claude Code" signature at the end
 - Write in plain past tense, objective and neutral (noun phrases acceptable)
+- Description content follows the comment principles:
+  - Write what is not recoverable from the diff: intent, constraints, rejected alternatives
+  - "Changes Made" groups changes by intent, not a file-by-file narration of the diff
+  - Do not include work history (previous attempts, review-fix iterations); describe only the final state
+  - State unverified items explicitly (e.g. unchecked Test Plan boxes); do not pad the description to mask uncertainty
 - Assume commit and push are already done (even if user doesn't mention it)
 - Use `git diff base...HEAD` (3 dots) to get only changes made in this branch, not `git diff base..HEAD` (2 dots)
 - After PR creation, monitor CI status with `gh pr checks --watch`

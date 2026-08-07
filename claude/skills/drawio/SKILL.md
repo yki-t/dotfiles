@@ -56,19 +56,19 @@ grep -qi microsoft /proc/version 2>/dev/null && echo "WSL2"
 On WSL2, use the Windows draw.io Desktop executable via `/mnt/c/...`:
 
 ```bash
-DRAWIO_CMD=`/mnt/c/Program Files/draw.io/draw.io.exe`
+DRAWIO_CMD="/mnt/c/Program Files/draw.io/draw.io.exe"
 ```
 
-The backtick quoting is required to handle the space in `Program Files` in bash.
+The double quotes are required to handle the space in `Program Files` in bash.
 
 If draw.io is installed in a non-default location, check common alternatives:
 
 ```bash
 # Default install path
-`/mnt/c/Program Files/draw.io/draw.io.exe`
+"/mnt/c/Program Files/draw.io/draw.io.exe"
 
 # Per-user install (if the above does not exist)
-`/mnt/c/Users/$WIN_USER/AppData/Local/Programs/draw.io/draw.io.exe`
+"/mnt/c/Users/$WIN_USER/AppData/Local/Programs/draw.io/draw.io.exe"
 ```
 
 #### macOS
@@ -100,7 +100,7 @@ drawio -x -f <format> -e -b 10 -o <output> <input.drawio>
 **WSL2 example:**
 
 ```bash
-`/mnt/c/Program Files/draw.io/draw.io.exe` -x -f png -e -b 10 -o diagram.drawio.png diagram.drawio
+"/mnt/c/Program Files/draw.io/draw.io.exe" -x -f png -e -b 10 -o diagram.drawio.png diagram.drawio
 ```
 
 Key flags:

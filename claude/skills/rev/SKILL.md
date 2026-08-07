@@ -35,7 +35,7 @@ Review a Pull Request from all perspectives and post line comments.
      - Important: Should fix
    - Comment tone:
      - Use assertive language (e.g., "べきです")
-     - Avoid defenitive language (e.g., "ねばならない")
+     - Avoid definitive language (e.g., "ねばならない")
      - Avoid vague expressions (e.g., "consider", "検討してください", "推奨します")
      - Use 敬体
    - Include specific file paths and line numbers
@@ -94,5 +94,5 @@ EOF
 ```
 
 ## Examples
-- `/review 157` - Review PR #157
-- `/review https://github.com/org/repo/pull/157` - Review from URL
+- `/rev 157` - Review PR #157
+- `/rev https://github.com/org/repo/pull/157` - Review from URL

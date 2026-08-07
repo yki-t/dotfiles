@@ -35,7 +35,7 @@ result = subprocess.run(
     ["secret-tool", "lookup", "server", "Chromium Keys", "user", "Chromium Safe Storage"],
     capture_output=True, text=True, timeout=5
 )
-password = result.stdout.strip()  # e.g. "P+ukb1YlPJklAjxE/p3vPA=="
+password = result.stdout.strip()  # e.g. "AAAAAAAAAAAAAAAAAAAAAA=="
 
 # Read encrypted d cookie from Cookies SQLite
 db_path = os.path.expanduser("~/.config/Slack/Cookies")

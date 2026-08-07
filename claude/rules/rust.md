@@ -13,13 +13,15 @@ Edition: 2024
 Always use the latest version from:
 https://blog.rust-lang.org/releases/latest/
 
-Example: 1.93.0 (as of writing)
+Example: 1.97.1
+
+A concrete version is listed here because, without one, an older version is often selected. Update it when a new stable version is released.
 
 ## Basic Policies
 
 You must:
 - use `-D warnings` to treat all warnings as errors.
-- use `stable` toolchain, prevent using `nightly` toolchains.
+- use `stable` toolchain, do not use `nightly` toolchains.
 - not use `allow(dead_code)`, `unwrap`, or `expect` in your code.
 - use captured identifiers in format strings, e.g. `format!("value: {value}")`.
 - not leave unused code or commented-out code.
@@ -30,7 +32,7 @@ You should use the latest versions of dependencies with `"*"` in `Cargo.toml`.
 ## Error Handling
 
 You must:
-- define custom error type like `Error` using `anyhow` crate (prevent using `thiserror` or `thiserror`-like crates).
+- define custom error type like `Error` using `anyhow` crate (do not use `thiserror` or `thiserror`-like crates).
 - define `crate::error::Error` and export it
 - define `pub type Result<T> = std::result::Result<T, crate::error::Error>;`
 - implement `From<T>` for `crate::error::Error` for each error type `T` you use in your code.

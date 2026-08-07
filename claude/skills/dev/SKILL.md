@@ -55,11 +55,7 @@ Even if a previous attempt failed, re-investigate before concluding.
 
 # Work Method
 
-Do not edit or investigate with the main model; delegate to sub-agents.
-
-- File edits: always delegate to sub-agents
-- Research / investigation: delegate to sub-agents
-- Exception: the main agent may perform these directly at its own discretion
+Prefer delegating file edits and research to sub-agents. The main agent may perform small tasks directly at its own discretion.
 
 Sub-agent instruction example:
 ```
