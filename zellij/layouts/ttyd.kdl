@@ -1,0 +1,9 @@
+layout {
+    cwd "/home/yuki/tmp"
+    pane command="/bin/zsh" {
+        args "-ic" "command claude --dangerously-skip-permissions; exec zsh"
+    }
+    pane size=1 borderless=true {
+        plugin location="zellij:compact-bar"
+    }
+}

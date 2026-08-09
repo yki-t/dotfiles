@@ -8,16 +8,16 @@ layout {
             plugin location="status-bar"
         }
     }
-    tab name="dev" focus=true {
-        pane split_direction="vertical" {
-            pane size="40%" name="terminal"
-            pane size="60%" name="claude code" command="zsh" {
-                args "-c" "source ~/dotfiles/zellij/scripts/claude-launcher.sh; exec zsh"
-            }
+    tab name="terminal" {
+        pane
+    }
+    tab name="claude code" focus=true {
+        pane command="zsh" {
+            args "-c" "source ~/dotfiles/zellij/scripts/claude-launcher.sh; exec zsh"
         }
     }
     tab name="docker" {
-        pane name="docker" command="zsh" {
+        pane command="zsh" {
             args "-c" "docker compose up; exec zsh"
         }
     }
