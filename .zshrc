@@ -820,3 +820,13 @@ if [ -d "$FNM_PATH" ]; then
 fi
 
 export TERM=xterm-256color
+
+# ==============================================================================
+# Zellij auto-start (alacritty only)
+# ==============================================================================
+
+# exec しないことで Ctrl+q (Quit) 後に元の zsh へ戻れる
+if [[ -o interactive && -n "$ALACRITTY_WINDOW_ID" && -z "$ZELLIJ" ]] \
+   && command -v zellij >/dev/null 2>&1; then
+  zellij attach --create "alacritty-$$"
+fi
