@@ -1,4 +1,4 @@
-# Coding Principles
+# Comment Principles
 
 ## Comments
 
@@ -23,11 +23,6 @@ and only clutters the surrounding code — never write it.
 
 Do not pad comments to compensate for low-confidence code.
 Communicate uncertainty explicitly in the PR description or response body ("this part is unverified"), not through comment volume.
-
-## docs / README
-
-- Do not write issue references, background stories, or migration history
-- Write only a snapshot of the current spec
 
 ## Language
 
