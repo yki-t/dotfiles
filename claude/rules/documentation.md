@@ -24,6 +24,14 @@ The reader is a future user who does not need the history of changes.
 Does a person who sees this repository for the first time today need this content?
 If not, do not write it. If existing README content violates these rules, do not delete it without instruction.
 
+## Writing Style
+
+- Prioritize brevity over completeness. Slightly under-explained is better than over-explained.
+- One sentence per fact. Do not restate the same point in different words.
+- No preamble, no hedging, no transitional filler.
+- Prefer lists and tables over prose paragraphs.
+- If a sentence survives deletion without losing the spec, delete it.
+
 ## Language
 
 - Japanese: industrial Japanese (産業日本語)
