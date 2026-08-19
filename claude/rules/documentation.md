@@ -8,7 +8,7 @@ The reader is a future user who does not need the history of changes.
 ## Prohibited in README / docs
 
 - Work logs and change history ("added X", "fixed Y", Before/After)
-- Implementation details (line-by-line code explanations, per-function or per-file descriptions, walkthroughs of internal logic)
+- Anything recoverable from the code (line-by-line explanations, per-function or per-file descriptions, restated signatures, type definitions, walkthroughs of internal logic)
 - Verification logs and test results
 - Issue references, task IDs, background stories, migration history
 - Sections that grow with each change (rewrite the README, do not append)
