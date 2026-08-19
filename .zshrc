@@ -792,7 +792,7 @@ cloudflare-access() {
     -H \"X-Auth-Key: \$CLOUDFLARE_API_KEY\" | jq ."
   curl -s "https://api.cloudflare.com/client/v4/user" \
     -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
-    -H "X-Auth-Key: $CLOUDFLARE_API_KEY" | jq .
+    -H "X-Auth-Key: $CLOUDFLARE_API_KEY"
 }
 
 # ==============================================================================
