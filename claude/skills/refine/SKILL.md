@@ -1,7 +1,6 @@
 ---
 name: refine
 description: Audit target areas for consistency, performance, error-handling, security, and fault-tolerance issues, then fix approved findings one at a time with a main-agent review gate and a commit checkpoint per finding
-disable-model-invocation: true
 ---
 
 # refine
