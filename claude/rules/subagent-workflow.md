@@ -77,15 +77,7 @@ If no Suggestions, request user review.
 - If more tasks exist, batch them
 
 ### Output Size
-Sub-agents MUST return only:
-- Changed file paths
-- Commit hash (if committed)
-- Brief summary (max 5 lines)
-
-Prohibited:
-- Returning full file contents
-- Returning full diffs
-- Returning large read results
+Sub-agents return only what the main agent needs to continue: changed file paths, the commit hash if committed, and a summary short enough to read at a glance. File contents, diffs, and large read results stay in the sub-agent; the main agent's context has to last the whole workflow.
 
 ## Notes
 

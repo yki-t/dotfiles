@@ -3,17 +3,15 @@
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-opus-5",
     "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
-    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
-    "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
-    "MAX_THINKING_TOKENS": "31999"
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
   },
   "permissions": {
     "deny": [
       "AskUserQuestion"
     ],
-    "defaultMode": "dontAsk"
+    "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "fable[1m]",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -87,7 +85,6 @@
   "language": "敬体",
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
-  "autoUpdatesChannel": "stable",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "verbose": false,
@@ -97,6 +94,5 @@
   "terminalProgressBarEnabled": true,
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "comment": "claude-fable-5[1m]"
+  "voiceEnabled": true
 }

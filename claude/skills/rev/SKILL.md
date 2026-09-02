@@ -42,11 +42,8 @@ Review a Pull Request from all perspectives and post line comments.
    - Present draft to user
 
 4. **User Approval**
-   - Wait for explicit user approval before posting
-   - User reviews as themselves, so approval is mandatory
-   - Even partial modifications require full approval of final draft
+   - The review is posted under the user's own account, so post nothing until the user approves the final draft in full, including after partial edits
    - Ask if user wants to add a review summary (body)
-   - Do NOT post without approval
 
 5. **Verification**
    - Do NOT trust sub-agent analysis results as-is

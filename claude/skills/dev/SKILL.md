@@ -10,9 +10,7 @@ disable-model-invocation: true
 
 This principle overrides all other rules.
 
-# Code Quality (Mandatory)
-
-These are NOT optional. Violation is equivalent to bugs.
+# Code Quality
 
 ## Consistency
 
@@ -20,11 +18,6 @@ Follow the existing codebase:
 - Naming conventions, directory structure, error handling patterns
 - Use existing utilities (don't reinvent the wheel)
 - Don't introduce new patterns without explicit approval
-
-**Prohibited:**
-- Writing "quick and dirty" code that ignores existing patterns
-- Creating new abstractions when existing ones can be extended
-- Ignoring existing error handling patterns
 
 # Task Classification
 
@@ -63,10 +56,6 @@ Complete the following implementation (no approval needed)
 ```
 
 # Implementation Guidelines
-
-- YAGNI (You Aren't Gonna Need It)
-- KISS (Keep It Simple, Stupid)
-- DRY (Don't Repeat Yourself)
 
 Minimize code:
 - Extend existing code when possible

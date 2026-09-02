@@ -4,34 +4,19 @@
 
 Guidelines for implementing designs using the official Figma MCP server.
 
-## Context Management (Critical)
+## Context Management
 
-Figma MCP tools can return large payloads that flood the context window. Follow these rules strictly:
+Figma MCP tools can return payloads large enough to flood the context window, so fetch in small pieces:
 
-- **For large or unknown-size selections**, start with `get_metadata` (sparse XML) to identify `nodeId`s, then fetch only specific nodes with `get_design_context`. For small, known nodes, `get_design_context` directly is acceptable.
-- **Never fetch an entire page at once.** Break designs into small logical chunks (header, sidebar, card, etc.).
-- **Select the smallest possible node** that covers your needs.
-- **Disable `get_screenshot`** when token limits are tight — screenshots consume significant tokens.
+- For large or unknown-size selections, start with `get_metadata` (sparse XML) to identify `nodeId`s, then fetch only specific nodes with `get_design_context`. For small, known nodes, `get_design_context` directly is acceptable.
+- Fetch a page in logical chunks (header, sidebar, card, etc.) rather than whole, selecting the smallest node that covers the need.
+- Skip `get_screenshot` when token limits are tight; screenshots are expensive.
 - When only design tokens are needed, use `get_variable_defs` instead of `get_design_context`.
-- **Process section-by-section sequentially.** Do not fetch everything upfront.
+- Process section by section instead of fetching everything upfront.
 
-## Available Tools
+## Tool Cost
 
-| Tool | Purpose | Context Cost |
-|------|---------|-------------|
-| `get_metadata` | Sparse XML overview of layer structure | Low |
-| `get_design_context` | Full styled design spec (React+Tailwind by default) | **High** |
-| `get_screenshot` | Visual screenshot of selection | **High** |
-| `get_variable_defs` | Design tokens (colors, spacing, typography) | Low |
-| `get_code_connect_map` | Retrieve component-to-code mappings | Low |
-| `add_code_connect_map` | Create component-to-code mapping | Low |
-| `get_code_connect_suggestions` | Auto-detect component mapping suggestions | Low |
-| `send_code_connect_mappings` | Confirm Code Connect relationships | Low |
-| `create_design_system_rules` | Generate design system context rules | Low |
-| `get_figjam` | FigJam diagram metadata | Medium |
-| `generate_diagram` | Create FigJam diagrams from descriptions | Low |
-| `generate_figma_design` | Convert live web UI into Figma design layers (remote only) | N/A |
-| `whoami` | Verify authenticated user identity (remote only) | Low |
+`get_design_context` and `get_screenshot` are expensive; `get_metadata` and `get_variable_defs` are cheap. Take tool names and parameters from the server's live tool list; it changes between releases.
 
 ## Implementation Workflow
 

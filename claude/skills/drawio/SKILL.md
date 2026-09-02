@@ -178,8 +178,8 @@ https://raw.githubusercontent.com/jgraph/drawio-mcp/main/shared/xml-reference.md
 | Edges not rendering | Edge mxCell is self-closing (no child mxGeometry element) | Every edge must have `<mxGeometry relative="1" as="geometry" />` as a child element |
 | File won't open after export | Incorrect file path or missing file association | Print the absolute file path so the user can open it manually |
 
-## CRITICAL: XML well-formedness
+## XML well-formedness
 
-- **NEVER include ANY XML comments (`<!-- -->`) in the output.** XML comments are strictly forbidden — they waste tokens, can cause parse errors, and serve no purpose in diagram XML.
+- Do not write XML comments (`<!-- -->`): a `--` inside a comment breaks the parser, and comments add nothing the diagram uses
 - Escape special characters in attribute values: `&amp;`, `&lt;`, `&gt;`, `&quot;`
-- Always use unique `id` values for each `mxCell`
+- Use a unique `id` for each `mxCell`

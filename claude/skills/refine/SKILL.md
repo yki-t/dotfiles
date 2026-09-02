@@ -11,9 +11,9 @@ ARGUMENTS specify the target areas (e.g., "API, CMS"). The perspectives are fixe
 
 ## Rules
 
-- Precision over time and token efficiency. Findings are processed strictly one at a time; bundling multiple findings into one implementation step is prohibited, no matter how many findings there are.
+- Precision over time and token efficiency: findings are processed one at a time, because each checkpoint commit keeps the next finding's `git diff` limited to that finding, and the review gate depends on that.
 - Main agent coordinates, verifies, and reviews; research and code edits are delegated to sub-agents. **Exception to the delegation principle: the main agent MUST directly read and review each finding's diff** — this per-finding review gate is the core of this workflow.
-- **git commit is allowed in this workflow** (overrides the global git constraint). Each finding is committed as a checkpoint after passing review. Commit messages follow the global rules: one line, conventional commit format, Japanese. push remains prohibited.
+- git commit is allowed in this workflow even while /dev is active. Each finding is committed as a checkpoint after passing review. Commit messages follow the global rules: one line, conventional commit format, Japanese. push remains prohibited.
 - Follows the global subagent-workflow rules for sub-agent context and output limits. The per-finding main-agent review replaces the per-batch subagents-checker; the final code-reviewer pass remains.
 - Code quality rules from /dev apply: follow existing patterns, extend existing code, YAGNI/KISS/DRY.
 
@@ -51,18 +51,18 @@ Record the current commit hash as the workflow base before starting.
 
 Process approved findings **one at a time**, in severity order (High → Medium → Low; structural refactors that absorb other findings go first among equals). For each finding:
 
-1. **Delegate implementation.** One finding per step — never combine findings. A single finding may be delegated to one sub-agent or split across multiple (parallel allowed only within the finding; agents in the same step must edit disjoint files). Each prompt MUST include:
+1. **Delegate implementation.** One finding per step. A single finding may be delegated to one sub-agent or split across multiple (parallel allowed only within the finding; agents in the same step must edit disjoint files). Each prompt MUST include:
    - "Complete the following implementation (no approval needed)"
    - The finding's ID, description, and locations — state that line numbers are approximations and current code must be read
    - Project context: existing patterns to follow, and helpers/components introduced by earlier findings that MUST be used
    - The compile/lint command to run before finishing (include required dummy env vars)
-   - Output limits: changed file paths + summary of max 5 lines, including the outcome of any judgment calls; no file dumps or diffs
+   - Output limits: changed file paths and a summary short enough to read at a glance, including the outcome of any judgment calls; no file dumps or diffs
 2. **Verify the build.** Main agent runs the combined compile/lint check for all affected crates/packages.
 3. **Review gate.** `git add -N` any new files, then the main agent directly reads `git diff` (which contains only this finding, thanks to the previous checkpoint) and checks: the finding's requirements are met, existing patterns are followed, no unrelated changes leaked in, no behavior regressions beyond what the finding requires.
 4. **Fix loop.** On problems, re-delegate the fix and re-run steps 2-3. On justified deviations from the literal finding, record the reasoning instead of forcing a change.
 5. **Checkpoint commit.** After the review passes, commit this finding's changes (one line, conventional, Japanese; reference the finding in the message). This keeps the next finding's `git diff` clean.
 
-Then move to the next finding. Do not skip, reorder without reason, or batch to save time.
+Then move to the next finding.
 
 ## Phase 4: Final Review
 

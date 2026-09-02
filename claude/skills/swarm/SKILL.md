@@ -13,16 +13,11 @@ hooks:
 # swarm
 
 ## Rules
-- **Step compliance is the highest priority rule.** Each step MUST be completed before proceeding to the next. Skipping or reordering steps is prohibited.
-- Sub-agents MUST report which step they are executing.
-- If a sub-agent does not follow the step order, main agent MUST stop and re-delegate.
-- Main agent MUST NOT edit code directly. All code edits MUST be delegated to sub-agents.
-- Main agent's role is planning and coordination. Detailed work (research, file reading, implementation, review) MUST be delegated to sub-agents.
-- Main agent should maintain only high-level understanding. Do not read source files directly.
-- This workflow takes priority over subagent-workflow.
-- Implementation sub-agents MUST be spawned with `isolation: "worktree"` to ensure file isolation. This prevents sub-agents from editing the main working tree.
-- Sub-agents operating in worktrees are ALLOWED to run `git add` and `git commit`. The main agent is ALLOWED to run `git merge` for integrating worktree branches. This overrides the global git constraint in CLAUDE.md.
-- When a sub-agent's work fails gates or encounters problems, the main agent MUST either discard the worktree and re-delegate, or instruct the sub-agent to fix. Never merge or adopt work that has not passed all gates.
+- Complete each step before starting the next; the merge protocol below depends on the order. Sub-agents report the step they are executing, and a sub-agent that departs from the step order is stopped and re-delegated.
+- The main agent plans, coordinates, and merges. Research, file reading, implementation, and review are delegated to sub-agents so the main agent's context stays small enough for the whole workflow; the main agent does not edit code or read source files directly.
+- This workflow replaces the subagent-workflow rules while it runs.
+- Implementation sub-agents run with `isolation: "worktree"`, which keeps their edits out of the main working tree. Inside a worktree a sub-agent may run `git add` and `git commit`, and the main agent runs `git merge` to integrate worktree branches, even while /dev is active.
+- Work that has not passed both gates is never merged: discard the worktree and re-delegate, or instruct the sub-agent to fix it.
 
 ## Project Checks
 - Project checks = build, lint, and test commands defined in the project (e.g., Makefile, package.json scripts, CLAUDE.md).
@@ -46,7 +41,10 @@ hooks:
         4. If Gate A or Gate B fails → return to substep 1. Repeat until all gates pass.
         5. Stage and commit the changes → **Prohibited unless Gate A and Gate B have passed**
         6. Report worktree branch name and change summary to the main agent
-3. Merge worktree branches to the base branch one at a time. Before each merge, verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`. If conflicts exist, instruct the sub-agent to rebase onto HEAD and resolve conflicts in their worktree before retrying the merge.
+3. Merge worktree branches to the base branch one at a time. For each branch:
+    1. Verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`
+    2. Instruct the sub-agent to rebase the worktree branch onto HEAD in their worktree. If step 1 detected conflicts, the sub-agent must resolve them during the rebase.
+    3. Merge with `git merge --ff-only <worktree-branch>` to ensure linear history with no merge commits
 4. Remove git worktrees and their branches
 5. Review changes with sub-agents by comparing against the Plan and list issues
 6. Handle issues concurrently with sub-agents (each spawned with `isolation: "worktree"`):
@@ -57,7 +55,10 @@ hooks:
         4. If Gate A or Gate B fails → return to substep 1. Repeat until all gates pass.
         5. Stage and commit the changes → **Prohibited unless Gate A and Gate B have passed**
         6. Report worktree branch name and change summary to the main agent
-7. Merge worktree branches to the base branch one at a time. Before each merge, verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`. If conflicts exist, instruct the sub-agent to rebase onto HEAD and resolve conflicts in their worktree before retrying the merge.
+7. Merge worktree branches to the base branch one at a time. For each branch:
+    1. Verify mergeability against HEAD with `git merge-tree --write-tree HEAD <worktree-branch>`
+    2. Instruct the sub-agent to rebase the worktree branch onto HEAD in their worktree. If step 1 detected conflicts, the sub-agent must resolve them during the rebase.
+    3. Merge with `git merge --ff-only <worktree-branch>` to ensure linear history with no merge commits
 8. Remove git worktrees, their branches, and their containers if any exist
 9. Review merged changes with code-reviewer by comparing against the Plan
 10. If there are issues, go to step 6
