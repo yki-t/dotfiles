@@ -11,9 +11,13 @@ ln -snf $DIR/.vimrc ~/
 ln -snf $DIR/.zprofile ~/
 ln -snf $DIR/.zshrc ~/
 ln -snf $DIR/alacritty/alacritty.arch.toml ~/.alacritty.toml
-ln -snf $DIR/claude/settings.json ~/.claude/
-ln -snf $DIR/claude/CLAUDE.md ~/.claude/
-ln -snf $DIR/claude/skills ~/.claude/
-ln -snf $DIR/claude/rules ~/.claude/
-ln -snf $DIR/claude/agents ~/.claude/
+mkdir -p ~/.claude ~/.codex ~/.agents
+ln -snf $DIR/agents/llms/claude/settings.json ~/.claude/
+ln -snf $DIR/agents/llms/claude/CLAUDE.md ~/.claude/
+ln -snf $DIR/agents/skills ~/.claude/
+ln -snf $DIR/agents/rules ~/.claude/
+ln -snf $DIR/agents/agents ~/.claude/
+ln -snf $DIR/agents/skills ~/.agents/
+ln -snf $DIR/agents/hooks/hooks.json ~/.codex/
+ln -snf $DIR/agents/llms/codex/config.toml ~/.codex/
 ln -snf $DIR/zellij ~/.config/zellij

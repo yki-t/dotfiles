@@ -776,9 +776,9 @@ commit() {
 # Swarm mode - autonomous multi-agent workflow
 swarm() {
   command claude --dangerously-skip-permissions \
-    --append-system-prompt "$(cat ~/dotfiles/claude/swarm/prompt.txt)" \
+    --append-system-prompt "$(cat ~/dotfiles/agents/llms/claude/swarm/prompt.txt)" \
     --setting-sources "user" \
-    --settings ~/dotfiles/claude/swarm/settings.json \
+    --settings ~/dotfiles/agents/llms/claude/swarm/settings.json \
     "$@"
 }
 

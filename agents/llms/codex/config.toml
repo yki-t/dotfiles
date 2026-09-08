@@ -1,0 +1,30 @@
+model_reasoning_effort = "medium"
+
+approval_policy = "on-request"
+sandbox_mode = "danger-full-access"
+model = "gpt-6-astra"
+
+[features]
+image_generation = false
+apps = false
+
+[tui]
+vim_mode_default = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 2
+gpt-6-astra = 4
+
+[hooks.state]
+
+[hooks.state."/home/yuki/.codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:7edfbfe00891ddb5fa406061594ce0d6c358dd3a5ce8d533f4b11b5ac7fbe046"
+
+[hooks.state."/home/yuki/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:272eab0e45c422a80accf1f7905ff3ec53c3d129ea731a4b3ce5d88da8e443b2"
+
+[hooks.state."/home/yuki/.codex/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:374efdb6d99437f1b646fb00c2d6dc25e5be9d982a04459b12d9b230bb90eb85"
+
+[hooks.state."/home/yuki/.codex/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:aee175dc442bb2461065884ed112d4298a8dd17a6303c136b5f80990ccc2fad9"

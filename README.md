@@ -10,11 +10,10 @@ cd ~/dotfiles
 bash link.sh
 ```
 
-Claude Code の hook を使用する場合は別途ビルドが必要。
+Codex 用の生成物は `agents/build.sh` で作成する。
 
 ```bash
-cd ~/dotfiles/claude/hook-src
-cargo build --release
+bash agents/build.sh
 ```
 
 ## 構成
@@ -22,8 +21,8 @@ cargo build --release
 ```
 .
 ├── alacritty/          # Alacritty (プラットフォーム別設定)
-├── claude/             # Claude Code (hooks, skills, rules, agents)
-│   └── hook-src/       # hook (Rust)
+├── agents/             # Claude Code / Codex 共通設定 (rules, skills, agents, hooks)
+│   └── llms/           # ツール固有設定 (claude, codex)
 ├── scripts/            # ユーティリティスクリプト
 ├── windows/            # Windows 固有設定 (PowerShell, AutoHotkey, Windows Terminal)
 ├── zellij/             # Zellij
