@@ -7,6 +7,10 @@ model = "gpt-6-astra"
 [features]
 image_generation = false
 apps = false
+fast_mode = false
+
+[agents]
+default_subagent_model = "gpt-5.6-sol"
 
 [tui]
 vim_mode_default = true
