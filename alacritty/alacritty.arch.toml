@@ -45,6 +45,11 @@ action = "None"
 key = "Space"
 mods = "Control|Shift"
 
+[[keyboard.bindings]]
+key = "["
+mods = "Control"
+chars = "\u001b"
+
 [window]
 opacity = 0.85
 
