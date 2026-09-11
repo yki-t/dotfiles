@@ -1,0 +1,8 @@
+#!/bin/sh
+# Codex writes per-repository trust entries into config.toml; they name private
+# projects, so they must not reach the public repository.
+exec awk '
+/^\[projects(\.|\])/ { skip = 1; next }
+/^\[/               { skip = 0 }
+!skip
+'

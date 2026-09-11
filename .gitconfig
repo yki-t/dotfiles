@@ -21,3 +21,7 @@
 			else echo 'No remote branch found. skip.'; fi; \
 		done; \
 		git checkout \"$current\"; }; f"
+
+[filter "codex-config"]
+	clean = ~/dotfiles/scripts/codex-config-clean
+	required = true
