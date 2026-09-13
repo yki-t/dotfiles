@@ -11,7 +11,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "fable[1m]",
+  "model": "claude-fable-5-1[1m]",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -94,6 +94,7 @@
     "frontend-design@claude-plugins-official": true
   },
   "language": "敬体",
+  "feedbackDrafts": "off",
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
@@ -105,6 +106,5 @@
   "terminalProgressBarEnabled": true,
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "feedbackDrafts": "off"
+  "voiceEnabled": true
 }
