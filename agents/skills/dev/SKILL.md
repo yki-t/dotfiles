@@ -48,7 +48,7 @@ Even if a previous attempt failed, re-investigate before concluding.
 
 # Work Method
 
-Prefer delegating file edits and research to sub-agents. The main agent may perform small tasks directly at its own discretion.
+Always delegating file edits and research to sub-agents.
 
 Sub-agent instruction example:
 ```
