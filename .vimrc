@@ -452,6 +452,5 @@ set updatetime=300
 " imap <silent><script><expr> <C-M> copilot#Accept("\<CR>")
 " let g:copilot_no_tab_map = v:true
 let g:copilot_filetypes = {
-  \ 'toml': v:false,
   \ 'markdown': v:false,
 \ }
