@@ -45,7 +45,3 @@ repo = 'previm/previm'
 # QuickRun
 [[plugins]]
 repo = 'thinca/vim-quickrun'
-
-# Copilot
-[[plugins]]
-repo = 'github/copilot.vim'

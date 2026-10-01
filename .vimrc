@@ -447,10 +447,3 @@ set updatetime=300
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved
 " set signcolumn=yes
-
-" C-M is CR, C-I is Tab so ignore them
-" imap <silent><script><expr> <C-M> copilot#Accept("\<CR>")
-" let g:copilot_no_tab_map = v:true
-let g:copilot_filetypes = {
-  \ 'markdown': v:false,
-\ }
