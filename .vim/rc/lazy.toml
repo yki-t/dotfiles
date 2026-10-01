@@ -1,4 +1,55 @@
-# 言語別プラグイン（遅延読み込み）
+# 遅延読み込みプラグイン
+
+# Unite
+[[plugins]]
+repo = 'Shougo/unite.vim'
+on_cmd = ['Unite', 'UniteWithCurrentDir', 'UniteWithBufferDir', 'UniteWithProjectDir', 'UniteWithCursorWord', 'UniteWithInput', 'UniteResume']
+
+[[plugins]]
+repo = 'Shougo/unite-outline'
+on_source = ['unite.vim']
+
+# Shell
+[[plugins]]
+repo = 'Shougo/vimshell'
+on_cmd = ['VimShell', 'VimShellInteractive', 'VimShellPop', 'VimShellTab', 'VimShellCreate', 'VimShellExecute', 'VimShellCurrentDir', 'VimShellBufferDir']
+
+# 括弧
+[[plugins]]
+repo = 'tpope/vim-surround'
+on_map = { n = ['ds', 'cs', 'cS', 'ys', 'yS'], x = ['S', 'gS'], i = ['<C-S>', '<C-G>s', '<C-G>S'] }
+
+# 文字の入れ替え
+[[plugins]]
+repo = 'kana/vim-operator-user'
+
+[[plugins]]
+repo = 'kana/vim-operator-replace'
+depends = ['vim-operator-user']
+on_map = { nxo = '<Plug>(operator-replace)' }
+
+# MD 記法
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = ['markdown']
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+on_cmd = ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']
+on_map = { nx = '<Plug>(openbrowser-' }
+
+[[plugins]]
+repo = 'previm/previm'
+depends = ['open-browser.vim']
+on_cmd = ['PrevimOpen']
+
+# QuickRun
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+on_cmd = ['QuickRun']
+on_map = { n = '<Plug>(quickrun' }
+
+# 言語別プラグイン
 
 # TypeScript/JavaScript
 [[plugins]]
