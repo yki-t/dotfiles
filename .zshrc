@@ -830,3 +830,6 @@ if [[ -o interactive && -n "$ALACRITTY_WINDOW_ID" && -z "$ZELLIJ" ]] \
    && command -v zellij >/dev/null 2>&1; then
   zellij attach --create "alacritty-$$"
 fi
+
+# Hermes Agent command
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac

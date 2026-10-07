@@ -293,3 +293,5 @@ paths+=":${HOME}/.local/bin"
 
 # Load additional local settings if available
 [[ -f "$HOME/.append.sh" ]] && source "$HOME/.append.sh"
+# Hermes Agent command
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
