@@ -101,10 +101,12 @@
   "editorMode": "vim",
   "verbose": false,
   "autoCompactEnabled": true,
+  "idleCompaction": false,
   "switchModelsOnFlag": false,
   "fileCheckpointingEnabled": false,
   "terminalProgressBarEnabled": true,
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "autoContinueAtUsageLimit": false
 }
