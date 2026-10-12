@@ -1,0 +1,10 @@
+skills:
+  external_dirs:
+    - ~/.agents/skills
+    - __AGENTS_DIR__/llms/hermes/skills
+  auto_load:
+    - rules
+hooks:
+  pre_llm_call:
+    - command: __AGENTS_DIR__/hooks/hermes-date.sh
+      timeout: 5

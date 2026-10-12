@@ -10,7 +10,7 @@ cd ~/dotfiles
 bash link.sh
 ```
 
-Codex 用の生成物は `agents/build.sh` で作成する。
+Codex, Hermes 用の生成物は `agents/build.sh` で作成する。
 
 ```bash
 bash agents/build.sh
@@ -21,8 +21,8 @@ bash agents/build.sh
 ```
 .
 ├── alacritty/          # Alacritty (プラットフォーム別設定)
-├── agents/             # Claude Code / Codex 共通設定 (rules, skills, agents, hooks)
-│   └── llms/           # ツール固有設定 (claude, codex)
+├── agents/             # Claude Code / Codex / Hermes 共通設定 (rules, skills, agents, hooks)
+│   └── llms/           # ツール固有設定 (claude, codex, hermes)
 ├── scripts/            # ユーティリティスクリプト
 ├── windows/            # Windows 固有設定 (PowerShell, AutoHotkey, Windows Terminal)
 ├── zellij/             # Zellij

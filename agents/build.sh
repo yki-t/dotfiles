@@ -59,3 +59,71 @@ for f in "$DIR"/skills/*/SKILL.md; do
     rmdir "$skill_dir/agents" 2>/dev/null || true
   fi
 done
+
+# Hermes has no rules directory and no subagent definition files: both become skills under
+# llms/hermes/skills, and skills.auto_load pins the rules skill into every session's system prompt.
+hermes_skills="$DIR/llms/hermes/skills"
+rm -rf "$hermes_skills"
+mkdir -p "$hermes_skills/rules"
+{
+  echo '---'
+  echo 'name: rules'
+  echo 'description: "Shared rules for every session. Loaded via skills.auto_load; no manual invocation needed."'
+  echo '---'
+  for f in "$DIR"/rules/*.md; do
+    cat "$f"
+    echo
+  done
+  cat "$DIR/llms/hermes/rules.md"
+} > "$hermes_skills/rules/SKILL.md"
+for f in "$DIR"/agents/*.md; do
+  name="$(sed -n 's/^name: *//p' "$f" | head -1)"
+  description="$(sed -n 's/^description: *//p' "$f" | head -1)"
+  body="$(awk 'f>=2{print} /^---$/{f++}' "$f" | sed '/./,$!d')"
+  mkdir -p "$hermes_skills/$name"
+  {
+    echo '---'
+    echo "name: $name"
+    echo "description: \"${description//\"/\\\"}\""
+    echo '---'
+    echo "$body"
+  } > "$hermes_skills/$name/SKILL.md"
+done
+
+# config.yaml is owned by Hermes (it rewrites the file itself), so only the keys in llms/hermes/config.yaml
+# are merged in, through Hermes's own ruamel round-trip loader to keep the user's comments intact.
+HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
+if command -v hermes >/dev/null && [[ -f "$HERMES_HOME/config.yaml" ]]; then
+  hermes_py="$(hermes --print-runtime-command | jq -r '.[0]')"
+  hermes_root="$(hermes --version | sed -n 's/^Install directory: *//p')"
+  # The heredoc is the script's stdin, so the fragment travels in an env var.
+  HERMES_FRAGMENT="$(sed "s|__AGENTS_DIR__|$DIR|g" "$DIR/llms/hermes/config.yaml")" \
+    HERMES_ROOT="$hermes_root" HERMES_CONFIG="$HERMES_HOME/config.yaml" "$hermes_py" -I - <<'PY'
+import os, sys, tempfile
+sys.path.insert(0, os.environ["HERMES_ROOT"])
+import hermes_bootstrap  # noqa: F401  puts Hermes's venv (ruamel) on sys.path
+import hermes_yaml
+
+yaml = hermes_yaml.roundtrip_yaml()
+path = os.environ["HERMES_CONFIG"]
+with open(path, encoding="utf-8") as fh:
+    cfg = yaml.load(fh) or {}
+fragment = yaml.load(os.environ["HERMES_FRAGMENT"])
+
+def merge(dst, src):
+    for key, value in src.items():
+        if isinstance(value, dict) and isinstance(dst.get(key), dict):
+            merge(dst[key], value)
+        else:
+            dst[key] = value
+
+merge(cfg, fragment)
+fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), prefix=".config.yaml.")
+with os.fdopen(fd, "w", encoding="utf-8") as fh:
+    yaml.dump(cfg, fh)
+os.chmod(tmp, os.stat(path).st_mode & 0o777)
+os.replace(tmp, path)
+PY
+else
+  echo "hermes: not installed or $HERMES_HOME/config.yaml missing; skipped" >&2
+fi
