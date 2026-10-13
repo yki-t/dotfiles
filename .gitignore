@@ -5,3 +5,4 @@
 lastpwd
 .claude/
 agents/hooks/cc-rein/
+__pycache__/
