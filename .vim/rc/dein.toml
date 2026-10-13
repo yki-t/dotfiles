@@ -7,6 +7,18 @@ repo = 'ConradIrwin/vim-bracketed-paste'
 # File System（g:vimfiler_as_default_explorer が起動時の BufEnter フックに依存）
 [[plugins]]
 repo = 'Shougo/vimfiler'
+# Vim 9.2 以降は sandbox 内の readfile() が E48 になるため、キャッシュの読み込みを sandbox の外に出す
+hook_post_update = '''
+  let view = g:dein#plugin.path .. '/autoload/vimfiler/view.vim'
+  let lines = readfile(view)
+  let i = match(lines, 'sandbox let files = eval(s:Cache.readfile(')
+  if i >= 0
+    call remove(lines, i, i + 1)
+    call insert(lines, '    sandbox let files = eval(lines[0])', i)
+    call insert(lines, '    let lines = s:Cache.readfile(cache_dir, b:vimfiler.current_dir)', i)
+    call writefile(lines, view)
+  endif
+'''
 
 # Shell
 [[plugins]]
