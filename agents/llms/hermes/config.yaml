@@ -8,3 +8,5 @@ hooks:
   pre_llm_call:
     - command: __AGENTS_DIR__/hooks/hermes-date.sh
       timeout: 5
+compression:
+  enabled: false
