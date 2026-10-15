@@ -12,7 +12,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5-1",
+  "model": "fable",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -104,10 +104,10 @@
   "autoCompactEnabled": true,
   "idleCompaction": false,
   "switchModelsOnFlag": false,
+  "autoContinueAtUsageLimit": false,
   "fileCheckpointingEnabled": false,
   "terminalProgressBarEnabled": true,
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "autoContinueAtUsageLimit": false
+  "voiceEnabled": true
 }
