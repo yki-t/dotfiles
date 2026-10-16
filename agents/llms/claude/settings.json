@@ -1,4 +1,5 @@
 {
+  "tui": "fullscreen",
   "cleanupPeriodDays": 99999,
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-opus-5-5",
@@ -20,6 +21,10 @@
           {
             "type": "command",
             "command": "date '+[%Y-%m-%d (%a) %H:%M:%S %Z]' | jq -Rc '{hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:.}}'"
+          },
+          {
+            "type": "command",
+            "command": "~/.cargo/bin/cc-rein hook"
           }
         ]
       }
