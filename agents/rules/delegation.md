@@ -8,7 +8,7 @@ For edits, follow Sub-agent Workflow. This file covers everything else.
 ## The main agent does
 
 - Decides what to do, in what order, and asks the user for approval.
-- Runs `git status`, `git diff`, `git add`, `git commit`.
+- Runs `git status` and `git add`. The user commits; an agent commits only when a skill's steps say so.
 - Reports to the user.
 
 ## The main agent delegates
@@ -17,6 +17,7 @@ For edits, follow Sub-agent Workflow. This file covers everything else.
 |---|---|
 | Any question that needs a search, a file read, a git history lookup, a log query, or a remote command | `investigator` |
 | Reading a known file, line range, or pattern | `file-reader`, through `investigator` |
+| Reading a diff | `subagents-checker` (edit requirements), `code-reviewer` (review), `investigator` (other questions) |
 | Waiting for a CI run, a background task, or a deploy | `Monitor` tool, or a sub-agent |
 
 There is no minimum size. Delegate a single lookup too.
@@ -27,5 +28,8 @@ Each main-agent turn is charged the whole context of that session. A search that
 takes 5 turns in the main agent costs 5 times the context; the same search in a
 sub-agent costs 1 turn plus the answer.
 
-cc-rein blocks these commands in the main agent. A blocked call still costs a
-turn, so delegate first instead of running the command and waiting for the block.
+In the main agent, cc-rein blocks search and read commands (grep, rg, find, fd,
+sed, cat, awk, wc, tree), `git log`, `git show`, `git blame`, `git diff`,
+`git commit`, the Read tool, the Edit and Write tools, `sleep`, `gh run watch`, and `gh pr checks`.
+A blocked call still costs a turn, so delegate first instead of running the
+command and waiting for the block.

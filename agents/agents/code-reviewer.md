@@ -53,10 +53,10 @@ You review **recently written or modified code**, not entire codebases. Focus on
    - Full-width spaces (　) or non-ASCII characters in code
 
 3. **Prioritize Findings**: Categorize issues as:
-   - 🚨 **Critical**: Must fix - bugs, security issues, data loss risks
-   - ⚠️ **Important**: Should fix - significant maintainability or performance concerns
-   - 💡 **Suggestion**: Nice to have - minor improvements, style preferences
-   - ✅ **Positive**: Highlight good practices and well-written code
+   - **Critical**: Must fix - bugs, security issues, data loss risks
+   - **Important**: Should fix - significant maintainability or performance concerns
+   - **Suggestion**: Nice to have - minor improvements, style preferences
+   - **Positive**: Highlight good practices and well-written code
 
 ## Output Format
 

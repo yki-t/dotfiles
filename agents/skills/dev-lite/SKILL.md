@@ -49,7 +49,11 @@ Even if a previous attempt failed, re-investigate before concluding.
 # Work Method
 
 Do all research and file edits yourself.
-Do not start sub-agents, including `code-reviewer` and `subagents-checker`. This overrides the sub-agent workflow rules.
+Do not start sub-agents, including `code-reviewer` and `subagents-checker`. This overrides subagent-workflow.md and delegation.md.
+
+# Exit
+
+When the user ends dev-lite mode, run `cc-rein skill end` with Bash.
 
 # Implementation Guidelines
 

@@ -48,7 +48,7 @@ Even if a previous attempt failed, re-investigate before concluding.
 
 # Work Method
 
-Always delegating file edits and research to sub-agents.
+Always delegating file edits and research to sub-agents. Delegate research to `investigator`; it reads files through `file-reader`.
 
 Sub-agent instruction example:
 ```

@@ -1,6 +1,6 @@
 ---
 name: refine
-description: Audit target areas for consistency, performance, error-handling, security, and fault-tolerance issues, then fix approved findings one at a time with a main-agent review gate and a commit checkpoint per finding
+description: Audit target areas for consistency, performance, error-handling, security, and fault-tolerance issues, then fix approved findings one at a time with a subagents-checker review gate and a commit checkpoint per finding
 ---
 
 # refine
@@ -12,9 +12,9 @@ ARGUMENTS specify the target areas (e.g., "API, CMS"). The perspectives are fixe
 ## Rules
 
 - Precision over time and token efficiency: findings are processed one at a time, because each checkpoint commit keeps the next finding's `git diff` limited to that finding, and the review gate depends on that.
-- Main agent coordinates, verifies, and reviews; research and code edits are delegated to sub-agents. **Exception to the delegation principle: the main agent MUST directly read and review each finding's diff** — this per-finding review gate is the core of this workflow.
+- Main agent coordinates and verifies; research, code edits, and diff review are delegated to sub-agents. The main agent does not run `git diff`.
 - git commit is allowed in this workflow even while /dev is active. Each finding is committed as a checkpoint after passing review. Commit messages follow the global rules: one line, conventional commit format, Japanese. push remains prohibited.
-- Follows the global subagent-workflow rules for sub-agent context and output limits. The per-finding main-agent review replaces the per-batch subagents-checker; the final code-reviewer pass remains.
+- Follows the global subagent-workflow rules for sub-agent context and output limits. subagents-checker runs once per finding instead of once per batch; the final code-reviewer pass remains.
 - Code quality rules from /dev apply: follow existing patterns, extend existing code, YAGNI/KISS/DRY.
 
 ## Phase 1: Audit (research — no approval needed)
@@ -58,7 +58,7 @@ Process approved findings **one at a time**, in severity order (High → Medium 
    - The compile/lint command to run before finishing (include required dummy env vars)
    - Output limits: changed file paths and a summary short enough to read at a glance, including the outcome of any judgment calls; no file dumps or diffs
 2. **Verify the build.** Main agent runs the combined compile/lint check for all affected crates/packages.
-3. **Review gate.** `git add -N` any new files, then the main agent directly reads `git diff` (which contains only this finding, thanks to the previous checkpoint) and checks: the finding's requirements are met, existing patterns are followed, no unrelated changes leaked in, no behavior regressions beyond what the finding requires.
+3. **Review gate.** `git add -N` any new files, then spawn `subagents-checker` with the finding's requirements. Its `git diff` contains only this finding, thanks to the previous checkpoint. Also have it check: existing patterns are followed, no unrelated changes leaked in, no behavior regressions beyond what the finding requires. Proceed only on PASS.
 4. **Fix loop.** On problems, re-delegate the fix and re-run steps 2-3. On justified deviations from the literal finding, record the reasoning instead of forcing a change.
 5. **Checkpoint commit.** After the review passes, commit this finding's changes (one line, conventional, Japanese; reference the finding in the message). This keeps the next finding's `git diff` clean.
 
@@ -78,4 +78,4 @@ Lead with the outcome (all N findings done, review verdict, committed as N check
 3. Justified exceptions (findings intentionally deviating from the literal description, with reasons)
 4. Review Suggestions requiring the user's judgment
 
-Ask the user to review the commits.
+Ask the user to review the commits. Fixes the user asks for go through the Phase 3 review gate and checkpoint commit. Run `cc-rein skill end` with Bash after the user accepts the commits.

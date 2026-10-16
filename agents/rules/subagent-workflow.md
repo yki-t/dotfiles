@@ -2,7 +2,6 @@
 
 ## Scope
 
-This workflow is an exception to the "no code edits beyond agreed scope" rule.
 Follow this workflow when using sub-agents that edit code.
 
 ## Workflow
@@ -77,7 +76,7 @@ If no Suggestions, request user review.
 - If more tasks exist, batch them
 
 ### Output Size
-Sub-agents return only what the main agent needs to continue: changed file paths, the commit hash if committed, and a summary short enough to read at a glance. File contents, diffs, and large read results stay in the sub-agent; the main agent's context has to last the whole workflow.
+Sub-agents return only what the main agent needs to continue: changed file paths and a summary short enough to read at a glance. File contents, diffs, and large read results stay in the sub-agent; the main agent's context has to last the whole workflow.
 
 ## Notes
 
