@@ -820,6 +820,7 @@ if [ -d "$FNM_PATH" ]; then
 fi
 
 export TERM=xterm-256color
+export CLAUDE_CODE_TMPDIR="$HOME/.claude/tmp-dir"
 
 # ==============================================================================
 # Zellij auto-start (alacritty only)
