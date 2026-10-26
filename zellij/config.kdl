@@ -48,6 +48,8 @@ keybinds clear-defaults=true {
         bind "j" { GoToNextTab; }
         bind "k" { GoToPreviousTab; }
         bind "l" { GoToNextTab; }
+        bind "H" { MoveTab "left"; }
+        bind "L" { MoveTab "right"; }
         bind "n" { NewTab; SwitchToMode "normal"; }
         bind "r" { SwitchToMode "renametab"; TabNameInput 0; }
         bind "s" { ToggleActiveSyncTab; SwitchToMode "normal"; }
