@@ -2,7 +2,6 @@
 name: pr
 description: Create a Pull Request against a specified base branch
 argument-hint: <base-branch>
-disable-model-invocation: true
 ---
 
 # pull request
