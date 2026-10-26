@@ -773,6 +773,43 @@ commit() {
   rm -f "$tmpfile"
 }
 
+# AI-powered git branch creation from the uncommitted changes on the current branch
+branch() {
+  local diff st
+  st="$(git status --short)"
+  diff="$(git diff HEAD)"
+
+  if [[ -z "$diff" && -z "$st" ]]; then
+    echo "No changes found."
+    return 1
+  fi
+
+  echo -n "Generating branch name..."
+
+  local prompt_text name branches
+  branches="$(git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads refs/remotes | head -20)"
+  prompt_text="Please generate a git branch name based on the diff below. "
+  prompt_text+="Output only the branch name on a single line, nothing else. "
+  prompt_text+="Use lowercase kebab-case English words with a type prefix such as feat/, fix/, docs/, refactor/, chore/. "
+  prompt_text+="Keep it short (at most 5 words after the prefix) and summarize the intent of the changes. "
+  prompt_text+="If the existing branch names show a consistent style, follow that style. \n"
+  prompt_text+="[existing branches]\n$branches\n"
+  prompt_text+="[status]\n$st\n"
+  prompt_text+="[diff]\n$diff"
+
+  name="$(echo "$prompt_text" | ask | tr -d '`' | sed -n '/[^[:space:]]/{s/^[[:space:]]*//;s/[[:space:]]*$//;p;q}')"
+  echo
+
+  if [[ -z "$name" ]]; then
+    err "Failed to generate a branch name."
+    return 1
+  fi
+  if ! git check-ref-format --branch "$name" >/dev/null; then
+    return 1
+  fi
+  git switch -c "$name"
+}
+
 # Swarm mode - autonomous multi-agent workflow
 swarm() {
   command claude --dangerously-skip-permissions \
