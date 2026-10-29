@@ -33,7 +33,7 @@ Implement fixes for review comments and post responses.
 4. **Post Responses**
    - User pushes commits
    - Post all replies using `gh api`
-   - Run `cc-rein skill end` with Bash
+   - Run `cc-rein skill end rfix` with Bash
 
 ## API Call Format
 

@@ -53,7 +53,7 @@ Do not start sub-agents, including `code-reviewer` and `subagents-checker`. This
 
 # Exit
 
-When the user ends dev-lite mode, run `cc-rein skill end` with Bash.
+When the user ends dev-lite mode, run `cc-rein skill end dev-lite` with Bash.
 
 # Implementation Guidelines
 

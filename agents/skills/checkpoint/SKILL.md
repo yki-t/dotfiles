@@ -55,4 +55,4 @@ Lead with the outcome (all N tasks done, review verdict, committed as N checkpoi
 3. Justified exceptions (tasks intentionally deviating from the literal description, with reasons)
 4. Review Suggestions requiring the user's judgment
 
-Ask the user to review the commits. Fixes the user asks for go through the Phase 1 review gate and checkpoint commit. Run `cc-rein skill end` with Bash after the user accepts the commits.
+Ask the user to review the commits. Fixes the user asks for go through the Phase 1 review gate and checkpoint commit. Run `cc-rein skill end checkpoint` with Bash after the user accepts the commits.

@@ -17,4 +17,4 @@ Research, file reads, edits, and sub-agent use follow the default judgment of Cl
 
 # Exit
 
-When the user ends naive mode, run `cc-rein skill end` with Bash.
+When the user ends naive mode, run `cc-rein skill end naive` with Bash.
