@@ -64,8 +64,8 @@ Minimize code:
 # Constraints
 
 ## git
-- Edits prohibited (commit, push, pull, checkout, merge, rebase, etc.)
-- git add allowed
+- commit and push allowed
+- Other edits prohibited (pull, checkout, merge, rebase, etc.)
 - Read operations allowed
 - gh allowed
 

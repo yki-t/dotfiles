@@ -7,6 +7,7 @@
 - Conventional commit format (e.g., feat:, fix:, docs:, refactor:)
 - In Japanese (English technical terms allowed)
 - Concise summary of key points
+- Follow the style of the recent commits (`git log --oneline -10`) when they show a consistent style
 
 ### Content
 - State the intent of the change, not a narration of the diff (no file lists, no mechanical restatement)
