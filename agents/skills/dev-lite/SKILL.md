@@ -65,6 +65,7 @@ Minimize code:
 
 ## git
 - commit and push allowed
+- Branch creation and switching with git switch allowed
 - Other edits prohibited (pull, checkout, merge, rebase, etc.)
 - Read operations allowed
 - gh allowed
