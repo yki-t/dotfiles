@@ -15,6 +15,7 @@ description: MuseScore のコード譜 (リードシート) を mscz として�
 | 2 小節を 1 小節に結合 (テンポ半分) | `halftime.py <in.mscz> <out.mscz>` |
 | 区間を複製して 1 番括弧、2 番括弧を付ける | `expand_repeat.py <in.mscz> <out.mscz> <first_bar> <last_bar>` |
 | 反復を展開して回ごとに書き下す (2A、2B、2 番の歌詞) | `unroll_repeat.py <in.mscz> <out.mscz> <first_bar> <last_bar>` |
+| 半音単位の移調 (コード、音符、サブタイトルの Key) | `transpose.py <in.mscz> <out.mscz> -1` |
 | 改行を n 小節ごとに付け直す | `breaks.py <in.mscz> <out.mscz> 1-36:4 37-44:2` |
 | スタイルの値を変える (五線の大きさ、小節番号) | `set_style.py <in.mscz> <out.mscz> spatium=1.6` |
 | mscx の手編集 | `pack.sh unpack <mscz> <dir>` / `pack.sh pack <dir> <mscz>` |
