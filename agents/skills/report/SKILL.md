@@ -1,47 +1,47 @@
 ---
 name: report
-description: 作業結果、調査結果、障害を、結論先行の短い段落と箇条書きで報告する
-argument-hint: <報告の対象。省略時は直前の作業結果>
+description: Report a work result, an investigation result or an incident in short conclusion-first paragraphs and lists
+argument-hint: <subject. Default: the last work result>
 disable-model-invocation: true
 ---
 
 # report
 
-## タスク
+## Task
 
-指定された対象 (省略時は直前の作業結果) を、以下の形式で報告する。
+Write the report of the given subject (default: the last work result) in the format below.
 
-## 構成
+## Structure
 
-- 1 行目に結論を書く (「修正しました」「以下調査結果です」)。経緯から書き始めない。
-- 根拠、手順、経緯は箇条書きにする。経緯は `[7/27 09:22]` のように時刻を付ける。
-- 原因、対応、影響範囲を分けて書く。直接の原因と根本原因も分ける。
-- 分かったことと分からなかったことを分けて書く。
-- 末尾はユーザーに求める操作か次の予定で終える (「ご確認お願いします」「〜してから対応します」)。総括の一文を置かない。
-- 一つの報告は 2〜5 行の段落を数個までにする。
+- Line 1 is the conclusion (「修正しました」「以下調査結果です」). Do not start with the history.
+- Write evidence, steps and history as a list. Give each history item a time (`[7/27 09:22]`).
+- Separate cause, action and affected range. Separate the direct cause and the root cause.
+- Separate what is known and what is not known.
+- End with the action you ask of the user or with the next step (「ご確認お願いします」「〜してから対応します」). Do not add a closing summary.
+- One report has at most a few paragraphs of 2 to 5 lines.
 
-## 文体
+## Style
 
-- 敬体。箇条書きの中は体言止めか常体 (「〜が発生」「完了」)。
-- 段落は 1〜3 行。空行で区切る。長い文は読点の位置で改行する。
-- 推測には「〜かと思います」「〜と思われます」を添える。未調査の箇所には「未調査ですが」と書く。
-- 接続は「また、」「なお、」「ただ、」。
+- 敬体. Inside a list, use 体言止め or 常体 (「〜が発生」「完了」).
+- A paragraph is 1 to 3 lines. Separate paragraphs with a blank line. Break a long sentence at a 読点.
+- Mark a guess with 「〜かと思います」 or 「〜と思われます」. Mark an uninvestigated item with 「未調査ですが」.
+- Connect sentences with 「また、」「なお、」「ただ、」.
 
-## 記法
+## Notation
 
-- 箇条書きは `-`。副項目は 1 段まで。先頭を太字にしない。
-- 見出しは障害報告の「原因」「対応」「影響範囲」に限る。太字は見出しの代わりにだけ使う。
-- 数値、パス、環境名、時刻、URL は文中にそのまま書く。表にしない。
-- URL は 1 行に単独で置く。複数あるときは「UI: 」のような短いラベルを前に付ける。
-- コマンド、設定値、議事録はコードブロックに入れる。
-- ユーザーの発言に答えるときは `>` で引用し、直下に 1〜2 行で答える。
+- Lists use `-`. At most one level of sub-items. No bold at the start of an item.
+- Headings only in an incident report: 「原因」「対応」「影響範囲」. Bold only as a substitute for a heading.
+- Numbers, paths, environment names, times and URLs go inline in the sentence, not in a table.
+- A URL is alone on its line. For two or more URLs, add a short label before each (「UI: 」).
+- Commands, configuration values and meeting notes go in a code block.
+- To answer a statement of the user, quote it with `>` and answer in 1 to 2 lines under it.
 
-## 判断を求めるとき
+## Asking for a decision
 
-- 選択肢は箇条書きにし、副項目に利用者側の影響を書く。
-- 推奨は「可能であれば〜でお願いしたいです」の形で書く。
-- 確認は「〜でよろしいでしょうか」の疑問の形で終える。
+- List the options. Write the effect on the user as a sub-item of each option.
+- Write the recommendation as 「可能であれば〜でお願いしたいです」.
+- End the question as 「〜でよろしいでしょうか」.
 
-## 書かない
+## Do not write
 
-挨拶、予告 (「〜について報告します」)、まとめ、絵文字、感嘆符、謝罪の演出、括弧の補足。
+Greetings, announcements (「〜について報告します」), summaries, emoji, exclamation marks, apologies, supplements in parentheses.
