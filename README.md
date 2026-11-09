@@ -16,6 +16,8 @@ Codex, Hermes 用の生成物は `agents/build.sh` で作成する。
 bash agents/build.sh
 ```
 
+`systemd/ttyd.service.d/` の drop-in は `/etc/systemd/system/ttyd.service.d/` に手動で配置し、`sudo systemctl daemon-reload` を実行する。
+
 ## 構成
 
 ```
