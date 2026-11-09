@@ -7,44 +7,11 @@ argument-hint: <base-branch>
 # pull request
 
 ## Task
-Create a Pull Request against the base branch specified in Arguments.
-- Fetch the base branch with git fetch
-- Verify the remote branch is up to date by `git ls-remote --heads origin {branch}`
-- Draft the PR and get user approval
-- After approval, create the PR (use gh command)
-
-## Constraints
-- Do NOT push (assume user already pushed)
-
-## Summary
-Use git commands to get diff title and content, understand the changes, then use them for PR title and description.
-Ask questions if unclear.
-Include not just what changed (What) but also the intent behind changes (Why) in title and description.
-
-## Format
-### Title
-- Do not include prefixes like feat: in the title.
-
-### Description
-Include the following in the PR description:
-- Summary
-- Changes Made
-- Test Plan (with checkbox `- [ ]`, and fill what you confirmed)
-- Related Commits (list of commit titles and hashes)
-
-Do not include:
-- Deployment Instructions
-- Bold emphasis with `**`
-- Task ID references (e.g. `(UZU-XXXX)`, `Closes #123`)
-
-## Notes
-- Follow the project's existing PR conventions (title format, description style, language). Check recent merged PRs with `gh pr list --state merged` for reference.
-- No "Generated with Claude Code" signature at the end
-- Write in plain past tense, objective and neutral (noun phrases acceptable)
-- Description content follows the comment principles:
-  - Write what is not recoverable from the diff: intent, constraints, rejected alternatives
-  - "Changes Made" groups changes by intent, not a file-by-file narration of the diff
-  - Do not include work history (previous attempts, review-fix iterations); describe only the final state
-  - State unverified items explicitly (e.g. unchecked Test Plan boxes); do not pad the description to mask uncertainty
-- Use `git diff base...HEAD` (3 dots) to get only changes made in this branch, not `git diff base..HEAD` (2 dots)
-- After PR creation, monitor CI status with `gh pr checks --watch`
+Create a Pull Request from the current branch against the base branch specified in Arguments.
+1. Fetch the base branch with `git fetch origin <base>`
+2. Push the current branch with `git push -u origin <head-branch>` when the hash from `git ls-remote --heads origin <head-branch>` differs from `git rev-parse HEAD`
+3. Delegate to `investigator`: run `git diff origin/<base>...HEAD` (3 dots; 2 dots includes base-branch commits) and `git log origin/<base>..HEAD`, and return the changes grouped by intent and the commit titles with hashes
+4. Draft the PR title and description following the Pull Request section of the Git rules. Ask questions if unclear
+5. Get user approval
+6. Create the PR with `gh pr create`
+7. Monitor CI with the Monitor tool, or delegate the wait to a sub-agent

@@ -29,7 +29,7 @@ takes 5 turns in the main agent costs 5 times the context; the same search in a
 sub-agent costs 1 turn plus the answer.
 
 In the main agent, cc-rein blocks search and read commands (grep, rg, find, fd,
-sed, cat, awk, wc, tree), `git log`, `git show`, `git blame`, `git diff`,
+sed, cat, awk, wc, tree), `git log`, `git show`, `git blame`,
 the Read tool, the Edit and Write tools, `sleep`, `gh run watch`, and `gh pr checks`.
 A blocked call still costs a turn, so delegate first instead of running the
 command and waiting for the block.

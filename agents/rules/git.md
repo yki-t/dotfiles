@@ -17,3 +17,30 @@
 - "Co-Authored-By: Claude" signature
 - `#` prefix on commit hashes
 - Task ID references (e.g. `(UZU-XXXX)`, `Closes #123`)
+
+## Pull Request
+
+Follow the title and description style of recent merged PRs (`gh pr list --state merged`) when they show a consistent style. Project convention overrides the rules below.
+
+### Title
+- No conventional commit prefix (feat:, fix:)
+- State the intent (Why), not only what changed
+
+### Description
+Sections, in this order:
+- Summary
+- Changes Made (grouped by intent, not a file-by-file narration)
+- Test Plan (checkboxes `- [ ]`; check only what was confirmed)
+- Related Commits (commit title and hash)
+
+### Content
+- Plain past tense, objective and neutral (noun phrases acceptable)
+- Write what is not recoverable from the diff: intent, constraints, rejected alternatives
+- Describe only the final state; no work history (previous attempts, review-fix iterations)
+- State unverified items explicitly; do not pad the description to mask uncertainty
+
+### Prohibited
+- Deployment Instructions
+- Bold emphasis with `**`
+- Task ID references (e.g. `(UZU-XXXX)`, `Closes #123`)
+- "Generated with Claude Code" signature
