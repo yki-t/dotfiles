@@ -64,9 +64,9 @@ Minimize code:
 # Constraints
 
 ## git
-- commit and push allowed
+- commit, push and pull allowed
 - Branch creation and switching with git switch allowed
-- Other edits prohibited (pull, checkout, merge, rebase, etc.)
+- Other edits prohibited (checkout, merge, rebase, etc.)
 - Read operations allowed
 - gh allowed
 
